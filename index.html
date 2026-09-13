@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Exámenes Médicos</title>
+  <!-- Tailwind CSS para un diseño limpio -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+
+  <header class="bg-blue-800 text-white p-6 shadow-md text-center">
+    <h1 class="text-2xl font-bold">Catálogo de Exámenes Médicos</h1>
+    <p class="text-sm opacity-90">Consulta rápida de preparación e información clínica</p>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4">
+    <!-- Buscador -->
+    <div class="mb-6">
+      <input type="text" id="searchInput" onkeyup="filterExams()" 
+             placeholder="Buscar por nombre o código de examen..." 
+             class="w-full p-4 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-700">
+    </div>
+
+    <!-- Lista de resultados -->
+    <div id="examList" class="space-y-4"></div>
+  </main>
+
+  <script>
+    // Datos de los exámenes (Puedes agregar todos los que necesites aquí)
+    const examenes = [
+      {
+        codigo: "599",
+        nombre: "Perfil Bioquímico",
+        preparacion: "Requiere ayuno mínimo de 8 horas. Sin restricción de agua.",
+        muestra: "Sangre (Suero y Plasma - 2 mL tubo amarillo, 1 mL tubo gris).",
+        plazo: "24 horas hábiles.",
+        info: "Mide glucosa, urea, calcio, colesterol y otros 8 parámetros para evaluar función metabólica y renal."
+      },
+      {
+        codigo: "2153",
+        nombre: "Sangre Oculta en Deposición",
+        preparacion: "Seguir instructivo especial para recolección de muestra.",
+        muestra: "Deposición en tubo recolector especial.",
+        plazo: "1 día hábil.",
+        info: "Prueba de screening para sangrado gastrointestinal, tumores o pólipos."
+      },
+      {
+        codigo: "966",
+        nombre: "Calcio Iónico con Medición de pH",
+        preparacion: "No requiere preparación previa.",
+        muestra: "Sangre venosa o arterial con heparina de litio balanceada.",
+        plazo: "45 minutos (urgencias/rutina).",
+        info: "Evalúa trastornos de la regulación hormonal, hiperparatiroidismo y osteolisis."
+      }
+    ];
+
+    // Función para renderizar los exámenes
+    function renderExams(data) {
+      const container = document.getElementById('examList');
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = `<p class="text-center text-gray-500 py-4">No se encontraron exámenes coincidentes.</p>`;
+        return;
+      }
+
+      data.forEach(exam => {
+        const card = document.createElement('div');
+        card.className = "bg-white p-5 rounded-lg shadow-sm border border-gray-200";
+        card.innerHTML = `
+          <div class="flex items-center justify-between border-b pb-2 mb-3">
+            <h2 class="text-xl font-semibold text-blue-900">${exam.nombre}</h2>
+            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Código: ${exam.codigo}</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700">
+            <p><strong>📋 Preparación:</strong> ${exam.preparacion}</p>
+            <p><strong>🧪 Muestra:</strong> ${exam.muestra}</p>
+            <p><strong>⏱️ Plazo de Entrega:</strong> ${exam.plazo}</p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-gray-100 text-sm text-gray-600">
+            <p><strong>💡 Información Clínica:</strong> ${exam.info}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Filtrar búsqueda en tiempo real
+    function filterExams() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = examenes.filter(item => 
+        item.nombre.toLowerCase().includes(query) || 
+        item.codigo.toLowerCase().includes(query)
+      );
+      renderExams(filtered);
+    }
+
+    // Cargar inicial
+    renderExams(examenes);
+  </script>
+</body>
+</html>
