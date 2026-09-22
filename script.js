@@ -21,6 +21,7 @@ function cleanText(text) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
+// Formatea los pasos de preparación si es un array o string
 function formatPasos(pasos) {
   if (Array.isArray(pasos)) {
     return `<ul class="list-disc list-inside space-y-1 mt-1">${pasos.map(p => `<li>${p}</li>`).join('')}</ul>`;
@@ -28,6 +29,24 @@ function formatPasos(pasos) {
   return pasos || 'Sin indicaciones especiales.';
 }
 
+// Abrir y cerrar el menú desplegable del Header
+function toggleMenuGuias() {
+  const dropdown = document.getElementById('dropdownGuias');
+  if (dropdown) {
+    dropdown.classList.toggle('hidden');
+  }
+}
+
+// Cerrar el menú desplegable si se hace clic fuera de él
+window.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('dropdownGuias');
+  const btnMenu = e.target.closest('button[onclick*="toggleMenuGuias"]');
+  if (dropdown && !dropdown.classList.contains('hidden') && !btnMenu && !dropdown.contains(e.target)) {
+    dropdown.classList.add('hidden');
+  }
+});
+
+// Renderiza las tarjetas de exámenes en pantalla
 function renderExams(exams) {
   const container = document.getElementById('examList');
   container.innerHTML = '';
@@ -35,7 +54,7 @@ function renderExams(exams) {
   if (!exams || exams.length === 0) {
     container.innerHTML = `
       <div class="text-center py-8 text-gray-500">
-        <p class="text-lg">No hay exámenes en pantalla. Usa el buscador o presiona "Ver todos".</p>
+        <p class="text-sm sm:text-base">No hay exámenes en pantalla. Usa el buscador o presiona "Ver todos".</p>
       </div>
     `;
     return;
@@ -49,28 +68,28 @@ function renderExams(exams) {
       : '';
 
     const card = document.createElement('div');
-    card.className = "bg-white p-5 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md";
+    card.className = "bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md";
     card.innerHTML = `
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-gray-100">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
         <div>
-          <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
+          <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block mb-1">
             Código: ${exam.codigo}
           </span>
-          <h3 class="text-xl font-bold text-gray-800 mt-1">${exam.nombre}</h3>
+          <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
         </div>
         <button 
           onclick="toggleSelectExam('${exam.codigo}')"
-          class="px-4 py-2 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shrink-0 ${
+          class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shrink-0 ${
             isSelected 
               ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' 
               : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
           }"
         >
-          ${isSelected ? '❌ Quitar' : '➕ Agregar a mi lista'}
+          ${isSelected ? '❌ Quitar de mi lista' : '➕ Agregar a mi lista'}
         </button>
       </div>
 
-      <div class="mt-4 space-y-3 text-sm text-gray-600">
+      <div class="mt-3 sm:mt-4 space-y-3 text-xs sm:text-sm text-gray-600">
         <p><strong class="text-gray-800">📋 Tipo de muestra:</strong> ${exam.tipo || 'No especificado'}</p>
         
         ${requisitosHTML ? `<div>${requisitosHTML}</div>` : ''}
@@ -87,7 +106,7 @@ function renderExams(exams) {
   });
 }
 
-// Búsqueda flexible con soporte para tildes, mayúsculas y sinónimos
+// Búsqueda de exámenes
 function filterExams() {
   const query = cleanText(document.getElementById('searchInput').value.trim());
   const btn = document.getElementById('showAllBtn');
@@ -125,7 +144,7 @@ function filterExams() {
   renderExams(filtered);
 }
 
-// Botón Toggle para "Ver Todos / Ocultar"
+// Alternar entre ver todos los exámenes y ocultar lista
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   document.getElementById('searchInput').value = '';
@@ -146,6 +165,7 @@ function toggleShowAll() {
   }
 }
 
+// Seleccionar/Deseleccionar examen
 function toggleSelectExam(codigo) {
   const examIndex = selectedExams.findIndex(e => e.codigo === codigo);
 
@@ -167,6 +187,7 @@ function toggleSelectExam(codigo) {
   }
 }
 
+// Vaciar la lista completa
 function clearSelectedExams() {
   selectedExams = [];
   localStorage.removeItem('selectedExams');
@@ -174,6 +195,7 @@ function clearSelectedExams() {
   if (showingAll) renderExams(allExams);
 }
 
+// Actualizar la interfaz de la lista lateral (desktop) y modal (móvil)
 function updateSelectedUI() {
   const count = selectedExams.length;
   document.getElementById('selectedCount').textContent = count;
@@ -213,35 +235,19 @@ function updateSelectedUI() {
   mobileContainer.innerHTML = itemsHTML;
 }
 
+// Modal helpers
 function toggleModal(modalId) {
   const modal = document.getElementById(modalId);
-  modal.classList.toggle('hidden');
+  if (modal) {
+    modal.classList.toggle('hidden');
+  }
 }
 
 function toggleMobileCart() {
   toggleModal('mobileCartModal');
 }
 
-// Función dedicada a generar el documento imprimible limpio (Evita la hoja en blanco)
-// Función para eliminar emojis y símbolos especiales del texto impreso
-function removeEmojis(string) {
-  if (!string) return '';
-  return string.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F6D0}-\u{1F6FF}\u{1F004}\u{1F0CF}\u{1F170}-\u{1F251}]/gu, '').trim();
-}
-
-// Genera un documento 100% formal en texto plano sin emojis
-// Función avanzada para eliminar CUALQUIER emoji o símbolo gráfico
-function removeEmojis(string) {
-  if (!string) return '';
-  return string
-    // Elimina todos los pictogramas y símbolos Unicode (incluye órganos, gotas, etc.)
-    .replace(/[\p{Extended_Pictographic}\p{Emoji_Component}\p{Symbol}]/gu, '')
-    // Limpia espacios dobles que puedan quedar al quitar el emoji
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-// Función para eliminar cualquier emoji o símbolo gráfico
+// Elimina cualquier emoji o símbolo gráfico para una impresión limpia
 function removeEmojis(string) {
   if (!string) return '';
   return string
@@ -250,6 +256,7 @@ function removeEmojis(string) {
     .trim();
 }
 
+// Genera el documento de impresión sin emojis ni elementos innecesarios
 function imprimirResumen() {
   let printSection = document.getElementById('printSection');
   
@@ -266,7 +273,6 @@ function imprimirResumen() {
 
   let htmlContent = `
     <div style="padding: 24px; font-family: Arial, Helvetica, sans-serif; color: #111827; background-color: #ffffff;">
-      <!-- Encabezado con la barra verde institucional -->
       <div style="border-bottom: 3px solid #059669; padding-bottom: 12px; margin-bottom: 20px;">
         <h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #047857; text-transform: uppercase;">
           Indicaciones de Preparación para Exámenes Médicos
@@ -278,7 +284,6 @@ function imprimirResumen() {
   `;
 
   selectedExams.forEach(exam => {
-    // Se elimina cualquier emoji del título, tipo e indicaciones
     const nombreLimpio = removeEmojis(exam.nombre || 'Examen sin nombre');
     const tipoLimpio = removeEmojis(exam.tipo || 'No especificado');
 
@@ -305,9 +310,8 @@ function imprimirResumen() {
   });
 
   htmlContent += `
-      <!-- Pie de página corregido y formateado -->
       <div style="margin-top: 30px; border-top: 1px solid #d1d5db; padding-top: 12px; font-size: 11px; color: #047857; text-align: center; font-weight: 500;">
-        Por favor, cumpla estrictamente con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
+        Por favor, cumpla strictly con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
       </div>
     </div>
   `;
