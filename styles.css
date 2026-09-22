@@ -1,18 +1,16 @@
-body {
-  background-color: #f3f4f6;
-}
+@media print {
+  /* Oculta absolutamente toda la interfaz web */
+  body > *:not(#printSection) {
+    display: none !important;
+  }
 
-.header-custom {
-  background-color: #1e3a8a; /* Azul oscuro */
-}
-
-.exam-card {
-  background-color: #ffffff;
-  border-left: 5px solid #2563eb;
-  transition: all 0.2s ease-in-out;
-}
-
-.exam-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  /* Muestra únicamente el contenedor formateado para imprimir */
+  #printSection {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    background: #ffffff !important;
+  }
 }

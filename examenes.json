@@ -1,5 +1,60 @@
 [
-    {
+  {
+    "codigo": "GUIA-SANGRE",
+    "nombre": "🩸 GUÍA GENERAL: Exámenes de Sangre y Ayuno",
+    "sinonimos": "sangre ayuno glicemia hemograma perfil lipidico lipidico venosa puncion",
+    "tipo": "💉 Muestra de Sangre",
+    "requisitos_rapidos": ["⏱️ Ayuno 8 a 12 hrs", "💧 Solo agua pura", "🚫 Sin café ni té"],
+    "pasos_preparacion": [
+      "Presentarse en ayunas de 8 a 12 horas (no superar las 12 horas).",
+      "Puede beber pequeñas cantidades de agua pura.",
+      "No fumar, no masticar chicle ni realizar ejercicio intenso la mañana del examen.",
+      "No consumir alcohol las 24 horas previas."
+    ],
+    "importancia": "Instrucciones estándar para cualquier examen de sangre que requiera ayuno."
+  },
+  {
+    "codigo": "GUIA-ORINA",
+    "nombre": "🧪 GUÍA GENERAL: Muestra de Orina",
+    "sinonimos": "orina urocultivo orina completa segundo chorro pish pichi muestra orina fisiologico",
+    "tipo": "🧪 Muestra de Orina",
+    "requisitos_rapidos": ["📦 Frasco estéril de farmacia", "🚿 Aseo genital previo", "☀️ 1ª orina de la mañana"],
+    "pasos_preparacion": [
+      "Comprar un frasco estéril en la farmacia (no tocar el interior).",
+      "Realizar aseo genital previo con abundante agua y jabón.",
+      "Técnica del 2° chorro: Descartar la primera porción de orina en el baño, juntar la porción media en el frasco y terminar en el baño.",
+      "Entregar en el laboratorio antes de 2 horas o mantener refrigerado."
+    ],
+    "importancia": "Aplica para la mayoría de análisis de orina de rutina."
+  },
+  {
+    "codigo": "GUIA-FECA",
+    "nombre": "💩 GUÍA GENERAL: Muestra de Deposición",
+    "sinonimos": "caca feca fecas deposicion deposiciones coprocultivo parasitologico caquis muestra fecal digestion",
+    "tipo": "💩 Muestra de Deposición",
+    "requisitos_rapidos": ["📦 Frasco estéril con espátula", "🚫 Sin contaminar con agua/orina", "🚫 Sin laxantes"],
+    "pasos_preparacion": [
+      "Recolectar la muestra en un recipiente limpio y seco sin mezclar con agua del baño ni orina.",
+      "Tomar una porción equivalente al tamaño de una nuez con la espátula del frasco.",
+      "Si el examen requiere fijador (frasco con líquido), mezclar bien la muestra.",
+      "Entregar en el laboratorio el mismo día de la recolección."
+    ],
+    "importancia": "Guía básica de recolección para muestras fecales y digestivas."
+  },
+  {
+    "codigo": "GUIA-FECA",
+    "nombre": "💩 GUÍA GENERAL: Muestra de Deposición / Caca / Feca (Coprocultivo, Parasitológico)",
+    "tipo": "💩 Muestra de Deposición",
+    "requisitos_rapidos": ["📦 Frasco estéril con espátula", "🚫 Sin contaminar con agua/orina", "🚫 Sin laxantes"],
+    "pasos_preparacion": [
+      "Recolectar la muestra en un recipiente limpio y seco sin mezclar con agua del baño ni orina.",
+      "Tomar una porción equivalente al tamaño de una nuez con la espátula del frasco.",
+      "Si el examen requiere fijador (frasco con líquido), mezclar bien la muestra.",
+      "Entregar en el laboratorio el mismo día de la recolección."
+    ],
+    "importancia": "Guía básica de recolección para muestras fecales y digestivas."
+  },  
+  {
     "codigo": "0308003",
     "nombre": "Coprocultivo",
     "tipo": "💩 Muestra de Deposición",
@@ -519,16 +574,6 @@
       "Ayuno de 8 horas."
     ],
     "importancia": "Detección de infección por *Toxoplasma gondii* (relevante en el embarazo)."
-  },
-  {
-    "codigo": "0306014",
-    "nombre": "Citomegalovirus (IgG e IgM)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal / Inmunodemostrados"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Detección de infección por Citomegalovirus (CMV) dentro del perfil TORCH."
   },
       {
     "codigo": "0308003",
@@ -794,262 +839,6 @@
       "Requiere firmar el consentimiento informado en el CESFAM."
     ],
     "importancia": "Detección del Virus de Inmunodeficiencia Humana."
-  },
-  {
-    "codigo": "0302021",
-    "nombre": "Prolactina",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ 2 hrs de vigilia", "🧘 Sin estrés"],
-    "pasos_preparacion": [
-      "Estar despierta 2 horas antes de la toma de muestra.",
-      "Guardar reposo de 15 a 20 minutos en el laboratorio antes de la extracción.",
-      "Evitar estimulación mamaria las 24 horas previas."
-    ],
-    "importancia": "Evaluación de alteraciones menstruales, galactorrea o infertilidad."
-  },
-  {
-    "codigo": "0302025",
-    "nombre": "FSH (Hormona Folículo Estimulante)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📅 Día 2 a 5 del ciclo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Realizar la toma entre el 2° y 5° día del ciclo menstrual (salvo indicación médica)."
-    ],
-    "importancia": "Evalúa la reserva ovárica, menopausia y función testicular."
-  },
-  {
-    "codigo": "0302026",
-    "nombre": "LH (Hormona Luteinizante)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📅 Día 2 a 5 del ciclo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Tomar la muestra según el día del ciclo menstrual indicado por el médico."
-    ],
-    "importancia": "Diagnóstico de ovulación, Síndrome de Ovario Poliquístico (SOP) y menopausia."
-  },
-  {
-    "codigo": "0302027",
-    "nombre": "Estradiol (E2)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Informar uso de anticonceptivos u hormonas."
-    ],
-    "importancia": "Evalúa el funcionamiento de los ovarios y el desarrollo folicular."
-  },
-  {
-    "codigo": "0302028",
-    "nombre": "Progesterona",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📅 Día 21 del ciclo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Suele realizarse en la fase lútea (día 21 del ciclo menstrual)."
-    ],
-    "importancia": "Confirma la ocurrencia de la ovulación y evalúa el soporte de la fase lútea."
-  },
-  {
-    "codigo": "0302029",
-    "nombre": "Testosterona Total",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "🌅 Mañana"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Toma recomendada temprano en la mañana (pico hormonal)."
-    ],
-    "importancia": "Evaluación del hiperandrogenismo (hirsutismo/acné) o hipogonadismo masculino."
-  },
-  {
-    "codigo": "0302016",
-    "nombre": "Cortisol Matinal",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["🌅 8:00 AM exacta", "🧘 Reposo previo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "La extracción debe realizarse estrictamente alrededor de las 8:00 AM.",
-      "Evitar situaciones de estrés físico o emocional previo."
-    ],
-    "importancia": "Evalúa la función de las glándulas suprarrenales y respuesta al estrés."
-  },
-  {
-    "codigo": "0301032",
-    "nombre": "Coombs Directo",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Sin ayuno estricto"],
-    "pasos_preparacion": [
-      "No requiere ayuno especial."
-    ],
-    "importancia": "Detección de anticuerpos adheridos a los glóbulos rojos (Anemia hemolítica)."
-  },
-  {
-    "codigo": "0301033",
-    "nombre": "Coombs Indirecto",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal Rh(-)"],
-    "pasos_preparacion": [
-      "No requiere ayuno especial."
-    ],
-    "importancia": "Esencial en gestantes Rh negativas para prevenir la enfermedad hemolítica del recién nacido."
-  },
-  {
-    "codigo": "0306020",
-    "nombre": "HBsAg (Antígeno de Superficie Hepatitis B)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "📋 Control Prenatal / ETS"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas la mañana de la toma de muestra."
-    ],
-    "importancia": "Detección de infección activa por el Virus de la Hepatitis B."
-  },
-  {
-    "codigo": "0306021",
-    "nombre": "Anti-HCV (Anticuerpos Virus Hepatitis C)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas la mañana de la prueba."
-    ],
-    "importancia": "Tamizaje de infección crónica por el Virus de la Hepatitis C."
-  },
-  {
-    "codigo": "0306001",
-    "nombre": "Serología para Chagas (IgG)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal / Zona Endémica"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Examen de rutina en embarazadas de zonas endémicas."
-    ],
-    "importancia": "Diagnóstico de la enfermedad de Chagas (*Trypanosoma cruzi*)."
-  },
-  {
-    "codigo": "0302060",
-    "nombre": "PSA Total (Antígeno Prostático Específico)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["🚫 Sin relaciones 48h", "🚫 Sin ciclismo 48h"],
-    "pasos_preparacion": [
-      "Abstinencia sexual de 48 horas previas al examen.",
-      "No andar en bicicleta ni a caballo 48 horas antes.",
-      "No haberse realizado tacto rectal o ecografía transrectal los 7 días previos."
-    ],
-    "importancia": "Tamizaje de salud prostática y prevención de cáncer de próstata en hombres mayores de 40-50 años."
-  },
-  {
-    "codigo": "0302064",
-    "nombre": "PSA Libre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["🚫 Mismas indicaciones que PSA Total"],
-    "pasos_preparacion": [
-      "Seguir las mismas indicaciones de abstinencia y reposo que el PSA Total.",
-      "Se solicita cuando el PSA Total está levemente alterado."
-    ],
-    "importancia": "Ayuda a diferenciar entre hiperplasia prostática benigna y cáncer de próstata."
-  },
-  {
-    "codigo": "0302070",
-    "nombre": "Alfa-Fetoproteína (AFP)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Marcador tumoral e indicador de patologías hepáticas o embrionarias."
-  },
-  {
-    "codigo": "0302018",
-    "nombre": "Antígeno Carcinoembrionario (CEA)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "🚬 Indicar si fuma"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Informar si el paciente es fumador activo (puede elevar levemente los niveles)."
-    ],
-    "importancia": "Seguimiento y control de neoplasias gastrointestinales."
-  },
-  {
-    "codigo": "0302008",
-    "nombre": "Amilasa en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "🚫 Sin alcohol"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Evitar la ingesta de alcohol la noche anterior."
-    ],
-    "importancia": "Evaluación de dolor abdominal agudo y diagnóstico de pancreatitis."
-  },
-  {
-    "codigo": "0302050",
-    "nombre": "Lipasa en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Enzima más específica que la amilasa para el diagnóstico de pancreatitis aguda."
-  },
-  {
-    "codigo": "0302020",
-    "nombre": "Fosfatasa Ácida Prostática",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Mismas restricciones físicas que el PSA."
-    ],
-    "importancia": "Evaluación complementaria del tejido prostático."
-  },
-  {
-    "codigo": "0302058",
-    "nombre": "Proteínas Totales y Relación A/G",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Evalúa el estado nutricional, hepático e inmunológico del paciente."
-  },
-  {
-    "codigo": "0302002",
-    "nombre": "Albúmina en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Mide la principal proteína producida por el hígado; evalúa nutrición y función hepática."
-  },
-  {
-    "codigo": "0302041",
-    "nombre": "Fósforo en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas la mañana del examen."
-    ],
-    "importancia": "Evalúa la salud ósea y la función renal en conjunto con el calcio."
-  },
-  {
-    "codigo": "0302054",
-    "nombre": "Magnesio en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Mide niveles de magnesio, mineral clave en la función muscular y nerviosa."
-  },
-  {
-    "codigo": "0306012",
-    "nombre": "Toxoplasmosis (IgG e IgM)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Detección de infección por *Toxoplasma gondii* (relevante en el embarazo)."
   },
   {
     "codigo": "0306014",
@@ -1669,271 +1458,5 @@
       "Requiere firmar el consentimiento informado en el CESFAM."
     ],
     "importancia": "Detección del Virus de Inmunodeficiencia Humana."
-  },
-  {
-    "codigo": "0302021",
-    "nombre": "Prolactina",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ 2 hrs de vigilia", "🧘 Sin estrés"],
-    "pasos_preparacion": [
-      "Estar despierta 2 horas antes de la toma de muestra.",
-      "Guardar reposo de 15 a 20 minutos en el laboratorio antes de la extracción.",
-      "Evitar estimulación mamaria las 24 horas previas."
-    ],
-    "importancia": "Evaluación de alteraciones menstruales, galactorrea o infertilidad."
-  },
-  {
-    "codigo": "0302025",
-    "nombre": "FSH (Hormona Folículo Estimulante)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📅 Día 2 a 5 del ciclo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Realizar la toma entre el 2° y 5° día del ciclo menstrual (salvo indicación médica)."
-    ],
-    "importancia": "Evalúa la reserva ovárica, menopausia y función testicular."
-  },
-  {
-    "codigo": "0302026",
-    "nombre": "LH (Hormona Luteinizante)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📅 Día 2 a 5 del ciclo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Tomar la muestra según el día del ciclo menstrual indicado por el médico."
-    ],
-    "importancia": "Diagnóstico de ovulación, Síndrome de Ovario Poliquístico (SOP) y menopausia."
-  },
-  {
-    "codigo": "0302027",
-    "nombre": "Estradiol (E2)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Informar uso de anticonceptivos u hormonas."
-    ],
-    "importancia": "Evalúa el funcionamiento de los ovarios y el desarrollo folicular."
-  },
-  {
-    "codigo": "0302028",
-    "nombre": "Progesterona",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📅 Día 21 del ciclo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Suele realizarse en la fase lútea (día 21 del ciclo menstrual)."
-    ],
-    "importancia": "Confirma la ocurrencia de la ovulación y evalúa el soporte de la fase lútea."
-  },
-  {
-    "codigo": "0302029",
-    "nombre": "Testosterona Total",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "🌅 Mañana"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Toma recomendada temprano en la mañana (pico hormonal)."
-    ],
-    "importancia": "Evaluación del hiperandrogenismo (hirsutismo/acné) o hipogonadismo masculino."
-  },
-  {
-    "codigo": "0302016",
-    "nombre": "Cortisol Matinal",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["🌅 8:00 AM exacta", "🧘 Reposo previo"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "La extracción debe realizarse estrictamente alrededor de las 8:00 AM.",
-      "Evitar situaciones de estrés físico o emocional previo."
-    ],
-    "importancia": "Evalúa la función de las glándulas suprarrenales y respuesta al estrés."
-  },
-  {
-    "codigo": "0301032",
-    "nombre": "Coombs Directo",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Sin ayuno estricto"],
-    "pasos_preparacion": [
-      "No requiere ayuno especial."
-    ],
-    "importancia": "Detección de anticuerpos adheridos a los glóbulos rojos (Anemia hemolítica)."
-  },
-  {
-    "codigo": "0301033",
-    "nombre": "Coombs Indirecto",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal Rh(-)"],
-    "pasos_preparacion": [
-      "No requiere ayuno especial."
-    ],
-    "importancia": "Esencial en gestantes Rh negativas para prevenir la enfermedad hemolítica del recién nacido."
-  },
-  {
-    "codigo": "0306020",
-    "nombre": "HBsAg (Antígeno de Superficie Hepatitis B)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "📋 Control Prenatal / ETS"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas la mañana de la toma de muestra."
-    ],
-    "importancia": "Detección de infección activa por el Virus de la Hepatitis B."
-  },
-  {
-    "codigo": "0306021",
-    "nombre": "Anti-HCV (Anticuerpos Virus Hepatitis C)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas la mañana de la prueba."
-    ],
-    "importancia": "Tamizaje de infección crónica por el Virus de la Hepatitis C."
-  },
-  {
-    "codigo": "0306001",
-    "nombre": "Serología para Chagas (IgG)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal / Zona Endémica"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Examen de rutina en embarazadas de zonas endémicas."
-    ],
-    "importancia": "Diagnóstico de la enfermedad de Chagas (*Trypanosoma cruzi*)."
-  },
-  {
-    "codigo": "0302060",
-    "nombre": "PSA Total (Antígeno Prostático Específico)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["🚫 Sin relaciones 48h", "🚫 Sin ciclismo 48h"],
-    "pasos_preparacion": [
-      "Abstinencia sexual de 48 horas previas al examen.",
-      "No andar en bicicleta ni a caballo 48 horas antes.",
-      "No haberse realizado tacto rectal o ecografía transrectal los 7 días previos."
-    ],
-    "importancia": "Tamizaje de salud prostática y prevención de cáncer de próstata en hombres mayores de 40-50 años."
-  },
-  {
-    "codigo": "0302064",
-    "nombre": "PSA Libre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["🚫 Mismas indicaciones que PSA Total"],
-    "pasos_preparacion": [
-      "Seguir las mismas indicaciones de abstinencia y reposo que el PSA Total.",
-      "Se solicita cuando el PSA Total está levemente alterado."
-    ],
-    "importancia": "Ayuda a diferenciar entre hiperplasia prostática benigna y cáncer de próstata."
-  },
-  {
-    "codigo": "0302070",
-    "nombre": "Alfa-Fetoproteína (AFP)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Marcador tumoral e indicador de patologías hepáticas o embrionarias."
-  },
-  {
-    "codigo": "0302018",
-    "nombre": "Antígeno Carcinoembrionario (CEA)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "🚬 Indicar si fuma"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Informar si el paciente es fumador activo (puede elevar levemente los niveles)."
-    ],
-    "importancia": "Seguimiento y control de neoplasias gastrointestinales."
-  },
-  {
-    "codigo": "0302008",
-    "nombre": "Amilasa en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "🚫 Sin alcohol"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Evitar la ingesta de alcohol la noche anterior."
-    ],
-    "importancia": "Evaluación de dolor abdominal agudo y diagnóstico de pancreatitis."
-  },
-  {
-    "codigo": "0302050",
-    "nombre": "Lipasa en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Enzima más específica que la amilasa para el diagnóstico de pancreatitis aguda."
-  },
-  {
-    "codigo": "0302020",
-    "nombre": "Fosfatasa Ácida Prostática",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas.",
-      "Mismas restricciones físicas que el PSA."
-    ],
-    "importancia": "Evaluación complementaria del tejido prostático."
-  },
-  {
-    "codigo": "0302058",
-    "nombre": "Proteínas Totales y Relación A/G",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Evalúa el estado nutricional, hepático e inmunológico del paciente."
-  },
-  {
-    "codigo": "0302002",
-    "nombre": "Albúmina en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Mide la principal proteína producida por el hígado; evalúa nutrición y función hepática."
-  },
-  {
-    "codigo": "0302041",
-    "nombre": "Fósforo en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas la mañana del examen."
-    ],
-    "importancia": "Evalúa la salud ósea y la función renal en conjunto con el calcio."
-  },
-  {
-    "codigo": "0302054",
-    "nombre": "Magnesio en Sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Mide niveles de magnesio, mineral clave en la función muscular y nerviosa."
-  },
-  {
-    "codigo": "0306012",
-    "nombre": "Toxoplasmosis (IgG e IgM)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Detección de infección por *Toxoplasma gondii* (relevante en el embarazo)."
-  },
-  {
-    "codigo": "0306014",
-    "nombre": "Citomegalovirus (IgG e IgM)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Control Prenatal / Inmunodemostrados"],
-    "pasos_preparacion": [
-      "Ayuno de 8 horas."
-    ],
-    "importancia": "Detección de infección por Citomegalovirus (CMV) dentro del perfil TORCH."
   }
 ]
