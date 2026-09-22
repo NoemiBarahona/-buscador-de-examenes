@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(error => console.error('Error al cargar el JSON:', error));
 });
 
-// Función auxiliar para normalizar texto (quita mayúsculas y tildes)
 function cleanText(text) {
   if (!text) return '';
   return text
@@ -21,7 +20,6 @@ function cleanText(text) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-// Formatea los pasos de preparación si es un array o string
 function formatPasos(pasos) {
   if (Array.isArray(pasos)) {
     return `<ul class="list-disc list-inside space-y-1 mt-1">${pasos.map(p => `<li>${p}</li>`).join('')}</ul>`;
@@ -29,31 +27,14 @@ function formatPasos(pasos) {
   return pasos || 'Sin indicaciones especiales.';
 }
 
-// Abrir y cerrar el menú desplegable del Header
-function toggleMenuGuias() {
-  const dropdown = document.getElementById('dropdownGuias');
-  if (dropdown) {
-    dropdown.classList.toggle('hidden');
-  }
-}
-
-// Cerrar el menú desplegable si se hace clic fuera de él
-window.addEventListener('click', (e) => {
-  const dropdown = document.getElementById('dropdownGuias');
-  const btnMenu = e.target.closest('button[onclick*="toggleMenuGuias"]');
-  if (dropdown && !dropdown.classList.contains('hidden') && !btnMenu && !dropdown.contains(e.target)) {
-    dropdown.classList.add('hidden');
-  }
-});
-
-// Renderiza las tarjetas de exámenes en pantalla
 function renderExams(exams) {
   const container = document.getElementById('examList');
+  if (!container) return;
   container.innerHTML = '';
 
   if (!exams || exams.length === 0) {
     container.innerHTML = `
-      <div class="text-center py-8 text-gray-500">
+      <div class="text-center py-8 text-gray-500 bg-white rounded-2xl border border-gray-200 p-6">
         <p class="text-sm sm:text-base">No hay exámenes en pantalla. Usa el buscador o presiona "Ver todos".</p>
       </div>
     `;
@@ -70,23 +51,11 @@ function renderExams(exams) {
     const card = document.createElement('div');
     card.className = "bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md";
     card.innerHTML = `
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
-        <div>
-          <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block mb-1">
-            Código: ${exam.codigo}
-          </span>
-          <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
-        </div>
-        <button 
-          onclick="toggleSelectExam('${exam.codigo}')"
-          class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shrink-0 ${
-            isSelected 
-              ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' 
-              : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
-          }"
-        >
-          ${isSelected ? '❌ Quitar de mi lista' : '➕ Agregar a mi lista'}
-        </button>
+      <div class="pb-3 border-b border-gray-100">
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block mb-1">
+          Código: ${exam.codigo}
+        </span>
+        <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
       </div>
 
       <div class="mt-3 sm:mt-4 space-y-3 text-xs sm:text-sm text-gray-600">
@@ -100,13 +69,26 @@ function renderExams(exams) {
         </div>
 
         ${exam.importancia ? `<p class="text-xs text-gray-500 italic"><strong class="text-gray-700">💡 Importancia:</strong> ${exam.importancia}</p>` : ''}
+
+        <div class="pt-2 sm:flex sm:justify-end border-t border-gray-100 sm:border-0 sm:pt-0">
+          <button 
+            type="button"
+            onclick="toggleSelectExam('${exam.codigo}')"
+            class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shrink-0 ${
+              isSelected 
+                ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' 
+                : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm'
+            }"
+          >
+            ${isSelected ? '❌ Quitar de mi lista' : '➕ Agregar a mi lista'}
+          </button>
+        </div>
       </div>
     `;
     container.appendChild(card);
   });
 }
 
-// Búsqueda de exámenes
 function filterExams() {
   const query = cleanText(document.getElementById('searchInput').value.trim());
   const btn = document.getElementById('showAllBtn');
@@ -121,10 +103,8 @@ function filterExams() {
   }
 
   showingAll = false;
-  btn.innerHTML = `
-    <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-    Ver todos
-  `;
+  const eyeIcon = `<svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
+  btn.innerHTML = `${eyeIcon} Ver todos`;
   btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
 
   const filtered = allExams.filter(exam => {
@@ -144,7 +124,6 @@ function filterExams() {
   renderExams(filtered);
 }
 
-// Alternar entre ver todos los exámenes y ocultar lista
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   document.getElementById('searchInput').value = '';
@@ -156,7 +135,7 @@ function toggleShowAll() {
     showingAll = false;
     btn.innerHTML = `${eyeIcon} Ver todos`;
     btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
-    renderExams([]);
+    renderExams([]); 
   } else {
     showingAll = true;
     btn.innerHTML = `${eyeOffIcon} Ocultar lista`;
@@ -165,7 +144,6 @@ function toggleShowAll() {
   }
 }
 
-// Seleccionar/Deseleccionar examen
 function toggleSelectExam(codigo) {
   const examIndex = selectedExams.findIndex(e => e.codigo === codigo);
 
@@ -184,30 +162,36 @@ function toggleSelectExam(codigo) {
     filterExams();
   } else if (showingAll) {
     renderExams(allExams);
+  } else {
+    renderExams([]);
   }
 }
 
-// Vaciar la lista completa
 function clearSelectedExams() {
   selectedExams = [];
   localStorage.removeItem('selectedExams');
   updateSelectedUI();
   if (showingAll) renderExams(allExams);
+  const currentQuery = cleanText(document.getElementById('searchInput').value.trim());
+  if (currentQuery) filterExams();
 }
 
-// Actualizar la interfaz de la lista lateral (desktop) y modal (móvil)
 function updateSelectedUI() {
   const count = selectedExams.length;
-  document.getElementById('selectedCount').textContent = count;
-  document.getElementById('mobileSelectedCount').textContent = count;
+  
+  const countEl = document.getElementById('selectedCount');
+  const mobileCountEl = document.getElementById('mobileSelectedCount');
+  
+  if (countEl) countEl.textContent = count;
+  if (mobileCountEl) mobileCountEl.textContent = count;
 
   const desktopContainer = document.getElementById('selectedExamsList');
   const mobileContainer = document.getElementById('mobileSelectedExamsList');
 
   if (count === 0) {
     const emptyHTML = `<p class="text-sm text-gray-400 text-center py-6">No has seleccionado ningún examen aún.</p>`;
-    desktopContainer.innerHTML = emptyHTML;
-    mobileContainer.innerHTML = emptyHTML;
+    if (desktopContainer) desktopContainer.innerHTML = emptyHTML;
+    if (mobileContainer) mobileContainer.innerHTML = emptyHTML;
     return;
   }
 
@@ -216,8 +200,9 @@ function updateSelectedUI() {
       <div class="flex items-center justify-between">
         <h4 class="font-bold text-gray-800 text-sm">${exam.nombre}</h4>
         <button 
+          type="button"
           onclick="toggleSelectExam('${exam.codigo}')" 
-          class="text-red-500 hover:text-red-700 font-bold text-base leading-none"
+          class="text-red-500 hover:text-red-700 font-bold text-base leading-none px-1"
           title="Eliminar"
         >
           &times;
@@ -231,23 +216,19 @@ function updateSelectedUI() {
     </div>
   `).join('');
 
-  desktopContainer.innerHTML = itemsHTML;
-  mobileContainer.innerHTML = itemsHTML;
+  if (desktopContainer) desktopContainer.innerHTML = itemsHTML;
+  if (mobileContainer) mobileContainer.innerHTML = itemsHTML;
 }
 
-// Modal helpers
 function toggleModal(modalId) {
   const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.classList.toggle('hidden');
-  }
+  if (modal) modal.classList.toggle('hidden');
 }
 
 function toggleMobileCart() {
   toggleModal('mobileCartModal');
 }
 
-// Elimina cualquier emoji o símbolo gráfico para una impresión limpia
 function removeEmojis(string) {
   if (!string) return '';
   return string
@@ -256,30 +237,92 @@ function removeEmojis(string) {
     .trim();
 }
 
-// Genera el documento de impresión sin emojis ni elementos innecesarios
 function imprimirResumen() {
-  let printSection = document.getElementById('printSection');
-  
-  if (!printSection) {
-    printSection = document.createElement('div');
-    printSection.id = 'printSection';
-    document.body.appendChild(printSection);
-  }
-
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen antes de imprimir el resumen.");
     return;
   }
 
+  const oldPrintSection = document.getElementById('printSection');
+  if (oldPrintSection) {
+    oldPrintSection.remove();
+  }
+
   let htmlContent = `
-    <div style="padding: 24px; font-family: Arial, Helvetica, sans-serif; color: #111827; background-color: #ffffff;">
-      <div style="border-bottom: 3px solid #059669; padding-bottom: 12px; margin-bottom: 20px;">
-        <h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #047857; text-transform: uppercase;">
-          Indicaciones de Preparación para Exámenes Médicos
-        </h1>
-        <p style="font-size: 11px; color: #4b5563; margin-top: 4px;">
-          Documento informativo previo a la toma de muestras de laboratorio.
-        </p>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <title>Resumen de Exámenes Médicos</title>
+      <style>
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          color: #111827;
+          background-color: #ffffff;
+          padding: 24px;
+          margin: 0;
+        }
+        .header {
+          border-bottom: 3px solid #059669;
+          padding-bottom: 12px;
+          margin-bottom: 20px;
+        }
+        .header h1 {
+          font-size: 18px;
+          font-weight: bold;
+          margin: 0;
+          color: #047857;
+          text-transform: uppercase;
+        }
+        .header p {
+          font-size: 11px;
+          color: #4b5563;
+          margin-top: 4px;
+        }
+        .exam-card {
+          border: 1px solid #a7f3d0;
+          border-left: 4px solid #059669;
+          border-radius: 6px;
+          padding: 12px 16px;
+          margin-bottom: 14px;
+          background-color: #f0fdf4;
+          page-break-inside: avoid;
+        }
+        .exam-card h3 {
+          font-size: 15px;
+          font-weight: bold;
+          color: #065f46;
+          margin: 0 0 4px 0;
+        }
+        .exam-card p {
+          font-size: 12px;
+          color: #047857;
+          margin: 0 0 8px 0;
+        }
+        .footer {
+          margin-top: 30px;
+          border-top: 1px solid #d1d5db;
+          padding-top: 12px;
+          font-size: 11px;
+          color: #047857;
+          text-align: center;
+          font-weight: 500;
+        }
+        ol {
+          margin: 4px 0 0 18px;
+          padding: 0;
+          font-size: 12px;
+          color: #1f2937;
+        }
+        li {
+          margin-bottom: 3px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1>Indicaciones de Preparación para Exámenes Médicos</h1>
+        <p>Documento informativo previo a la toma de muestras de laboratorio.</p>
       </div>
   `;
 
@@ -289,18 +332,15 @@ function imprimirResumen() {
 
     let pasosHTML = '';
     if (Array.isArray(exam.pasos_preparacion)) {
-      pasosHTML = `<ol style="margin: 4px 0 0 18px; padding: 0; font-size: 12px; color: #1f2937;">${
-        exam.pasos_preparacion.map(p => `<li style="margin-bottom: 3px;">${removeEmojis(p)}</li>`).join('')
-      }</ol>`;
+      pasosHTML = `<ol>${exam.pasos_preparacion.map(p => `<li>${removeEmojis(p)}</li>`).join('')}</ol>`;
     } else {
-      pasosHTML = `<p style="margin: 4px 0 0 0; font-size: 12px; color: #1f2937;">${removeEmojis(exam.pasos_preparacion || 'Sin indicaciones especiales.')}</p>`;
+      pasosHTML = `<p>${removeEmojis(exam.pasos_preparacion || 'Sin indicaciones especiales.')}</p>`;
     }
 
     htmlContent += `
-      <div style="border: 1px solid #a7f3d0; border-left: 4px solid #059669; border-radius: 6px; padding: 12px 16px; margin-bottom: 14px; background-color: #f0fdf4; page-break-inside: avoid;">
-        <h3 style="font-size: 15px; font-weight: bold; color: #065f46; margin: 0 0 4px 0;">${nombreLimpio}</h3>
-        <p style="font-size: 12px; color: #047857; margin: 0 0 8px 0;"><strong>Tipo de muestra:</strong> ${tipoLimpio}</p>
-        
+      <div class="exam-card">
+        <h3>${nombreLimpio}</h3>
+        <p><strong>Tipo de muestra:</strong> ${tipoLimpio}</p>
         <div>
           <strong style="font-size: 12px; color: #111827;">Indicaciones:</strong>
           ${pasosHTML}
@@ -310,12 +350,26 @@ function imprimirResumen() {
   });
 
   htmlContent += `
-      <div style="margin-top: 30px; border-top: 1px solid #d1d5db; padding-top: 12px; font-size: 11px; color: #047857; text-align: center; font-weight: 500;">
-        Por favor, cumpla strictly con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
+      <div class="footer">
+        Por favor, cumpla estrictamente con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
       </div>
-    </div>
+    </body>
+    </html>
   `;
 
-  printSection.innerHTML = htmlContent;
-  window.print();
+  const printWindow = window.open('', '_blank', 'width=800,height=600');
+  if (!printWindow) {
+    alert("Por favor, permite las ventanas emergentes (pop-ups) en tu navegador para poder imprimir.");
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+
+  printWindow.onload = function () {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
 }

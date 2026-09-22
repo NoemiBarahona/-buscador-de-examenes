@@ -3,142 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Indicaciones de Laboratorio</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Instrucciones de Preparación - Exámenes Médicos</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tu archivo CSS independiente -->
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-50 min-h-screen text-gray-800 antialiased pt-[68px]">
+<body class="bg-slate-50 font-sans min-h-screen pb-20 lg:pb-0">
 
-  <!-- HEADER INSTITUCIONAL (Fijo con 'fixed' en la parte superior) -->
-  <header class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 py-3 px-4 sm:px-6 shadow-sm z-40 h-[68px] flex items-center">
-    <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl sm:text-2xl font-bold shadow-sm shrink-0">
-          🧪
-        </div>
-        <div>
-          <h1 class="text-base sm:text-2xl font-bold text-gray-900 leading-tight">Indicaciones de Laboratorio</h1>
-          <p class="text-xs text-gray-500 hidden sm:block">Consulta las indicaciones exactas y horas de ayuno antes de tu toma de muestras.</p>
+  <!-- HEADER STICKY -->
+  <header class="sticky top-0 z-40 bg-white border-b border-gray-200 py-3 sm:py-4 px-4 sm:px-6 shadow-sm min-h-[68px] flex items-center">
+    <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl sm:text-2xl font-bold shadow-sm shrink-0">
+            🧪
+          </div>
+          <div>
+            <h1 class="text-base sm:text-xl font-bold text-gray-900 leading-tight">Indicaciones para tomas de muestra y laboratorio</h1>
+            <p class="text-xs text-gray-500 hidden sm:block">Consulta las indicaciones exactas, horas de ayuno y recomendaciones antes de tu toma de muestras.</p>
+          </div>
         </div>
       </div>
 
-      <!-- Menú Desplegable de Guías Generales -->
-      <div class="relative">
-        <button 
-          onclick="toggleMenuGuias()" 
-          class="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors"
-        >
-          <span>📖 Guías Generales</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-        </button>
-
-        <!-- Dropdown -->
-        <div id="dropdownGuias" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
-          <button 
-            onclick="toggleModal('modalSangre'); toggleMenuGuias();" 
-            class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-700 text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors"
-          >
-            🩸 Guía Sangre y Ayuno
-          </button>
-          <button 
-            onclick="toggleModal('modalOrina'); toggleMenuGuias();" 
-            class="w-full text-left px-4 py-2.5 hover:bg-emerald-50 text-emerald-800 text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors"
-          >
-            🧪 Guía Muestra de Orina
-          </button>
-          <button 
-            onclick="toggleModal('modalDeposicion'); toggleMenuGuias();" 
-            class="w-full text-left px-4 py-2.5 hover:bg-amber-50 text-amber-800 text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors"
-          >
-            💩 Guía Muestra de Deposición
-          </button>
-        </div>
+      <div class="hidden md:flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg shrink-0">
+        <span>✅ Preparación de Exámenes</span>
       </div>
     </div>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto p-4 sm:p-6">
-    
-    <!-- Bloque de Accesos Rápidos a Guías Generales -->
+  
+    <!-- GUÍAS GENERALES -->
     <section class="mb-6 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
       <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
         ¿No sabes el nombre exacto de tu examen?
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button 
-          onclick="toggleModal('modalSangre')" 
-          class="flex items-center justify-between bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm"
-        >
+        <button onclick="toggleModal('modalSangre')" class="flex items-center justify-between bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
           <span class="flex items-center gap-2">🩸 Guía General: Exámenes de Sangre (Ayuno)</span>
           <span>➔</span>
         </button>
-        <button 
-          onclick="toggleModal('modalOrina')" 
-          class="flex items-center justify-between bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm"
-        >
+        <button onclick="toggleModal('modalOrina')" class="flex items-center justify-between bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
           <span class="flex items-center gap-2">🧪 Guía General: Muestra de Orina</span>
           <span>➔</span>
         </button>
       </div>
     </section>
 
+    <!-- GRID PRINCIPAL -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- Columna Principal: Buscador y Lista de Exámenes -->
+      <!-- COLUMNA IZQUIERDA -->
       <section class="lg:col-span-2">
-        
-        <!-- Buscador: Se fija exactamente debajo del Header Fijo (68px) -->
-        <div class="sticky top-[68px] z-20 bg-slate-50 py-3 mb-4 border-b border-gray-200">
+        <div class="sticky top-[68px] sm:top-[80px] z-30 bg-slate-50 py-3 mb-4 border-b border-gray-200">
           <label for="searchInput" class="block text-sm font-semibold text-gray-700 mb-2">
             🔍 Busca tu examen:
           </label>
-          
           <div class="flex flex-col sm:flex-row gap-3">
-            <input 
-              type="text" 
-              id="searchInput" 
-              onkeyup="filterExams()" 
-              placeholder="Ej: Hemograma, Coprocultivo, Orina..." 
-              class="flex-1 p-3.5 sm:p-4 text-base rounded-xl border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-800 bg-white"
-            >
-            <!-- Botón Ver Todos -->
+            <input type="text" id="searchInput" onkeyup="filterExams()" placeholder="Ej: Hemograma, Coprocultivo, Orina..." class="flex-1 p-3.5 sm:p-4 text-base rounded-xl border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-800 bg-white">
             <button 
               id="showAllBtn" 
               onclick="toggleShowAll()" 
-              class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-3.5 sm:py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0"
+              class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-3.5 sm:py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0 text-sm sm:text-base"
             >
-              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-              </svg>
+              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
               Ver todos
             </button>
           </div>
         </div>
 
-        <!-- Lista Dinámica de Exámenes -->
         <div id="examList" class="space-y-4"></div>
       </section>
 
-      <!-- Panel Lateral Escritorio: Mi Lista -->
+      <!-- COLUMNA DERECHA (Escritorio) -->
       <aside class="hidden lg:block lg:col-span-1">
-        <div class="sticky top-24 bg-white p-6 rounded-2xl shadow-md border border-gray-200">
-          <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-              📋 Mis Exámenes
-              <span id="selectedCount" class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold">0</span>
+        <div class="sticky top-[90px] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+            <h2 class="font-bold text-gray-800 text-base flex items-center gap-2">
+              📋 Mis Exámenes <span id="selectedCount" class="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full">0</span>
             </h2>
-            <button onclick="clearSelectedExams()" class="text-xs text-red-500 hover:text-red-700 font-medium">Vaciar</button>
+          </div>
+          
+          <div id="selectedExamsList" class="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
+            <p class="text-sm text-gray-400 text-center py-6">No has seleccionado ningún examen aún.</p>
           </div>
 
-          <div id="selectedExamsList" class="mt-4 space-y-3 max-h-[60vh] overflow-y-auto pr-1"></div>
-
-          <div class="mt-6 pt-4 border-t border-gray-100">
-            <button onclick="imprimirResumen()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition-colors flex items-center justify-center gap-2">
+          <div class="pt-3 border-t border-gray-100 space-y-2">
+            <button onclick="imprimirResumen()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors">
               🖨️ Imprimir Resumen
+            </button>
+            <button onclick="clearSelectedExams()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-xl text-sm transition-colors">
+              Vaciar lista
             </button>
           </div>
         </div>
@@ -148,7 +104,7 @@
   </main>
 
   <!-- Botón Flotante Móvil -->
-  <div class="lg:hidden fixed bottom-4 right-4 z-30">
+  <div class="lg:hidden fixed bottom-4 right-4 z-20">
     <button onclick="toggleMobileCart()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3.5 rounded-full shadow-lg flex items-center gap-2">
       📋 Mi Lista
       <span id="mobileSelectedCount" class="bg-white text-emerald-800 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
@@ -156,21 +112,20 @@
   </div>
 
   <!-- Modal Móvil "Mi Lista" -->
-  <div id="mobileCartModal" class="fixed inset-0 bg-black/50 z-40 hidden flex justify-end">
+  <div id="mobileCartModal" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
     <div class="bg-white w-full max-w-md h-full p-6 overflow-y-auto flex flex-col justify-between">
       <div>
         <div class="flex items-center justify-between pb-4 border-b border-gray-100">
           <h2 class="text-lg font-bold text-gray-800">📋 Mis Exámenes Seleccionados</h2>
           <button onclick="toggleMobileCart()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
         </div>
-        <div id="mobileSelectedExamsList" class="mt-4 space-y-3"></div>
+        <div id="mobileSelectedExamsList" class="mt-4 space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+          <p class="text-sm text-gray-400 text-center py-6">No has seleccionado ningún examen aún.</p>
+        </div>
       </div>
       
       <div class="pt-4 border-t border-gray-100 space-y-2">
-        <button 
-          onclick="imprimirResumen()" 
-          class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow flex items-center justify-center gap-2"
-        >
+        <button onclick="imprimirResumen()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow flex items-center justify-center gap-2">
           🖨️ Imprimir Resumen
         </button>
         <button onclick="clearSelectedExams()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-4 rounded-xl">
@@ -180,7 +135,7 @@
     </div>
   </div>
 
-  <!-- MODALES GUÍAS GENERALES -->
+  <!-- MODALES INFORMATIVOS -->
   <div id="modalSangre" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
       <div class="bg-red-600 text-white p-4 flex justify-between items-center">
@@ -203,15 +158,6 @@
           <h4 class="font-bold text-gray-900 mb-1">✅ Lo que SÍ puedes hacer:</h4>
           <p>Beber pequeñas cantidades de <strong>agua pura estéril o del grifo</strong>. Te mantendrá hidratado y facilitará la extracción de sangre.</p>
         </div>
-        <div>
-          <h4 class="font-bold text-gray-900 mb-1">❌ Lo que NO debes hacer:</h4>
-          <ul class="list-disc list-inside space-y-1 text-red-700">
-            <li>No tomar té, café, ni infusiones (aunque no tengan azúcar).</li>
-            <li>No fumar ni masticar chicle antes del examen.</li>
-            <li>No realizar ejercicio físico intenso la mañana previa.</li>
-            <li>No consumir alcohol las 24 horas previas.</li>
-          </ul>
-        </div>
       </div>
       <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
         <button onclick="toggleModal('modalSangre')" class="bg-gray-800 text-white px-5 py-2 rounded-xl font-medium">Entendido</button>
@@ -228,14 +174,12 @@
       <div class="p-5 overflow-y-auto space-y-4 text-sm text-gray-700">
         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
           <h4 class="font-bold text-emerald-900 mb-1">Instrucciones Estándar (Urocultivo / Orina Completa)</h4>
-          <p>Aplica para la mayoría de los exámenes de orina de rutina, salvo indicaciones específicas de 24 horas.</p>
+          <p>Aplica para la mayoría de los exámenes de orina de rutina.</p>
         </div>
         <ol class="list-decimal list-inside space-y-2">
           <li><strong>Usar frasco estéril:</strong> Adquiérelo en la farmacia. No tocar el interior del frasco ni de la tapa.</li>
-          <li><strong>Primera orina de la mañana:</strong> Es la muestra ideal por estar más concentrada. Debe tener una retención mínima de 4 horas.</li>
-          <li><strong>Higiene previa:</strong> Lavar la zona genital con abundante agua y jabón neutro, luego secar con toalla limpia.</li>
-          <li><strong>Técnica del Segundo Chorro:</strong> Descartar la primera porción de la orina en el WC, recolectar la porción media directamente en el frasco (hasta la mitad) y terminar de orinar en el WC.</li>
-          <li><strong>Entrega rápida:</strong> Llevar la muestra al laboratorio antes de 2 horas. Si no es posible, mantener refrigerada (no congelar).</li>
+          <li><strong>Primera orina de la mañana:</strong> Muestra ideal por estar más concentrada. Retención mínima de 4 horas.</li>
+          <li><strong>Técnica del Segundo Chorro:</strong> Descartar la primera porción, recolectar la porción media en el frasco.</li>
         </ol>
       </div>
       <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
@@ -244,33 +188,7 @@
     </div>
   </div>
 
-  <div id="modalDeposicion" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="bg-amber-600 text-white p-4 flex justify-between items-center">
-        <h3 class="font-bold text-lg">💩 Guía General: Muestra de Deposición</h3>
-        <button onclick="toggleModal('modalDeposicion')" class="text-2xl font-bold hover:text-amber-200">&times;</button>
-      </div>
-      <div class="p-5 overflow-y-auto space-y-4 text-sm text-gray-700">
-        <div class="bg-amber-50 p-3 rounded-xl border border-amber-100">
-          <h4 class="font-bold text-amber-900 mb-1">Instrucciones Generales</h4>
-          <p>Aplica para Coprocultivo, Parasitológico, Parasitológico Seriado y Sangre Oculta en Deposición.</p>
-        </div>
-        <ol class="list-decimal list-inside space-y-2">
-          <li><strong>Caja/Frasco adecuado:</strong> Adquiere un frasco limpio/estéril con espátula para deposición en la farmacia.</li>
-          <li><strong>Evitar contaminación:</strong> La muestra no debe mezclarse con orina ni agua del WC. Orinar antes de la recolección.</li>
-          <li><strong>Cantidad:</strong> Tomar una porción pequeña del tamaño de una nuez con la espátula del frasco.</li>
-          <li><strong>Muestras seriadas:</strong> En caso de parasitológico seriado, recolectar las muestras en días alternados según la indicación del laboratorio.</li>
-        </ol>
-      </div>
-      <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
-        <button onclick="toggleModal('modalDeposicion')" class="bg-gray-800 text-white px-5 py-2 rounded-xl font-medium">Entendido</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Contenedor de impresión -->
-  <div id="printSection" class="hidden print:block"></div>
-
+  <!-- Enlace al archivo JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
