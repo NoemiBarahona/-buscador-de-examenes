@@ -63,7 +63,7 @@
       "Mezclar bien cada muestra con el líquido conservante del frasco.",
       "Mantener a temperatura ambiente en un lugar fresco hasta completar el kit."
     ],
-    "importancia": "Identifica parásitos, quistes y quistes de amebas o giardias en el tubo digestivo."
+    "importancia": "Permite detectar parásitos y sus formas, como quistes de amebas o Giardia, en muestras de deposición"
   },
   {
     "codigo": "0308004",
@@ -98,6 +98,7 @@
     "pasos_preparacion": [
       "Asistir en ayunas por la mañana.",
       "NO lavarse los dientes, no usar enjuague bucal ni chicles antes del examen.",
+      "Informar si está utilizando o ha utilizado antibióticos recientemente.",
       "No haber tomado antibióticos en los últimos 3 días."
     ],
     "importancia": "Identifica bacterias responsables de amigdalitis bacteriana (como el Estreptococo)."
@@ -233,9 +234,10 @@
     "tipo": "🧪 Muestra de Orina",
     "requisitos_rapidos": ["⏱️ Recolección 24 hrs", "🧊 Mantener fresco"],
     "pasos_preparacion": [
-      "Descartar la primera orina de las 7:00 AM.",
+      "A la hora indicada para iniciar la recolección, descartar la primera orina.",
+      "Registrar la hora de inicio y recolectar todas las micciones durante las siguientes 24 horas",
       "Juntar TODAS las micciones en un bidón durante 24 horas consecutivas.",
-      "Incluir la primera orina de las 7:00 AM del día siguiente.",
+      "Incluir la primera orina desde el iniciar de la recolección del día siguiente.",
       "Mantener refrigerado durante el proceso."
     ],
     "importancia": "Mide daño renal cuantitativo y excreción de proteínas o creatinina."
@@ -632,7 +634,7 @@
     "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "💊 Meds después de la toma"],
     "pasos_preparacion": [
       "Ayuno de 8 horas.",
-      "Si toma Eutirox/Levotiroxina, NO tomar la dosis la mañana del examen hasta después de la extracción."
+      "Si utiliza levotiroxina u otro medicamento tiroideo, consulte al laboratorio o siga la indicación médica sobre cuándo tomarlo."
     ],
     "importancia": "Examen de elección para detectar Hipotiroidismo o Hipertiroidismo."
   },
@@ -915,5 +917,137 @@
       "Ayuno de 8 horas la mañana de la muestra."
     ],
     "importancia": "Evalúa salud ósea, función paratiroidea y metabolismo mineral."
-  }
+  },
+{
+  "codigo": "0309008",
+  "nombre": "Calciuria",
+  "tipo": "🧪 Muestra de Orina",
+  "requisitos_rapidos": ["📦 Recipiente indicado", "📋 Seguir instrucciones del laboratorio"],
+  "pasos_preparacion": [
+    "Utilizar el recipiente indicado por el laboratorio.",
+    "La muestra puede requerir una recolección de orina durante un período determinado.",
+    "Si se solicita una recolección de 24 horas, seguir las instrucciones entregadas para iniciar y finalizar la recolección.",
+    "Mantener y transportar la muestra según las indicaciones del establecimiento."
+  ],
+  "importancia": "Permite medir la cantidad de calcio eliminada por la orina y apoyar el estudio del metabolismo del calcio y de algunas enfermedades renales."
+},
+{
+  "codigo": "0309010",
+  "nombre": "Creatininuria",
+  "tipo": "🧪 Muestra de Orina",
+  "requisitos_rapidos": ["📦 Frasco indicado por el laboratorio", "📋 Seguir instrucciones de recolección"],
+  "pasos_preparacion": [
+    "Utilizar el recipiente entregado o indicado por el laboratorio.",
+    "Si se solicita una muestra aislada, recolectarla según las indicaciones entregadas.",
+    "Si forma parte de una recolección de 24 horas, seguir estrictamente las instrucciones correspondientes a ese procedimiento.",
+    "Entregar la muestra según las indicaciones del laboratorio."
+  ],
+  "importancia": "Mide la cantidad de creatinina eliminada por la orina y puede utilizarse para evaluar la función renal."
+},
+{
+  "codigo": "0302024",
+  "nombre": "Clearance de Creatinina",
+  "tipo": "🧪 Muestra de Orina",
+  "requisitos_rapidos": ["⏱️ Recolección de 24 horas", "📦 Recipiente indicado", "🩸 Puede requerir muestra de sangre"],
+  "pasos_preparacion": [
+    "Recibir del laboratorio las instrucciones y el recipiente correspondiente.",
+    "Registrar la hora de inicio de la recolección.",
+    "Seguir las indicaciones entregadas para iniciar la recolección.",
+    "Recolectar todas las micciones durante el período indicado.",
+    "Finalizar la recolección según las instrucciones del laboratorio.",
+    "Mantener la muestra según las indicaciones de conservación entregadas."
+  ],
+  "importancia": "Permite estimar la capacidad de los riñones para filtrar la creatinina."
+},
+{
+  "codigo": "0308049",
+  "nombre": "Calprotectina Fecal",
+  "tipo": "💩 Muestra de Deposición",
+  "requisitos_rapidos": ["📦 Recipiente indicado", "🚫 No contaminar con agua ni orina"],
+  "pasos_preparacion": [
+    "Recolectar una muestra de deposición en el recipiente indicado por el laboratorio.",
+    "Evitar el contacto con agua del baño u orina.",
+    "Cerrar correctamente el recipiente después de recolectar la muestra.",
+    "Entregar la muestra siguiendo las instrucciones de conservación y transporte del laboratorio."
+  ],
+  "importancia": "Mide calprotectina en las deposiciones, un marcador que puede utilizarse para estudiar inflamación intestinal."
+},
+{
+  "codigo": "0302030",
+  "nombre": "LDH (Lactato Deshidrogenasa)",
+  "tipo": "🩸 Muestra de Sangre",
+  "requisitos_rapidos": ["📋 Seguir indicación del laboratorio", "🏋️ Informar ejercicio intenso"],
+  "pasos_preparacion": [
+    "Seguir las instrucciones entregadas por el laboratorio.",
+    "Informar al personal si realizó ejercicio físico intenso recientemente.",
+    "Informar los medicamentos y suplementos que utiliza habitualmente.",
+    "Realizar la toma de muestra según las indicaciones del establecimiento."
+  ],
+  "importancia": "Mide una enzima presente en diferentes tejidos y puede utilizarse como apoyo en el estudio de daño o lesión celular."
+},
+{
+  "codigo": "0302045",
+  "nombre": "GGT (Gamma Glutamil Transferasa)",
+  "tipo": "🩸 Muestra de Sangre",
+  "requisitos_rapidos": ["📋 Seguir indicación del laboratorio", "💊 Informar medicamentos"],
+  "pasos_preparacion": [
+    "Seguir las indicaciones de preparación entregadas por el laboratorio.",
+    "Informar al personal de salud sobre los medicamentos y suplementos que utiliza.",
+    "No suspender medicamentos por cuenta propia.",
+    "Realizar la toma de muestra según las indicaciones del establecimiento."
+  ],
+  "importancia": "Permite evaluar una enzima relacionada principalmente con el hígado y las vías biliares."
+},
+{
+  "codigo": "0301021",
+  "nombre": "Fibrinógeno",
+  "tipo": "🩸 Muestra de Sangre",
+  "requisitos_rapidos": ["📋 Seguir indicación del laboratorio", "💊 Informar medicamentos"],
+  "pasos_preparacion": [
+    "Seguir las instrucciones entregadas por el laboratorio.",
+    "Informar al personal de salud sobre medicamentos que puedan afectar la coagulación.",
+    "No suspender anticoagulantes u otros medicamentos por cuenta propia.",
+    "Realizar la toma de muestra según las indicaciones del establecimiento."
+  ],
+  "importancia": "Mide una proteína que participa en el proceso de coagulación de la sangre."
+},
+{
+  "codigo": "0301068",
+  "nombre": "Reticulocitos",
+  "tipo": "🩸 Muestra de Sangre",
+  "requisitos_rapidos": ["📋 Seguir indicación del laboratorio"],
+  "pasos_preparacion": [
+    "Seguir las indicaciones entregadas por el laboratorio.",
+    "Informar al personal de salud sobre medicamentos o tratamientos que esté utilizando.",
+    "No modificar medicamentos por cuenta propia.",
+    "Realizar la toma de muestra según el horario indicado."
+  ],
+  "importancia": "Mide los reticulocitos, que son glóbulos rojos inmaduros, y ayuda a evaluar la producción de glóbulos rojos por la médula ósea."
+},
+{
+  "codigo": "0302078",
+  "nombre": "Vitamina D 25-OH Total",
+  "tipo": "🩸 Muestra de Sangre",
+  "requisitos_rapidos": ["📋 Seguir indicación del laboratorio", "💊 Informar suplementos"],
+  "pasos_preparacion": [
+    "Seguir las indicaciones de preparación entregadas por el laboratorio.",
+    "Informar si utiliza suplementos de vitamina D u otros suplementos.",
+    "No suspender medicamentos o suplementos por cuenta propia.",
+    "Realizar la toma de muestra según el horario indicado."
+  ],
+  "importancia": "Permite evaluar la concentración de vitamina D en la sangre."
+},
+{
+  "codigo": "0306082",
+  "nombre": "PCR para SARS-CoV-2",
+  "tipo": "👃 Muestra Nasal / Nasofaríngea",
+  "requisitos_rapidos": ["👃 Hisopado nasal o nasofaríngeo", "📋 Seguir indicaciones del establecimiento"],
+  "pasos_preparacion": [
+    "Seguir las indicaciones entregadas por el establecimiento antes de la toma.",
+    "Informar al personal sobre síntomas respiratorios y su fecha de inicio.",
+    "Seguir las instrucciones específicas entregadas por el laboratorio para la preparación de la zona nasal.",
+    "La muestra será recolectada por personal capacitado mediante un hisopo."
+  ],
+  "importancia": "Detecta material genético del virus SARS-CoV-2 en una muestra respiratoria."
+}
 ]
