@@ -1,7 +1,18 @@
+// ==========================================
+// 1. VARIABLES GLOBALES Y CONFIGURACIÓN INICIAL
+// ==========================================
 let allExams = [];
 let selectedExams = JSON.parse(localStorage.getItem('selectedExams')) || [];
 let showingAll = false;
 
+// Diccionario interno de sinónimos por código de examen (Mantiene tu JSON limpio)
+const diccionarioSinonimos = {
+  "GUIA-SANGRE": ["sangre", "ayuno", "glicemia", "hemograma", "perfil", "lipidico", "venosa", "puncion"],
+  "GUIA-ORINA": ["orina", "pipi", "urocultivo", "orina completa", "segundo chorro", "pish", "pichi", "muestra orina", "fisiologico"],
+  "GUIA-FECA": ["caca", "feca", "fecas", "deposicion", "deposiciones", "coprocultivo", "parasitologico", "caquis", "muestra fecal", "digestion"]
+};
+
+// Cargar el JSON al iniciar la página
 document.addEventListener('DOMContentLoaded', () => {
   fetch('examenes.json')
     .then(response => response.json())
@@ -12,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(error => console.error('Error al cargar el JSON:', error));
 });
 
+// ==========================================
+// 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
+// ==========================================
 function cleanText(text) {
   if (!text) return '';
   return text
@@ -27,6 +41,17 @@ function formatPasos(pasos) {
   return pasos || 'Sin indicaciones especiales.';
 }
 
+function removeEmojis(string) {
+  if (!string) return '';
+  return string
+    .replace(/[\p{Extended_Pictographic}\p{Emoji_Component}\p{Symbol}]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// ==========================================
+// 3. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
+// ==========================================
 function renderExams(exams) {
   const container = document.getElementById('examList');
   if (!container) return;
@@ -89,6 +114,9 @@ function renderExams(exams) {
   });
 }
 
+// ==========================================
+// 4. SISTEMA DE FILTRADO Y BÚSQUEDA
+// ==========================================
 function filterExams() {
   const query = cleanText(document.getElementById('searchInput').value.trim());
   const btn = document.getElementById('showAllBtn');
@@ -111,19 +139,23 @@ function filterExams() {
     const nombre = cleanText(exam.nombre || '');
     const codigo = cleanText(exam.codigo || '');
     const tipo = cleanText(exam.tipo || '');
-    const sinonimos = cleanText(exam.sinonimos || '');
-
+    const sinonimosLista = diccionarioSinonimos[exam.codigo] || [];
+    const matchSinonimo = sinonimosLista.some(sinonimo => query.includes(cleanText(sinonimo)));
+    
     return (
       nombre.includes(query) || 
       codigo.includes(query) || 
       tipo.includes(query) || 
-      sinonimos.includes(query)
+      matchSinonimo
     );
   });
 
   renderExams(filtered);
 }
 
+// ==========================================
+// 5. GESTIÓN DE EXÁMENES SELECCIONADOS
+// ==========================================
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   document.getElementById('searchInput').value = '';
@@ -229,23 +261,17 @@ function toggleMobileCart() {
   toggleModal('mobileCartModal');
 }
 
-function removeEmojis(string) {
-  if (!string) return '';
-  return string
-    .replace(/[\p{Extended_Pictographic}\p{Emoji_Component}\p{Symbol}]/gu, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+// ==========================================
+// 6 y 8. IMPRESIÓN Y GUARDAR COMO PDF (Unificados)
+// ==========================================
+function generarPDFResumen() {
+  imprimirResumen();
 }
 
 function imprimirResumen() {
   if (!selectedExams || selectedExams.length === 0) {
-    alert("Por favor, selecciona al menos un examen antes de imprimir el resumen.");
+    alert("Por favor, selecciona al menos un examen antes de imprimir o guardar el resumen.");
     return;
-  }
-
-  const oldPrintSection = document.getElementById('printSection');
-  if (oldPrintSection) {
-    oldPrintSection.remove();
   }
 
   let htmlContent = `
@@ -372,4 +398,42 @@ function imprimirResumen() {
     printWindow.print();
     printWindow.close();
   };
+}
+
+// ==========================================
+// 7. COMPARTIR LISTA (WhatsApp y Redes Sociales)
+// ==========================================
+function compartirListaWhatsApp() {
+  if (!selectedExams || selectedExams.length === 0) {
+    alert("Por favor, selecciona al menos un examen para compartir.");
+    return;
+  }
+
+  let mensaje = "📋 *Mis Exámenes Médicos - Indicaciones* 📋\n\n";
+
+  selectedExams.forEach((exam, index) => {
+    const nombreLimpio = removeEmojis(exam.nombre || 'Examen');
+    mensaje += `${index + 1}. *${nombreLimpio}*\n`;
+    mensaje += `   • Muestra: ${removeEmojis(exam.tipo || 'No especificado')}\n`;
+    
+    if (Array.isArray(exam.pasos_preparacion)) {
+      mensaje += `   • Preparación:\n`;
+      exam.pasos_preparacion.forEach(paso => {
+        mensaje += `     - ${removeEmojis(paso)}\n`;
+      });
+    }
+    mensaje += `\n`;
+  });
+
+  mensaje += "_Generado desde mi asistente de laboratorios._";
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'Mis Exámenes Médicos',
+      text: mensaje,
+    }).catch((error) => console.log('Error al compartir:', error));
+  } else {
+    const urlWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensaje)}`;
+    window.open(urlWhatsApp, '_blank');
+  }
 }

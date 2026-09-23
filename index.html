@@ -4,16 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Instrucciones de Preparación - Exámenes Médicos</title>
-  <!-- Tailwind CSS -->
+  
+  <!-- Tailwind CSS (Framework de estilos) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Tu archivo CSS independiente -->
+  
+  <!-- Estilos CSS personalizados adicionales -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-slate-50 font-sans min-h-screen pb-20 lg:pb-0">
 
-  <!-- HEADER STICKY -->
+  <!-- ========================================== -->
+  <!-- 1. ENCABEZADO PRINCIPAL (Sticky Header)   -->
+  <!-- ========================================== -->
   <header class="sticky top-0 z-40 bg-white border-b border-gray-200 py-3 sm:py-4 px-4 sm:px-6 shadow-sm min-h-[68px] flex items-center">
     <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-3">
+      
+      <!-- Logotipo y título -->
       <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl sm:text-2xl font-bold shadow-sm shrink-0">
@@ -26,15 +32,21 @@
         </div>
       </div>
 
+      <!-- Badge informativo de escritorio -->
       <div class="hidden md:flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg shrink-0">
         <span>✅ Preparación de Exámenes</span>
       </div>
+
     </div>
   </header>
 
+
+  <!-- ========================================== -->
+  <!-- 2. CONTENIDO PRINCIPAL                      -->
+  <!-- ========================================== -->
   <main class="max-w-7xl mx-auto p-4 sm:p-6">
   
-    <!-- GUÍAS GENERALES -->
+    <!-- GUÍAS GENERALES RÁPIDAS -->
     <section class="mb-6 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
       <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
         ¿No sabes el nombre exacto de tu examen?
@@ -51,11 +63,12 @@
       </div>
     </section>
 
-    <!-- GRID PRINCIPAL -->
+    <!-- GRID PRINCIPAL (Buscador + Resultados / Barra Lateral) -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- COLUMNA IZQUIERDA -->
+      <!-- COLUMNA IZQUIERDA: Buscador y Listado de Exámenes -->
       <section class="lg:col-span-2">
+        <!-- Barra de búsqueda fija al hacer scroll -->
         <div class="sticky top-[68px] sm:top-[80px] z-30 bg-slate-50 py-3 mb-4 border-b border-gray-200">
           <label for="searchInput" class="block text-sm font-semibold text-gray-700 mb-2">
             🔍 Busca tu examen:
@@ -73,37 +86,62 @@
           </div>
         </div>
 
+        <!-- Contenedor dinámico donde se cargan las tarjetas de exámenes -->
         <div id="examList" class="space-y-4"></div>
       </section>
 
-      <!-- COLUMNA DERECHA (Escritorio) -->
+      <!-- COLUMNA DERECHA: Lista de Selección (Escritorio) -->
       <aside class="hidden lg:block lg:col-span-1">
         <div class="sticky top-[90px] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm space-y-4">
+          
           <div class="flex items-center justify-between pb-3 border-b border-gray-100">
             <h2 class="font-bold text-gray-800 text-base flex items-center gap-2">
               📋 Mis Exámenes <span id="selectedCount" class="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full">0</span>
             </h2>
           </div>
           
+          <!-- Contenedor de elementos seleccionados -->
           <div id="selectedExamsList" class="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
             <p class="text-sm text-gray-400 text-center py-6">No has seleccionado ningún examen aún.</p>
           </div>
 
+          <!-- Botones de Acción de Escritorio (Compartir, PDF, Vaciar) -->
           <div class="pt-3 border-t border-gray-100 space-y-2">
-            <button onclick="imprimirResumen()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors">
-              🖨️ Imprimir Resumen
+            <button 
+              type="button" 
+              onclick="compartirListaWhatsApp()"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-sm"
+            >
+              📤 Compartir Lista (Texto)
             </button>
-            <button onclick="clearSelectedExams()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-xl text-sm transition-colors">
+            <button 
+              type="button" 
+              onclick="generarPDFResumen()" 
+              class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors"
+            >
+              📄 Guardar como PDF / Imprimir
+            </button>
+            <button 
+              type="button" 
+              onclick="clearSelectedExams()" 
+              class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-xl text-sm transition-colors"
+            >
               Vaciar lista
             </button>
           </div>
+
         </div>
       </aside>
 
     </div>
   </main>
 
-  <!-- Botón Flotante Móvil -->
+
+  <!-- ========================================== -->
+  <!-- 3. COMPONENTES MÓVILES (Botón y Modal Carrito) -->
+  <!-- ========================================== -->
+
+  <!-- Botón Flotante para ver lista en dispositivos móviles -->
   <div class="lg:hidden fixed bottom-4 right-4 z-20">
     <button onclick="toggleMobileCart()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3.5 rounded-full shadow-lg flex items-center gap-2">
       📋 Mi Lista
@@ -111,7 +149,7 @@
     </button>
   </div>
 
-  <!-- Modal Móvil "Mi Lista" -->
+  <!-- Modal Desplegable para Móviles -->
   <div id="mobileCartModal" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
     <div class="bg-white w-full max-w-md h-full p-6 overflow-y-auto flex flex-col justify-between">
       <div>
@@ -124,18 +162,40 @@
         </div>
       </div>
       
+      <!-- Acciones Móviles (Compartir, PDF, Vaciar) -->
       <div class="pt-4 border-t border-gray-100 space-y-2">
-        <button onclick="imprimirResumen()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow flex items-center justify-center gap-2">
-          🖨️ Imprimir Resumen
+        <button 
+          type="button" 
+          onclick="compartirListaWhatsApp()"
+          class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-sm"
+        >
+          📤 Compartir Lista (Texto)
         </button>
-        <button onclick="clearSelectedExams()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-4 rounded-xl">
+        <button 
+          type="button" 
+          onclick="generarPDFResumen()" 
+          class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors"
+        >
+          📄 Guardar como PDF / Imprimir
+        </button>
+        <button 
+          type="button" 
+          onclick="clearSelectedExams()" 
+          class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-4 rounded-xl text-sm transition-colors"
+        >
           Vaciar lista
         </button>
       </div>
+
     </div>
   </div>
 
-  <!-- MODALES INFORMATIVOS -->
+
+  <!-- ========================================== -->
+  <!-- 4. MODALES INFORMATIVOS (Guías Generales)  -->
+  <!-- ========================================== -->
+
+  <!-- Modal Guía de Sangre -->
   <div id="modalSangre" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
       <div class="bg-red-600 text-white p-4 flex justify-between items-center">
@@ -165,6 +225,7 @@
     </div>
   </div>
 
+  <!-- Modal Guía de Orina -->
   <div id="modalOrina" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
       <div class="bg-emerald-600 text-white p-4 flex justify-between items-center">
@@ -188,7 +249,10 @@
     </div>
   </div>
 
-  <!-- Enlace al archivo JavaScript -->
+
+  <!-- ========================================== -->
+  <!-- 5. ARCHIVO JAVASCRIPT PRINCIPAL             -->
+  <!-- ========================================== -->
   <script src="script.js"></script>
 </body>
 </html>
