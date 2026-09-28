@@ -12,7 +12,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-slate-50 font-sans min-h-screen pb-20 lg:pb-0">
-  <!-- 1. ENCABEZADO PRINCIPAL (Sticky Header)   -->
+
+  <!-- 1. ENCABEZADO PRINCIPAL (Sticky Header) -->
   <header class="sticky top-0 z-40 bg-white border-b border-gray-200 py-3 sm:py-4 px-4 sm:px-6 shadow-sm min-h-[68px] flex items-center">
     <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-3">
       <!-- Logotipo y título -->
@@ -33,40 +34,39 @@
       </div>
     </div>
   </header>
-  <!-- 2. CONTENIDO PRINCIPAL                      -->
-  <main class="max-w-7xl mx-auto p-4 sm:p-6">
-<!-- GUÍAS GENERALES RÁPIDAS (3 Botones Principales) -->
-    <section class="mb-6 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
+
+  <!-- 2. CONTENIDO PRINCIPAL -->
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- GUÍAS GENERALES RÁPIDAS (3 Botones Principales que abren modales) -->
+    <section class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
       <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
-        ¿No sabes el nombre exacto de tu examen?
+        ¿No sabes el nombre exacto de tu examen? Consulta las guías visuales:
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <!-- Botón 1: Sangre -->
-        <!-- Botón 1: Sangre (Se mantiene igual) -->
-<button onclick="toggleModal('modalSangre')" class="flex items-center justify-between bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
-  <span class="flex items-center gap-2">🩸 Exámenes de Sangre</span>
-  <span>➔</span>
-</button>
-
-<!-- Botón 2: Orina (Modificado a amarillo/beige suave: tono amber/yellow muy claro) -->
-<button onclick="toggleModal('modalOrina')" class="flex items-center justify-between bg-amber-50/80 hover:bg-amber-100 text-amber-900 border border-amber-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
-  <span class="flex items-center gap-2">🧪 Muestra de Orina</span>
-  <span>➔</span>
-</button>
-
-<!-- Botón 3: Deposición (Tono marrón arena claro / caqui sutil) -->
-<button onclick="toggleModal('modalFeca')" class="flex items-center justify-between bg-stone-200 hover:bg-stone-300 text-stone-900 border border-stone-300 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
-  <span class="flex items-center gap-2">💩 Muestra de Deposición</span>
-  <span>➔</span>
-</button>
+        <button onclick="toggleModal('modalSangre')" class="flex items-center justify-between bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
+          <span class="flex items-center gap-2">🩸 Exámenes de Sangre</span>
+          <span>➔</span>
+        </button>
+        <!-- Botón 2: Orina -->
+        <button onclick="toggleModal('modalOrina')" class="flex items-center justify-between bg-amber-50/80 hover:bg-amber-100 text-amber-900 border border-amber-200 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
+          <span class="flex items-center gap-2">🟡 Muestra de Orina</span>
+          <span>➔</span>
+        </button>
+        <!-- Botón 3: Deposición -->
+        <button onclick="toggleModal('modalFeca')" class="flex items-center justify-between bg-stone-200 hover:bg-stone-300 text-stone-900 border border-stone-300 p-3.5 rounded-xl transition-colors font-semibold text-left text-sm">
+          <span class="flex items-center gap-2">💩 Muestra de Deposición</span>
+          <span>➔</span>
+        </button>
       </div>
     </section>
+
     <!-- GRID PRINCIPAL (Buscador + Resultados / Barra Lateral) -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
       <!-- COLUMNA IZQUIERDA: Buscador y Listado de Exámenes -->
       <section class="lg:col-span-2">
-        <!-- Barra de búsqueda fija al hacer scroll -->
         <div class="sticky top-[68px] sm:top-[80px] z-30 bg-slate-50 py-3 mb-4 border-b border-gray-200">
           <label for="searchInput" class="block text-sm font-semibold text-gray-700 mb-2">
             🔍 Busca tu examen:
@@ -83,9 +83,9 @@
             </button>
           </div>
         </div>
-        <!-- Contenedor dinámico donde se cargan las tarjetas de exámenes -->
         <div id="examList" class="space-y-4"></div>
       </section>
+
       <!-- COLUMNA DERECHA: Lista de Selección (Escritorio) -->
       <aside class="hidden lg:block lg:col-span-1">
         <div class="sticky top-[90px] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm space-y-4"> 
@@ -94,31 +94,17 @@
               📋 Mis Exámenes <span id="selectedCount" class="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full">0</span>
             </h2>
           </div>
-          <!-- Contenedor de elementos seleccionados -->
           <div id="selectedExamsList" class="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
             <p class="text-sm text-gray-400 text-center py-6">No has seleccionado ningún examen aún.</p>
           </div>
-          <!-- Botones de Acción de Escritorio (Compartir, PDF, Vaciar) -->
           <div class="pt-3 border-t border-gray-100 space-y-2">
-            <button 
-              type="button" 
-              onclick="compartirListaWhatsApp()"
-              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-sm"
-            >
-              📤 Compartir Lista (Texto)
+            <button type="button" onclick="compartirListaWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-sm">
+              🔗 Compartir (Texto)
             </button>
-            <button 
-              type="button" 
-              onclick="generarPDFResumen()" 
-              class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors"
-            >
+            <button type="button" onclick="generarPDFResumen()" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors">
               📄 Guardar como PDF / Imprimir
             </button>
-            <button 
-              type="button" 
-              onclick="clearSelectedExams()" 
-              class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-xl text-sm transition-colors"
-            >
+            <button type="button" onclick="clearSelectedExams()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-xl text-sm transition-colors">
               Vaciar lista
             </button>
           </div>
@@ -126,15 +112,15 @@
       </aside>
     </div>
   </main>
+
   <!-- 3. COMPONENTES MÓVILES (Botón y Modal Carrito) -->
-  <!-- Botón Flotante para ver lista en dispositivos móviles -->
   <div class="lg:hidden fixed bottom-4 right-4 z-20">
     <button onclick="toggleMobileCart()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3.5 rounded-full shadow-lg flex items-center gap-2">
       📋 Mi Lista
       <span id="mobileSelectedCount" class="bg-white text-emerald-800 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
     </button>
   </div>
-  <!-- Modal Desplegable para Móviles -->
+
   <div id="mobileCartModal" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
     <div class="bg-white w-full max-w-md h-full p-6 overflow-y-auto flex flex-col justify-between">
       <div>
@@ -146,33 +132,24 @@
           <p class="text-sm text-gray-400 text-center py-6">No has seleccionado ningún examen aún.</p>
         </div>
       </div>
-      <!-- Acciones Móviles (Compartir, PDF, Vaciar) -->
       <div class="pt-4 border-t border-gray-100 space-y-2">
-        <button 
-          type="button" 
-          onclick="compartirListaWhatsApp()"
-          class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-sm"
-        >
-          📤 Compartir Lista (Texto)
+        <button type="button" onclick="compartirListaWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-sm">
+           🔗 Compartir (Texto)
         </button>
-        <button 
-          type="button" 
-          onclick="generarPDFResumen()" 
-          class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors"
-        >
+        <button type="button" onclick="generarPDFResumen()" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 px-4 rounded-xl shadow text-sm flex items-center justify-center gap-2 transition-colors">
           📄 Guardar como PDF / Imprimir
         </button>
-        <button 
-          type="button" 
-          onclick="clearSelectedExams()" 
-          class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-4 rounded-xl text-sm transition-colors"
-        >
+        <button type="button" onclick="clearSelectedExams()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-xl text-sm transition-colors">
           Vaciar lista
         </button>
       </div>
     </div>
   </div>
-  <!-- 4. MODALES INFORMATIVOS (Guías Generales)  -->
+
+  <!-- ========================================== -->
+  <!-- 4. MODALES INFORMATIVOS (Imagen limpia + Lupa) -->
+  <!-- ========================================== -->
+
   <!-- Modal Guía de Sangre -->
   <div id="modalSangre" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -180,7 +157,17 @@
         <h3 class="font-bold text-lg">🩸 Guía General: Exámenes de Sangre y Ayuno</h3>
         <button onclick="toggleModal('modalSangre')" class="text-2xl font-bold hover:text-red-200">&times;</button>
       </div>
+      
       <div class="p-5 overflow-y-auto space-y-4 text-sm text-gray-700">
+        <!-- Imagen Solita con Lupa Disimulada en la esquina -->
+<div class="relative bg-red-50 p-3 rounded-xl border border-red-100 flex items-center justify-center group cursor-pointer" onclick="abrirModalImagen('img/Imagen_sangre.jpeg', 'Guía Exámenes de Sangre')">          <img src="img/Imagen_sangre.jpeg" alt="Guía visual de sangre" class="w-full max-h-64 object-contain rounded-lg bg-white p-2 shadow-sm">
+          <!-- Icono de Lupa Flotante Disimulado -->
+          <div class="absolute bottom-5 right-5 bg-black/60 text-white p-2 rounded-full shadow-md opacity-80 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            🔍
+          </div>
+        </div>
+
+        <!-- Texto Original -->
         <div class="bg-red-50 p-3 rounded-xl border border-red-100">
           <h4 class="font-bold text-red-900 mb-1">¿Qué es el ayuno médico?</h4>
           <p>Consiste en abstenerse por completo de ingerir alimentos y bebidas (excepto agua pura) durante un período determinado antes de la toma de muestra.</p>
@@ -197,60 +184,330 @@
           <p>Beber pequeñas cantidades de <strong>agua pura estéril o del grifo</strong>. Te mantendrá hidratado y facilitará la extracción de sangre.</p>
         </div>
       </div>
+      
       <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
-        <button onclick="toggleModal('modalSangre')" class="bg-gray-800 text-white px-5 py-2 rounded-xl font-medium">Entendido</button>
+        <button onclick="toggleModal('modalSangre')" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium text-sm">Entendido</button>
       </div>
     </div>
   </div>
-<!-- Modal Guía de Orina -->
-<div id="modalOrina" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-    <!-- Encabezado en tono ámbar/amarillo cálido -->
-    <div class="bg-amber-500 text-white p-4 flex justify-between items-center">
-      <h3 class="font-bold text-lg">🧪 Guía General: Toma de Muestra de Orina</h3>
-      <button onclick="toggleModal('modalOrina')" class="text-2xl font-bold hover:text-amber-100">&times;</button>
-    </div>
-    <div class="p-5 overflow-y-auto space-y-4 text-sm text-gray-700">
-      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
-        <h4 class="font-bold text-amber-900 mb-1">Instrucciones Estándar (Urocultivo / Orina Completa)</h4>
-        <p>Aplica para la mayoría de los exámenes de orina de rutina.</p>
+
+  <!-- Modal Guía de Orina -->
+  <div id="modalOrina" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-amber-500 text-white p-4 flex justify-between items-center">
+        <h3 class="font-bold text-lg">🟡 Guía General: Toma de Muestra de Orina</h3>
+        <button onclick="toggleModal('modalOrina')" class="text-2xl font-bold hover:text-amber-100">&times;</button>
       </div>
-      <ol class="list-decimal list-inside space-y-2">
-        <li><strong>Usar frasco estéril:</strong> Adquiérelo en la farmacia. No tocar el interior del frasco ni de la tapa.</li>
-        <li><strong>Primera orina de la mañana:</strong> Muestra ideal por estar más concentrada. Retención mínima de 4 horas.</li>
-        <li><strong>Técnica del Segundo Chorro:</strong> Descartar la primera porción, recolectar la porción media en el frasco.</li>
-      </ol>
-    </div>
-    <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
-      <button onclick="toggleModal('modalOrina')" class="bg-gray-800 text-white px-5 py-2 rounded-xl font-medium">Entendido</button>
-    </div>
+      
+      <div class="p-5 overflow-y-auto space-y-4 text-sm text-gray-700">
+        <!-- Imagen Solita con Lupa Disimulada -->
+<div class="relative bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-center justify-center group cursor-pointer" onclick="abrirModalImagen('img/Imagen_orina.jpeg', 'Guía Muestra de Orina')">
+  <img src="img/Imagen_orina.jpeg" alt="Guía visual de orina" class="w-full max-h-64 object-contain rounded-lg bg-white p-2 shadow-sm">
+  <div class="absolute bottom-5 right-5 bg-black/60 text-white p-2 rounded-full shadow-md opacity-80 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+    🔍
   </div>
 </div>
-<!-- Modal Guía de Deposición (Fecal) -->
-<div id="modalFeca" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-    <!-- Encabezado en tono caqui / marrón tierra -->
-    <div class="bg-yellow-800 text-white p-4 flex justify-between items-center">
-      <h3 class="font-bold text-lg">💩 Guía General: Muestra de Deposición</h3>
-      <button onclick="toggleModal('modalFeca')" class="text-2xl font-bold hover:text-yellow-200">&times;</button>
-    </div>
-    <div class="p-5 overflow-y-auto space-y-4 text-sm text-gray-700">
-      <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-200">
-        <h4 class="font-bold text-yellow-900 mb-1">Instrucciones Generales (Coprocultivo / Parasitológico)</h4>
-        <p>Recomendaciones para la recolección adecuada de la muestra fecal.</p>
+
+        <!-- Texto Original -->
+        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+          <h4 class="font-bold text-amber-900 mb-1">Instrucciones Estándar (Urocultivo / Orina Completa)</h4>
+          <p>Aplica para la mayoría de los exámenes de orina de rutina.</p>
+        </div>
+        <ol class="list-decimal list-inside space-y-2">
+          <li><strong>Usar frasco estéril:</strong> Adquiérelo en la farmacia. No tocar el interior del frasco ni de la tapa.</li>
+          <li><strong>Primera orina de la mañana:</strong> Muestra ideal por estar más concentrada. Retención mínima de 4 horas.</li>
+          <li><strong>Técnica del Segundo Chorro:</strong> Descartar la primera porción, recolectar la porción media en el frasco.</li>
+        </ol>
       </div>
-      <ol class="list-decimal list-inside space-y-2">
-        <li><strong>Evitar contaminación:</strong> La muestra no debe mezclarse con orina ni tocar las paredes del WC. Utiliza un recipiente limpio o un colector especial.</li>
-        <li><strong>Cantidad adecuada:</strong> Por lo general, se requiere el equivalente al tamaño de una nuez o una almendra.</li>
-        <li><strong>Conservación y traslado:</strong> Entregar la muestra en el laboratorio en el menor tiempo posible (o mantener refrigerada según las indicaciones específicas de tu orden médica).</li>
-      </ol>
-    </div>
-    <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
-      <button onclick="toggleModal('modalFeca')" class="bg-gray-800 text-white px-5 py-2 rounded-xl font-medium">Entendido</button>
+      
+      <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
+        <button onclick="toggleModal('modalOrina')" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium text-sm">Entendido</button>
+      </div>
     </div>
   </div>
+
+  <!-- Modal Guía de Deposición (Fecal) -->
+
+  <div id="modalFeca" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-stone-800 text-white p-4 flex justify-between items-center">
+        <h3 class="font-bold text-lg">💩 Guía General: Muestra de Deposición</h3>
+        <button onclick="toggleModal('modalFeca')" class="text-2xl font-bold hover:text-stone-300">&times;</button>
+      </div>
+      
+      <div class="p-5 overflow-y-auto space-y-4 text-sm text-gray-700">
+        <!-- Imagen Solita con Lupa Disimulada -->
+        <div class="relative bg-stone-50 p-3 rounded-xl border border-stone-200 flex items-center justify-center group cursor-pointer" onclick="abrirModalImagen('img/Imagen_deposicion.png', 'Guía Muestra de Deposición')">
+          <img src="img/Imagen_deposicion.png" alt="Guía visual de deposición" class="w-full max-h-64 object-contain rounded-lg bg-white p-2 shadow-sm">
+          <div class="absolute bottom-5 right-5 bg-black/60 text-white p-2 rounded-full shadow-md opacity-80 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            🔍
+          </div>
+        </div>
+
+        <!-- Texto Original -->
+        <div class="bg-stone-100 p-3 rounded-xl border border-stone-200">
+          <h4 class="font-bold text-stone-900 mb-1">Instrucciones Generales (Coprocultivo / Parasitológico)</h4>
+          <p>Recomendaciones para la recolección adecuada de la muestra fecal.</p>
+        </div>
+        <ol class="list-decimal list-inside space-y-2">
+          <li><strong>Evitar contaminación:</strong> La muestra no debe mezclarse con orina ni tocar las paredes del WC. Utiliza un recipiente limpio o un colector especial.</li>
+          <li><strong>Cantidad adecuada:</strong> Por lo general, se requiere el equivalente al tamaño de una nuez o una almendra.</li>
+          <li><strong>Conservación y traslado:</strong> Entregar la muestra en el laboratorio en el menor tiempo posible (o mantener refrigerada según las indicaciones específicas de tu orden médica).</li>
+        </ol>
+      </div>
+      
+      <div class="p-4 bg-gray-50 border-t border-gray-100 text-right">
+        <button onclick="toggleModal('modalFeca')" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium text-sm">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+<!-- 5. MODAL GENÉRICO PARA AMPLIAR IMAGEN (Con Zoom y Colores) -->
+  <div id="modalImagenAmpliada" class="fixed inset-0 bg-black/85 z-[70] hidden flex items-center justify-center p-4 transition-colors duration-300">
+    <div id="modalContenedorFondo" class="bg-gray-950 text-white max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] transition-colors duration-300">
+      
+<!-- Cabecera dinámica -->
+<div id="modalHeaderFondo" class="text-white p-4 flex justify-between items-center transition-colors duration-300">
+  <h3 id="tituloModalImagen" class="font-bold text-base sm:text-lg">Visualización Ampliada</h3>
+  <button onclick="cerrarModalImagen()" class="text-3xl font-bold hover:text-gray-300">&times;</button>
 </div>
-  <!-- 5. ARCHIVO JAVASCRIPT PRINCIPAL             -->
+      
+      <!-- Contenedor con scroll para mover la imagen al hacer zoom (ID zoomContainer clave) -->
+      <div id="zoomContainer" class="p-4 bg-gray-50 flex-1 flex items-center justify-center overflow-auto relative select-none">
+        <img id="imagenAmpliadaSrc" src="" alt="Guía ampliada" class="max-h-[70vh] object-contain rounded-xl shadow-sm transition-transform duration-150 origin-center">
+      </div>
+      
+      <!-- Barra inferior con botones de Zoom, Descargar y Cerrar -->
+      <div class="p-3 bg-white border-t border-gray-200 flex flex-wrap items-center justify-between gap-3">
+        <!-- Controles de Zoom (+ y -) -->
+        <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+          <button onclick="cambiarZoom(-0.25)" class="w-8 h-8 flex items-center justify-center font-bold text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">-</button>
+          <span id="zoomLevelText" class="px-2 text-xs font-semibold text-gray-600">100%</span>
+          <button onclick="cambiarZoom(0.25)" class="w-8 h-8 flex items-center justify-center font-bold text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">+</button>
+          <button onclick="resetZoom()" class="text-xs font-medium text-gray-500 hover:text-gray-800 px-2">Reset</button>
+        </div>
+
+<!-- Contenedor de Acciones (Descargar y Compartir) en el Header o Footer del modal -->
+<div class="flex items-center gap-2">
+  <!-- Botón de Descarga existente -->
+  <a id="btnDescargarModal" href="" download class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition-colors">
+    📥 Descargar
+  </a>
+
+  <!-- Botón de Compartir -->
+<button onclick="compartirImagenActual()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition-colors">
+  🔗 Compartir
+</button>
+</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 6. ARCHIVO JAVASCRIPT PRINCIPAL -->
   <script src="script.js"></script>
+<script>
+  // 1. Aquí puedes tener tus funciones anteriores (como abrirModalImagen, cerrarModalImagen, etc.)
+
+  function abrirModalImagen(urlImagen, titulo) {
+    const modal = document.getElementById('modalImagenAmpliada');
+    const imgElement = document.getElementById('imagenAmpliadaSrc');
+    const titleElement = document.getElementById('tituloModalImagen');
+    const downloadBtn = document.getElementById('btnDescargarModal');
+
+    if (modal && imgElement && titleElement) {
+      imgElement.src = urlImagen;
+      titleElement.textContent = titulo;
+      if (downloadBtn) downloadBtn.href = urlImagen;
+      
+      resetZoom(); // Reinicia el zoom y posición al abrir
+      modal.classList.remove('hidden');
+    }
+  }
+
+  function cerrarModalImagen() {
+    const modal = document.getElementById('modalImagenAmpliada');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
+  // ====================================================
+  // 2. PEGA AQUÍ EL NUEVO CÓDIGO DE ZOOM Y ARRASTRE (PAN)
+  // ====================================================
+ let escalaActual = 1;
+let posX = 0;
+let posY = 0;
+let estaArrastrando = false;
+let inicioX = 0;
+let inicioY = 0;
+
+const imgAmpliada = document.getElementById('imagenAmpliadaSrc');
+
+function actualizarTransformacion() {
+  if (imgAmpliada) {
+    imgAmpliada.style.transform = `translate(${posX}px, ${posY}px) scale(${escalaActual})`;
+    if (escalaActual > 1) {
+      imgAmpliada.style.cursor = 'grab';
+    } else {
+      imgAmpliada.style.cursor = 'default';
+      posX = 0;
+      posY = 0;
+    }
+  }
+}
+
+function cambiarZoom(delta) {
+  escalaActual += delta;
+  if (escalaActual < 1) escalaActual = 1;
+  if (escalaActual > 4) escalaActual = 4; // Límite máximo de zoom x4
+  actualizarTransformacion();
+}
+
+function resetZoom() {
+  escalaActual = 1;
+  posX = 0;
+  posY = 0;
+  actualizarTransformacion();
+}
+
+// --- EVENTOS DE ARRASTRE (MOUSE Y TOUCH) ---
+if (imgAmpliada) {
+  // 1. Eventos para PC (Mouse)
+  imgAmpliada.addEventListener('mousedown', (e) => {
+    if (escalaActual > 1) {
+      estaArrastrando = true;
+      inicioX = e.clientX - posX;
+      inicioY = e.clientY - posY;
+      imgAmpliada.style.cursor = 'grabbing';
+      e.preventDefault();
+    }
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!estaArrastrando) return;
+    posX = e.clientX - inicioX;
+    posY = e.clientY - inicioY;
+    actualizarTransformacion();
+  });
+
+  window.addEventListener('mouseup', () => {
+    estaArrastrando = false;
+    if (escalaActual > 1 && imgAmpliada) {
+      imgAmpliada.style.cursor = 'grab';
+    }
+  });
+
+  // 2. Eventos para Celulares y Tablets (Touch)
+  imgAmpliada.addEventListener('touchstart', (e) => {
+    if (escalaActual > 1 && e.touches.length === 1) {
+      estaArrastrando = true;
+      inicioX = e.touches[0].clientX - posX;
+      inicioY = e.touches[0].clientY - posY;
+      e.preventDefault(); // Evita que la pantalla se mueva por detrás
+    }
+  }, { passive: false });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!estaArrastrando || e.touches.length !== 1) return;
+    posX = e.touches[0].clientX - inicioX;
+    posY = e.touches[0].clientY - inicioY;
+    actualizarTransformacion();
+    e.preventDefault(); // Evita comportamientos extraños del navegador móvil
+  }, { passive: false });
+
+  window.addEventListener('touchend', () => {
+    estaArrastrando = false;
+  });
+}
+
+  function cambiarZoom(delta) {
+    escalaActual += delta;
+    if (escalaActual < 1) escalaActual = 1;
+    if (escalaActual > 4) escalaActual = 4;
+    actualizarTransformacion();
+  }
+
+  function resetZoom() {
+    escalaActual = 1;
+    posX = 0;
+    posY = 0;
+    actualizarTransformacion();
+  }
+
+  // Eventos de arrastre con el mouse y pantalla táctil
+  if (imgAmpliada) {
+    imgAmpliada.addEventListener('mousedown', (e) => {
+      if (escalaActual > 1) {
+        estaArrastrando = true;
+        inicioX = e.clientX - posX;
+        inicioY = e.clientY - posY;
+        imgAmpliada.style.cursor = 'grabbing';
+        e.preventDefault();
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!estaArrastrando) return;
+      posX = e.clientX - inicioX;
+      posY = e.clientY - inicioY;
+      actualizarTransformacion();
+    });
+
+    window.addEventListener('mouseup', () => {
+      estaArrastrando = false;
+      if (escalaActual > 1 && imgAmpliada) {
+        imgAmpliada.style.cursor = 'grab';
+      }
+    });
+  }
+ async function compartirImagenActual() {
+  const imgElement = document.getElementById('imagenAmpliadaSrc');
+  const titleElement = document.getElementById('tituloModalImagen');
+
+  if (!imgElement) return;
+
+  const urlImagen = imgElement.src;
+  const titulo = titleElement ? titleElement.textContent : 'Guía médica';
+
+  try {
+    // 1. Descargamos la imagen como un blob para convertirla en un archivo real adjuntable
+    const response = await fetch(urlImagen);
+    const blob = await response.blob();
+    
+    // Extraemos el nombre del archivo desde la ruta (ej: Imagen_orina.jpeg)
+    const nombreArchivo = urlImagen.substring(urlImagen.lastIndexOf('/') + 1) || 'guia-medica.jpeg';
+    const archivo = new File([blob], nombreArchivo, { type: blob.type });
+
+    // 2. Verificamos si el navegador soporta compartir archivos nativos
+    if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+      await navigator.share({
+        title: titulo,
+        text: `Hola, te comparto esta guía médica: ${titulo}`,
+        files: [archivo],
+      });
+    } else if (navigator.share) {
+      // Si soporta compartir pero no archivos directos, comparte el texto y enlace
+      await navigator.share({
+        title: titulo,
+        text: `Guía médica: ${titulo}`,
+        url: urlImagen,
+      });
+    } else {
+      // Plan de respaldo si está en PC de escritorio sin soporte de compartir
+      const enlaceTemporal = document.createElement('a');
+      enlaceTemporal.href = urlImagen;
+      enlaceTemporal.download = nombreArchivo;
+      document.body.appendChild(enlaceTemporal);
+      enlaceTemporal.click();
+      document.body.removeChild(enlaceTemporal);
+      alert('Tu navegador no permite compartir la imagen directamente. La hemos descargado en tu equipo para que puedas adjuntarla.');
+    }
+  } catch (error) {
+    console.log('Error al intentar compartir la imagen:', error);
+    alert('No se pudo compartir la imagen automáticamente.');
+  }
+}
+</script>
 </body>
 </html>

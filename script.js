@@ -418,3 +418,47 @@ function compartirListaWhatsApp() {
     window.open(urlWhatsApp, '_blank');
   }
 }
+function abrirModalImagen(urlImagen, titulo) {
+  const modal = document.getElementById('modalImagenAmpliada');
+  const imgElement = document.getElementById('imagenAmpliadaSrc');
+  const titleElement = document.getElementById('tituloModalImagen');
+  const downloadBtn = document.getElementById('btnDescargarModal');
+  const contenedorFondo = modal ? modal.querySelector('.max-w-4xl') : null;
+  const headerFondo = document.getElementById('modalHeaderFondo');
+
+  if (modal && imgElement && titleElement) {
+    imgElement.src = urlImagen;
+    titleElement.textContent = titulo;
+    if (downloadBtn) downloadBtn.href = urlImagen;
+    
+    // Detectar color según el título o la ruta de la imagen
+    const urlLower = urlImagen.toLowerCase();
+    const tituloLower = titulo.toLowerCase();
+
+    if (headerFondo && contenedorFondo) {
+      if (urlLower.includes('sangre') || tituloLower.includes('sangre')) {
+        // Colores para SANGRE (Rojo)
+        contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-red-950 text-white transition-colors duration-300";
+        headerFondo.className = "bg-red-600 text-white p-4 flex justify-between items-center transition-colors duration-300";
+      } else if (urlLower.includes('orina') || tituloLower.includes('orina')) {
+        // Colores para ORINA (Ámbar / Amarillo)
+        contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-950 text-white transition-colors duration-300";
+        headerFondo.className = "bg-amber-500 text-white p-4 flex justify-between items-center transition-colors duration-300";
+      } else {
+        // Colores para DEPOSICIÓN (Café / Stone)
+        contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-stone-900 text-white transition-colors duration-300";
+        headerFondo.className = "bg-stone-700 text-white p-4 flex justify-between items-center transition-colors duration-300";
+      }
+    }
+
+    resetZoom(); // Reinicia el zoom y posición al abrir
+    modal.classList.remove('hidden');
+  }
+}
+
+function cerrarModalImagen() {
+  const modal = document.getElementById('modalImagenAmpliada');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+}
