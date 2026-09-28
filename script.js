@@ -1,6 +1,4 @@
-// ==========================================
 // 1. VARIABLES GLOBALES Y CONFIGURACIÓN INICIAL
-// ==========================================
 let allExams = [];
 let selectedExams = JSON.parse(localStorage.getItem('selectedExams')) || [];
 let showingAll = false;
@@ -22,10 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(error => console.error('Error al cargar el JSON:', error));
 });
-
-// ==========================================
 // 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
-// ==========================================
 function cleanText(text) {
   if (!text) return '';
   return text
@@ -48,10 +43,7 @@ function removeEmojis(string) {
     .replace(/\s+/g, ' ')
     .trim();
 }
-
-// ==========================================
 // 3. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
-// ==========================================
 function renderExams(exams) {
   const container = document.getElementById('examList');
   if (!container) return;
@@ -113,10 +105,7 @@ function renderExams(exams) {
     container.appendChild(card);
   });
 }
-
-// ==========================================
 // 4. SISTEMA DE FILTRADO Y BÚSQUEDA
-// ==========================================
 function filterExams() {
   const query = cleanText(document.getElementById('searchInput').value.trim());
   const btn = document.getElementById('showAllBtn');
@@ -152,10 +141,7 @@ function filterExams() {
 
   renderExams(filtered);
 }
-
-// ==========================================
 // 5. GESTIÓN DE EXÁMENES SELECCIONADOS
-// ==========================================
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   document.getElementById('searchInput').value = '';
@@ -260,10 +246,8 @@ function toggleModal(modalId) {
 function toggleMobileCart() {
   toggleModal('mobileCartModal');
 }
-
-// ==========================================
 // 6 y 8. IMPRESIÓN Y GUARDAR COMO PDF (Unificados)
-// ==========================================
+
 function generarPDFResumen() {
   imprimirResumen();
 }
@@ -399,10 +383,7 @@ function imprimirResumen() {
     printWindow.close();
   };
 }
-
-// ==========================================
 // 7. COMPARTIR LISTA (WhatsApp y Redes Sociales)
-// ==========================================
 function compartirListaWhatsApp() {
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen para compartir.");
