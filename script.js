@@ -61,45 +61,78 @@ function renderExams(exams) {
   exams.forEach(exam => {
     const isSelected = selectedExams.some(e => e.codigo === exam.codigo);
     
+    // DETECCIÓN AUTOMÁTICA DE LA IMAGEN SEGÚN EL TIPO O CÓDIGO
+    let imagenRuta = '';
+    let tituloGuia = exam.nombre;
+    const codigoUpper = (exam.codigo || '').toUpperCase();
+    const tipoLower = (exam.tipo || '').toLowerCase();
+    const nombreLower = (exam.nombre || '').toLowerCase();
+
+    if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre' ) || nombreLower.includes('sangre') || nombreLower.includes('glicemia') || nombreLower.includes('perfil')) {
+      imagenRuta = 'img/Imagen_sangre.jpeg';
+      tituloGuia = 'Guía Exámenes de Sangre';
+    } else if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
+      imagenRuta = 'img/Imagen_orina.jpeg';
+      tituloGuia = 'Guía Muestra de Orina';
+    } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo')) {
+      imagenRuta = 'img/Imagen_deposicion.png';
+      tituloGuia = 'Guía Muestra de Deposición';
+    }
+
     const requisitosHTML = Array.isArray(exam.requisitos_rapidos) 
       ? exam.requisitos_rapidos.map(r => `<span class="inline-block bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-md font-medium mr-1 mb-1">${r}</span>`).join('')
       : '';
 
     const card = document.createElement('div');
-    card.className = "bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md";
+    card.className = "bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md flex flex-col justify-between";
     card.innerHTML = `
-      <div class="pb-3 border-b border-gray-100">
-        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block mb-1">
-          Código: ${exam.codigo}
-        </span>
-        <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
+      <div>
+        <div class="pb-3 border-b border-gray-100">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block">
+              Código: ${exam.codigo}
+            </span>
+            
+            <!-- Botón automático de la guía visual -->
+            ${imagenRuta ? `
+              <button 
+                type="button"
+                onclick="abrirModalImagen('${imagenRuta}', '${tituloGuia}')"
+                class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
+              >
+                🖼️ Ver Guía
+              </button>
+            ` : ''}
+          </div>
+          <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
+        </div>
+
+        <div class="mt-3 sm:mt-4 space-y-3 text-xs sm:text-sm text-gray-600">
+          <p><strong class="text-gray-800">📋 Tipo de muestra:</strong> ${exam.tipo || 'No especificado'}</p>
+          
+          ${requisitosHTML ? `<div>${requisitosHTML}</div>` : ''}
+
+          <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-lg">
+            <p class="font-semibold text-amber-900 text-xs uppercase tracking-wider mb-1">Pasos de preparación:</p>
+            <div class="text-amber-800">${formatPasos(exam.pasos_preparacion)}</div>
+          </div>
+
+          ${exam.importancia ? `<p class="text-xs text-gray-500 italic"><strong class="text-gray-700">💡 Importancia:</strong> ${exam.importancia}</p>` : ''}
+        </div>
       </div>
 
-      <div class="mt-3 sm:mt-4 space-y-3 text-xs sm:text-sm text-gray-600">
-        <p><strong class="text-gray-800">📋 Tipo de muestra:</strong> ${exam.tipo || 'No especificado'}</p>
-        
-        ${requisitosHTML ? `<div>${requisitosHTML}</div>` : ''}
-
-        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-lg">
-          <p class="font-semibold text-amber-900 text-xs uppercase tracking-wider mb-1">Pasos de preparación:</p>
-          <div class="text-amber-800">${formatPasos(exam.pasos_preparacion)}</div>
-        </div>
-
-        ${exam.importancia ? `<p class="text-xs text-gray-500 italic"><strong class="text-gray-700">💡 Importancia:</strong> ${exam.importancia}</p>` : ''}
-
-        <div class="pt-2 sm:flex sm:justify-end border-t border-gray-100 sm:border-0 sm:pt-0">
-          <button 
-            type="button"
-            onclick="toggleSelectExam('${exam.codigo}')"
-            class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shrink-0 ${
-              isSelected 
-                ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' 
-                : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm'
-            }"
-          >
-            ${isSelected ? '❌ Quitar de mi lista' : '➕ Agregar a mi lista'}
-          </button>
-        </div>
+      <div class="pt-4 mt-4 sm:flex sm:justify-end border-t border-gray-100">
+        <button 
+          type="button"
+          onclick="toggleSelectExam('${exam.codigo}')"
+          class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shrink-0 ${
+            isSelected 
+              ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' 
+              : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm'
+          }"
+        >
+          ${isSelected ? '❌ Quitar de mi lista' : '➕ Agregar a mi lista'}
+        </button>
       </div>
     `;
     container.appendChild(card);
