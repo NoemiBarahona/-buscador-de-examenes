@@ -6,7 +6,7 @@ let showingAll = false;
 // Diccionario interno de sinónimos por código de examen (Mantiene tu JSON limpio)
 const diccionarioSinonimos = {
   "GUIA-SANGRE": ["sangre", "ayuno", "glicemia", "hemograma", "perfil", "lipidico", "venosa", "puncion"],
-  "GUIA-ORINA": ["orina", "pipi", "urocultivo", "orina completa", "segundo chorro", "pish", "pichi", "muestra orina", "fisiologico"],
+  "GUIA-ORINA": ["orina", "pipi", "pis","urocultivo", "orina completa", "segundo chorro", "pish", "pichi", "muestra orina", "fisiologico"],
   "GUIA-FECA": ["caca", "feca", "fecas", "deposicion", "deposiciones", "coprocultivo", "parasitologico", "caquis", "muestra fecal", "digestion"]
 };
 
