@@ -75,7 +75,7 @@ function renderExams(exams) {
       imagenRuta = 'img/Imagen_orina.jpeg';
       tituloGuia = 'Guía Muestra de Orina';
     } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo')) {
-      imagenRuta = 'img/Imagen_deposicion.png';
+      imagenRuta = 'img/Imagen_deposicion.jpeg';
       tituloGuia = 'Guía Muestra de Deposición';
     }
 
