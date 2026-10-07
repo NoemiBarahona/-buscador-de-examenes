@@ -3,14 +3,14 @@ let allExams = [];
 let selectedExams = JSON.parse(localStorage.getItem('selectedExams')) || [];
 let showingAll = false;
 
-// Diccionario interno de sinónimos por código de examen (Mantiene tu JSON limpio)
+// Diccionario interno de sinónimos por código de examen
 const diccionarioSinonimos = {
   "GUIA-SANGRE": ["sangre", "ayuno", "glicemia", "hemograma", "perfil", "lipidico", "venosa", "puncion"],
   "GUIA-ORINA": ["orina", "pipi", "pis","urocultivo", "orina completa", "segundo chorro", "pish", "pichi", "muestra orina", "fisiologico"],
   "GUIA-FECA": ["caca", "feca", "fecas", "deposicion", "deposiciones", "coprocultivo", "parasitologico", "caquis", "muestra fecal", "digestion"]
 };
 
-// Cargar el JSON al iniciar la página
+// Cargar el JSON al iniciar la página y conectar el buscador automáticamente
 document.addEventListener('DOMContentLoaded', () => {
   fetch('examenes.json')
     .then(response => response.json())
@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
       updateSelectedUI();
     })
     .catch(error => console.error('Error al cargar el JSON:', error));
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', filterExams);
+  }
 });
+
 // 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
 function cleanText(text) {
   if (!text) return '';
@@ -43,40 +49,44 @@ function removeEmojis(string) {
     .replace(/\s+/g, ' ')
     .trim();
 }
+
 // 3. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
 function renderExams(exams) {
-  const container = document.getElementById('examList');
+  const container = document.getElementById('examsContainer');
   if (!container) return;
+  
   container.innerHTML = '';
 
   if (!exams || exams.length === 0) {
-    container.innerHTML = `
-      <div class="text-center py-8 text-gray-500 bg-white rounded-2xl border border-gray-200 p-6">
-        <p class="text-sm sm:text-base">No hay exámenes en pantalla. Usa el buscador o presiona "Ver todos".</p>
-      </div>
-    `;
+    container.innerHTML = `<p class="text-sm text-gray-500 text-center col-span-full py-8">No se encontraron exámenes.</p>`;
     return;
   }
 
   exams.forEach(exam => {
     const isSelected = selectedExams.some(e => e.codigo === exam.codigo);
     
-    // DETECCIÓN AUTOMÁTICA DE LA IMAGEN SEGÚN EL TIPO O CÓDIGO
-    let imagenRuta = '';
-    let tituloGuia = exam.nombre;
+    // Lógica robusta para detectar la imagen correcta (Específica o General)
     const codigoUpper = (exam.codigo || '').toUpperCase();
     const tipoLower = (exam.tipo || '').toLowerCase();
     const nombreLower = (exam.nombre || '').toLowerCase();
 
-    if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre' ) || nombreLower.includes('sangre') || nombreLower.includes('glicemia') || nombreLower.includes('perfil')) {
-      imagenRuta = 'img/Imagen_sangre.jpeg';
-      tituloGuia = 'Guía Exámenes de Sangre';
-    } else if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
-      imagenRuta = 'img/Imagen_orina.jpeg';
+    let rutaImagenFinal = `img/${exam.codigo}.png`;
+    let tituloGuia = exam.nombre;
+
+    if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
+      rutaImagenFinal = 'img/Imagen_orina.jpeg';
       tituloGuia = 'Guía Muestra de Orina';
     } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo')) {
-      imagenRuta = 'img/Imagen_deposicion.jpeg';
+      rutaImagenFinal = 'img/Imagen_deposicion.jpeg';
       tituloGuia = 'Guía Muestra de Deposición';
+    } else if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre') || nombreLower.includes('sangre') || nombreLower.includes('perfil') || nombreLower.includes('hemograma')) {
+      // Si es un examen general de sangre o tiene relación, evaluamos si usamos el general o específico
+      // Nota: Si tus exámenes de sangre específicos usan su código, puedes ajustar esta condición si prefieres.
+      // Por ahora, si es el genérico de sangre usa la general:
+      if (codigoUpper === 'GUIA-SANGRE') {
+        rutaImagenFinal = 'img/Imagen_sangre.jpeg';
+        tituloGuia = 'Guía Exámenes de Sangre';
+      }
     }
 
     const requisitosHTML = Array.isArray(exam.requisitos_rapidos) 
@@ -93,16 +103,14 @@ function renderExams(exams) {
               Código: ${exam.codigo}
             </span>
             
-            <!-- Botón automático de la guía visual -->
-            ${imagenRuta ? `
-              <button 
-                type="button"
-                onclick="abrirModalImagen('${imagenRuta}', '${tituloGuia}')"
-                class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
-              >
-                🖼️ Ver Guía
-              </button>
-            ` : ''}
+            <!-- Botón que envía la ruta correcta evaluada -->
+            <button 
+              type="button"
+              onclick="abrirModalImagen('${rutaImagenFinal}', '${tituloGuia}')"
+              class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
+            >
+              🖼️ Ver Guía
+            </button>
           </div>
           <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
         </div>
@@ -138,9 +146,16 @@ function renderExams(exams) {
     container.appendChild(card);
   });
 }
+
 // 4. SISTEMA DE FILTRADO Y BÚSQUEDA
+// 4. SISTEMA DE FILTRADO Y BÚSQUEDA AVANZADO
 function filterExams() {
-  const query = cleanText(document.getElementById('searchInput').value.trim());
+  const searchInput = document.getElementById('searchInput');
+  if (!searchInput) return;
+
+  // Limpiamos la consulta del usuario (sin tildes, todo minúsculas, sin espacios de más)
+  const queryRaw = searchInput.value.trim();
+  const query = cleanText(queryRaw);
   const btn = document.getElementById('showAllBtn');
 
   if (query === '') {
@@ -153,44 +168,55 @@ function filterExams() {
   }
 
   showingAll = false;
-  const eyeIcon = `<svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
-  btn.innerHTML = `${eyeIcon} Ver todos`;
-  btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+  if (btn) {
+    const eyeIcon = `<svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
+    btn.innerHTML = `${eyeIcon} Ver todos`;
+    btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+  }
+
+  // Dividimos la búsqueda por palabras por si el usuario escribe "perfil lipid"
+  const palabrasBusqueda = query.split(/\s+/);
 
   const filtered = allExams.filter(exam => {
     const nombre = cleanText(exam.nombre || '');
     const codigo = cleanText(exam.codigo || '');
     const tipo = cleanText(exam.tipo || '');
     const sinonimosLista = diccionarioSinonimos[exam.codigo] || [];
-    const matchSinonimo = sinonimosLista.some(sinonimo => query.includes(cleanText(sinonimo)));
     
-    return (
-      nombre.includes(query) || 
-      codigo.includes(query) || 
-      tipo.includes(query) || 
-      matchSinonimo
-    );
+    // Unimos todo el texto relevante del examen en una sola cadena grande para buscar en cualquier parte
+    const textoCompletoExamen = `${nombre} ${codigo} ${tipo} ${sinonimosLista.join(' ')}`;
+
+    // Comprobamos si TODAS las palabras escritas aparecen en alguna parte del examen
+    const coincidePalabras = palabrasBusqueda.every(palabra => textoCompletoExamen.includes(palabra));
+
+    return coincidePalabras;
   });
 
   renderExams(filtered);
 }
-// 5. GESTIÓN DE EXÁMENES SELECCIONADOS
+
+// 5. GESTIÓN DE EXÁMENES SELECCIONADOS Y MODALES
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
-  document.getElementById('searchInput').value = '';
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.value = '';
 
   const eyeIcon = `<svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
   const eyeOffIcon = `<svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.025 10.025 0 013.122-.063c4.478 0 8.268 2.943 9.543 7a9.97 9.97 0 01-2.155 3.592m-2.228 2.228a9.98 9.98 0 01-2.589 1.17M3 3l18 18"/></svg>`;
 
   if (showingAll) {
     showingAll = false;
-    btn.innerHTML = `${eyeIcon} Ver todos`;
-    btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+    if (btn) {
+      btn.innerHTML = `${eyeIcon} Ver todos`;
+      btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+    }
     renderExams([]); 
   } else {
     showingAll = true;
-    btn.innerHTML = `${eyeOffIcon} Ocultar lista`;
-    btn.className = "bg-slate-600 hover:bg-slate-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+    if (btn) {
+      btn.innerHTML = `${eyeOffIcon} Ocultar lista`;
+      btn.className = "bg-slate-600 hover:bg-slate-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+    }
     renderExams(allExams);
   }
 }
@@ -208,7 +234,8 @@ function toggleSelectExam(codigo) {
   localStorage.setItem('selectedExams', JSON.stringify(selectedExams));
   updateSelectedUI();
   
-  const currentQuery = cleanText(document.getElementById('searchInput').value.trim());
+  const searchInput = document.getElementById('searchInput');
+  const currentQuery = searchInput ? cleanText(searchInput.value.trim()) : '';
   if (currentQuery) {
     filterExams();
   } else if (showingAll) {
@@ -223,7 +250,8 @@ function clearSelectedExams() {
   localStorage.removeItem('selectedExams');
   updateSelectedUI();
   if (showingAll) renderExams(allExams);
-  const currentQuery = cleanText(document.getElementById('searchInput').value.trim());
+  const searchInput = document.getElementById('searchInput');
+  const currentQuery = searchInput ? cleanText(searchInput.value.trim()) : '';
   if (currentQuery) filterExams();
 }
 
@@ -279,8 +307,8 @@ function toggleModal(modalId) {
 function toggleMobileCart() {
   toggleModal('mobileCartModal');
 }
-// 6 y 8. IMPRESIÓN Y GUARDAR COMO PDF (Unificados)
 
+// 6 y 8. IMPRESIÓN Y GUARDAR COMO PDF
 function generarPDFResumen() {
   imprimirResumen();
 }
@@ -298,68 +326,16 @@ function imprimirResumen() {
       <meta charset="UTF-8">
       <title>Resumen de Exámenes Médicos</title>
       <style>
-        body {
-          font-family: Arial, Helvetica, sans-serif;
-          color: #111827;
-          background-color: #ffffff;
-          padding: 24px;
-          margin: 0;
-        }
-        .header {
-          border-bottom: 3px solid #059669;
-          padding-bottom: 12px;
-          margin-bottom: 20px;
-        }
-        .header h1 {
-          font-size: 18px;
-          font-weight: bold;
-          margin: 0;
-          color: #047857;
-          text-transform: uppercase;
-        }
-        .header p {
-          font-size: 11px;
-          color: #4b5563;
-          margin-top: 4px;
-        }
-        .exam-card {
-          border: 1px solid #a7f3d0;
-          border-left: 4px solid #059669;
-          border-radius: 6px;
-          padding: 12px 16px;
-          margin-bottom: 14px;
-          background-color: #f0fdf4;
-          page-break-inside: avoid;
-        }
-        .exam-card h3 {
-          font-size: 15px;
-          font-weight: bold;
-          color: #065f46;
-          margin: 0 0 4px 0;
-        }
-        .exam-card p {
-          font-size: 12px;
-          color: #047857;
-          margin: 0 0 8px 0;
-        }
-        .footer {
-          margin-top: 30px;
-          border-top: 1px solid #d1d5db;
-          padding-top: 12px;
-          font-size: 11px;
-          color: #047857;
-          text-align: center;
-          font-weight: 500;
-        }
-        ol {
-          margin: 4px 0 0 18px;
-          padding: 0;
-          font-size: 12px;
-          color: #1f2937;
-        }
-        li {
-          margin-bottom: 3px;
-        }
+        body { font-family: Arial, sans-serif; color: #111827; padding: 24px; margin: 0; }
+        .header { border-bottom: 3px solid #059669; padding-bottom: 12px; margin-bottom: 20px; }
+        .header h1 { font-size: 18px; font-weight: bold; margin: 0; color: #047857; text-transform: uppercase; }
+        .header p { font-size: 11px; color: #4b5563; margin-top: 4px; }
+        .exam-card { border: 1px solid #a7f3d0; border-left: 4px solid #059669; border-radius: 6px; padding: 12px 16px; margin-bottom: 14px; background-color: #f0fdf4; page-break-inside: avoid; }
+        .exam-card h3 { font-size: 15px; font-weight: bold; color: #065f46; margin: 0 0 4px 0; }
+        .exam-card p { font-size: 12px; color: #047857; margin: 0 0 8px 0; }
+        .footer { margin-top: 30px; border-top: 1px solid #d1d5db; padding-top: 12px; font-size: 11px; color: #047857; text-align: center; font-weight: 500; }
+        ol { margin: 4px 0 0 18px; padding: 0; font-size: 12px; color: #1f2937; }
+        li { margin-bottom: 3px; }
       </style>
     </head>
     <body>
@@ -416,7 +392,8 @@ function imprimirResumen() {
     printWindow.close();
   };
 }
-// 7. COMPARTIR LISTA (WhatsApp y Redes Sociales)
+
+// 7. COMPARTIR LISTA
 function compartirListaWhatsApp() {
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen para compartir.");
@@ -451,6 +428,8 @@ function compartirListaWhatsApp() {
     window.open(urlWhatsApp, '_blank');
   }
 }
+
+// 8. GESTIÓN DEL MODAL DE IMÁGENES Y RESPALDOS INTELIGENTES
 function abrirModalImagen(urlImagen, titulo) {
   const modal = document.getElementById('modalImagenAmpliada');
   const imgElement = document.getElementById('imagenAmpliadaSrc');
@@ -464,27 +443,23 @@ function abrirModalImagen(urlImagen, titulo) {
     titleElement.textContent = titulo;
     if (downloadBtn) downloadBtn.href = urlImagen;
     
-    // Detectar color según el título o la ruta de la imagen
     const urlLower = urlImagen.toLowerCase();
     const tituloLower = titulo.toLowerCase();
 
     if (headerFondo && contenedorFondo) {
       if (urlLower.includes('sangre') || tituloLower.includes('sangre')) {
-        // Colores para SANGRE (Rojo)
         contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-red-950 text-white transition-colors duration-300";
         headerFondo.className = "bg-red-600 text-white p-4 flex justify-between items-center transition-colors duration-300";
       } else if (urlLower.includes('orina') || tituloLower.includes('orina')) {
-        // Colores para ORINA (Ámbar / Amarillo)
         contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-950 text-white transition-colors duration-300";
         headerFondo.className = "bg-amber-500 text-white p-4 flex justify-between items-center transition-colors duration-300";
       } else {
-        // Colores para DEPOSICIÓN (Café / Stone)
         contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-stone-900 text-white transition-colors duration-300";
         headerFondo.className = "bg-stone-700 text-white p-4 flex justify-between items-center transition-colors duration-300";
       }
     }
 
-    resetZoom(); // Reinicia el zoom y posición al abrir
+    if (typeof resetZoom === 'function') resetZoom();
     modal.classList.remove('hidden');
   }
 }
@@ -493,5 +468,93 @@ function cerrarModalImagen() {
   const modal = document.getElementById('modalImagenAmpliada');
   if (modal) {
     modal.classList.add('hidden');
+  }
+}
+
+async function compartirListaComoImagen() {
+  if (!selectedExams || selectedExams.length === 0) {
+    alert("Por favor, selecciona al menos un examen para compartir sus imágenes.");
+    return;
+  }
+
+  const TOPE_MAXIMO = 10;
+  let examenesAProcesar = selectedExams;
+
+  if (selectedExams.length > TOPE_MAXIMO) {
+    alert(`Has seleccionado ${selectedExams.length} exámenes. Por motivos de límite, se compartirán solo los primeros ${TOPE_MAXIMO}.`);
+    examenesAProcesar = selectedExams.slice(0, TOPE_MAXIMO);
+  }
+
+  try {
+    const archivosParaCompartir = [];
+    const codigosFaltantes = [];
+
+    for (const examen of examenesAProcesar) {
+      const codigoExamen = examen.codigo || examen.id || '';
+      if (!codigoExamen) continue;
+
+      let rutaImagen = `img/${codigoExamen}.png`;
+      let response = await fetch(rutaImagen);
+
+      if (!response.ok) {
+        rutaImagen = `img/${codigoExamen}.jpg`;
+        response = await fetch(rutaImagen);
+      }
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const extension = response.headers.get('content-type')?.includes('jpeg') ? 'jpg' : 'png';
+        const nombreArchivo = `${codigoExamen}.${extension}`;
+        
+        archivosParaCompartir.push(new File([blob], nombreArchivo, { type: blob.type }));
+      } else {
+        codigosFaltantes.push(codigoExamen);
+      }
+    }
+
+    if (archivosParaCompartir.length === 0) {
+      alert("No se encontraron las imágenes asociadas a los exámenes seleccionados en la carpeta 'img'.");
+      return;
+    }
+
+    const nombresExamenes = examenesAProcesar.map(e => e.nombre).join(', ');
+    const textoMensaje = `Hola, te comparto las guías e indicaciones para mis exámenes: ${nombresExamenes}.`;
+
+    if (navigator.canShare && navigator.canShare({ files: archivosParaCompartir })) {
+      await navigator.share({
+        title: 'Indicaciones de Exámenes',
+        text: textoMensaje,
+        files: archivosParaCompartir,
+      });
+    } else if (navigator.share) {
+      await navigator.share({
+        title: 'Indicaciones de Exámenes',
+        text: textoMensaje,
+        files: [archivosParaCompartir[0]],
+      });
+      alert("Tu dispositivo solo permitió adjuntar la primera imagen. Te sugerimos descargar el resto.");
+    } else {
+      archivosParaCompartir.forEach((archivo, index) => {
+        setTimeout(() => {
+          const url = URL.createObjectURL(archivo);
+          const enlaceTemporal = document.createElement('a');
+          enlaceTemporal.href = url;
+          enlaceTemporal.download = archivo.name;
+          document.body.appendChild(enlaceTemporal);
+          enlaceTemporal.click();
+          document.body.removeChild(enlaceTemporal);
+          URL.revokeObjectURL(url);
+        }, index * 300);
+      });
+      alert('Tu navegador no soporta compartir múltiples archivos directamente. Se han descargado las imágenes en tu equipo.');
+    }
+
+    if (codigosFaltantes.length > 0) {
+      console.log("No se encontraron imágenes para los códigos:", codigosFaltantes);
+    }
+
+  } catch (error) {
+    console.log('Error al procesar las imágenes para compartir:', error);
+    alert('Ocurrió un error al preparar las imágenes.');
   }
 }

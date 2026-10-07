@@ -671,7 +671,7 @@
     "importancia": "Mide las reservas reales de hierro almacenadas en el cuerpo."
   },
   {
-    "codigo": "0302078",
+    "codigo": "0302077",
     "nombre": "Vitamina B12",
     "tipo": "🩸 Muestra de Sangre",
     "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs", "🚫 Sin multivitamínicos 48h"],
@@ -855,7 +855,7 @@
     "importancia": "Evalúa el funcionamiento del hígado (Transaminasas, Bilirrubina, Fosfatasa Alcalina)."
   },
   {
-    "codigo": "0302030",
+    "codigo": "0302013",
     "nombre": "Bilirrubina Total y Conjugada",
     "tipo": "🩸 Muestra de Sangre",
     "requisitos_rapidos": ["⏱️ Ayuno de 8 hrs"],
