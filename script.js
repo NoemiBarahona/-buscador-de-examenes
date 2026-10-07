@@ -65,7 +65,6 @@ function renderExams(exams) {
   exams.forEach(exam => {
     const isSelected = selectedExams.some(e => e.codigo === exam.codigo);
     
-    // Lógica robusta para detectar la imagen correcta (Específica o General)
     const codigoUpper = (exam.codigo || '').toUpperCase();
     const tipoLower = (exam.tipo || '').toLowerCase();
     const nombreLower = (exam.nombre || '').toLowerCase();
@@ -80,9 +79,6 @@ function renderExams(exams) {
       rutaImagenFinal = 'img/Imagen_deposicion.jpeg';
       tituloGuia = 'Guía Muestra de Deposición';
     } else if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre') || nombreLower.includes('sangre') || nombreLower.includes('perfil') || nombreLower.includes('hemograma')) {
-      // Si es un examen general de sangre o tiene relación, evaluamos si usamos el general o específico
-      // Nota: Si tus exámenes de sangre específicos usan su código, puedes ajustar esta condición si prefieres.
-      // Por ahora, si es el genérico de sangre usa la general:
       if (codigoUpper === 'GUIA-SANGRE') {
         rutaImagenFinal = 'img/Imagen_sangre.jpeg';
         tituloGuia = 'Guía Exámenes de Sangre';
@@ -103,7 +99,6 @@ function renderExams(exams) {
               Código: ${exam.codigo}
             </span>
             
-            <!-- Botón que envía la ruta correcta evaluada -->
             <button 
               type="button"
               onclick="abrirModalImagen('${rutaImagenFinal}', '${tituloGuia}')"
@@ -147,13 +142,11 @@ function renderExams(exams) {
   });
 }
 
-// 4. SISTEMA DE FILTRADO Y BÚSQUEDA
 // 4. SISTEMA DE FILTRADO Y BÚSQUEDA AVANZADO
 function filterExams() {
   const searchInput = document.getElementById('searchInput');
   if (!searchInput) return;
 
-  // Limpiamos la consulta del usuario (sin tildes, todo minúsculas, sin espacios de más)
   const queryRaw = searchInput.value.trim();
   const query = cleanText(queryRaw);
   const btn = document.getElementById('showAllBtn');
@@ -174,7 +167,6 @@ function filterExams() {
     btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
   }
 
-  // Dividimos la búsqueda por palabras por si el usuario escribe "perfil lipid"
   const palabrasBusqueda = query.split(/\s+/);
 
   const filtered = allExams.filter(exam => {
@@ -183,10 +175,7 @@ function filterExams() {
     const tipo = cleanText(exam.tipo || '');
     const sinonimosLista = diccionarioSinonimos[exam.codigo] || [];
     
-    // Unimos todo el texto relevante del examen en una sola cadena grande para buscar en cualquier parte
     const textoCompletoExamen = `${nombre} ${codigo} ${tipo} ${sinonimosLista.join(' ')}`;
-
-    // Comprobamos si TODAS las palabras escritas aparecen en alguna parte del examen
     const coincidePalabras = palabrasBusqueda.every(palabra => textoCompletoExamen.includes(palabra));
 
     return coincidePalabras;
@@ -255,6 +244,25 @@ function clearSelectedExams() {
   if (currentQuery) filterExams();
 }
 
+// Función auxiliar para calcular la ruta de la imagen en el panel lateral
+function obtenerRutaImagenParaExamen(exam) {
+  const codigoUpper = (exam.codigo || '').toUpperCase();
+  const tipoLower = (exam.tipo || '').toLowerCase();
+  const nombreLower = (exam.nombre || '').toLowerCase();
+
+  let rutaImagenFinal = `img/${exam.codigo}.png`;
+
+  if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
+    rutaImagenFinal = 'img/Imagen_orina.jpeg';
+  } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo')) {
+    rutaImagenFinal = 'img/Imagen_deposicion.jpeg';
+  } else if (codigoUpper === 'GUIA-SANGRE') {
+    rutaImagenFinal = 'img/Imagen_sangre.jpeg';
+  }
+
+  return rutaImagenFinal;
+}
+
 function updateSelectedUI() {
   const count = selectedExams.length;
   
@@ -274,26 +282,57 @@ function updateSelectedUI() {
     return;
   }
 
-  const itemsHTML = selectedExams.map(exam => `
-    <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs space-y-2 relative group">
-      <div class="flex items-center justify-between">
-        <h4 class="font-bold text-gray-800 text-sm">${exam.nombre}</h4>
-        <button 
-          type="button"
-          onclick="toggleSelectExam('${exam.codigo}')" 
-          class="text-red-500 hover:text-red-700 font-bold text-base leading-none px-1"
-          title="Eliminar"
-        >
-          &times;
-        </button>
+  const itemsHTML = selectedExams.map(exam => {
+    const rutaImg = obtenerRutaImagenParaExamen(exam);
+    const tituloGuia = exam.nombre;
+
+    return `
+      <div class="bg-white p-3 rounded-xl border border-gray-200 text-xs space-y-2 relative group shadow-sm">
+        
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold text-gray-800 text-sm truncate pr-2">${exam.nombre}</h4>
+          <button 
+            type="button"
+            onclick="toggleSelectExam('${exam.codigo}')" 
+            class="text-red-500 hover:text-red-700 font-bold text-lg leading-none px-1"
+            title="Eliminar"
+          >
+            &times;
+          </button>
+        </div>
+
+        <div class="relative rounded-lg overflow-hidden border border-emerald-100 bg-emerald-50/50 group/img">
+          <img src="${rutaImg}" alt="${exam.nombre}" class="w-full h-28 object-cover object-top transition-transform duration-300 group-hover/img:scale-105">
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+            <button 
+              type="button"
+              onclick="abrirModalImagen('${rutaImg}', '${tituloGuia}')"
+              class="bg-white text-emerald-800 font-semibold px-3 py-1.5 rounded-lg text-xs shadow hover:bg-emerald-50 transition-colors"
+            >
+              🔍 Ampliar Guía
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <details class="group/details">
+            <summary class="cursor-pointer text-emerald-700 font-semibold text-xs py-1 flex items-center gap-1 select-none hover:text-emerald-800">
+              <span class="group-open/details:rotate-90 transition-transform">▶</span> Ver más detalles y preparación
+            </summary>
+            
+            <div class="mt-2 pt-2 border-t border-gray-100 space-y-2 text-gray-600 text-xs">
+              <p><strong class="text-gray-700">Muestra:</strong> ${exam.tipo || 'No especificado'}</p>
+              <div class="text-amber-900 bg-amber-50 p-2 rounded border border-amber-200">
+                <span class="font-bold block mb-1">Preparación:</span>
+                ${formatPasos(exam.pasos_preparacion)}
+              </div>
+            </div>
+          </details>
+        </div>
+
       </div>
-      <p class="text-gray-500 font-medium">${exam.tipo || ''}</p>
-      <div class="text-amber-900 bg-amber-50 p-2 rounded border border-amber-200">
-        <span class="font-bold block mb-1">Preparación:</span>
-        ${formatPasos(exam.pasos_preparacion)}
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   if (desktopContainer) desktopContainer.innerHTML = itemsHTML;
   if (mobileContainer) mobileContainer.innerHTML = itemsHTML;
@@ -308,7 +347,7 @@ function toggleMobileCart() {
   toggleModal('mobileCartModal');
 }
 
-// 6 y 8. IMPRESIÓN Y GUARDAR COMO PDF
+// 6 y 8. IMPRESIÓN Y GUARDAR COMO PDF (TEXTO)
 function generarPDFResumen() {
   imprimirResumen();
 }
@@ -393,7 +432,114 @@ function imprimirResumen() {
   };
 }
 
-// 7. COMPARTIR LISTA
+// NUEVA FUNCIÓN: IMPRIMIR GUÍAS VISUALES (3 IMÁGENES POR PÁGINA)
+function generarPDFImágenes() {
+  if (!selectedExams || selectedExams.length === 0) {
+    alert("Por favor, selecciona al menos un examen antes de imprimir las guías visuales.");
+    return;
+  }
+
+  // Filtrar para evitar duplicar imágenes idénticas si se seleccionan varios exámenes con la misma guía general (ej: orina)
+  const rutasUnicas = [...new Set(selectedExams.map(exam => obtenerRutaImagenParaExamen(exam)))];
+
+  let htmlContent = `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <title>Guías Visuales de Exámenes Médicos</title>
+      <style>
+        body { font-family: Arial, sans-serif; color: #111827; padding: 20px; margin: 0; background: #fff; }
+        .header { border-bottom: 2px solid #0369a1; padding-bottom: 8px; margin-bottom: 20px; }
+        .header h1 { font-size: 16px; font-weight: bold; margin: 0; color: #0369a1; text-transform: uppercase; }
+        .header p { font-size: 11px; color: #4b5563; margin-top: 2px; }
+        
+        /* Contenedor de bloque vertical para cada página */
+        .page-block {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 15px;
+          page-break-after: always;
+          min-height: 90vh;
+        }
+        .page-block:last-child {
+          page-break-after: avoid;
+        }
+
+        /* Tarjeta contenedora de cada imagen dispuesta en vertical */
+        .image-card {
+          width: 100%;
+          max-width: 600px;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          padding: 10px;
+          background: #fff;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          box-sizing: border-box;
+          page-break-inside: avoid;
+        }
+        img {
+          width: 100%;
+          max-height: 26vh; /* Altura controlada para que quepan exactamente 3 por hoja de forma vertical */
+          object-fit: contain;
+        }
+      </style>
+    </head>
+    <body>
+  `;
+
+  // Agrupamos las rutas de 3 en 3 para colocarlas en bloques de página separados
+  for (let i = 0; i < rutasUnicas.length; i += 3) {
+    const grupoImagenes = rutasUnicas.slice(i, i + 3);
+
+    htmlContent += `
+      <div class="page-block">
+        <div class="header">
+          <h1>Guías Visuales de Preparación</h1>
+          <p>Infografías de referencia para la toma de muestras (Página ${Math.floor(i / 3) + 1})</p>
+        </div>
+    `;
+
+    grupoImagenes.forEach(ruta => {
+      htmlContent += `
+        <div class="image-card">
+          <img src="${ruta}" alt="Guía visual de preparación">
+        </div>
+      `;
+    });
+
+    htmlContent += `
+      </div>
+    `;
+  }
+
+  htmlContent += `
+    </body>
+    </html>
+  `;
+
+  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  if (!printWindow) {
+    alert("Por favor, permite las ventanas emergentes (pop-ups) en tu navegador para poder imprimir.");
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+
+  printWindow.onload = function () {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+}
+
+// 7. COMPARTIR LISTA (TEXTO)
 function compartirListaWhatsApp() {
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen para compartir.");
