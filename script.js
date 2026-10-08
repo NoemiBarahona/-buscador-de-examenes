@@ -1,4 +1,6 @@
+// ==========================================
 // 1. VARIABLES GLOBALES Y CONFIGURACIÓN INICIAL
+// ==========================================
 let allExams = [];
 let selectedExams = JSON.parse(localStorage.getItem('selectedExams')) || [];
 let showingAll = false;
@@ -26,7 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+// ==========================================
 // 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
+// ==========================================
 function cleanText(text) {
   if (!text) return '';
   return text
@@ -50,7 +55,71 @@ function removeEmojis(string) {
     .trim();
 }
 
-// 3. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
+
+
+// 3. SISTEMA DE RESPALDO INTELIGENTE DE IMÁGENES
+// ==========================================
+// 3. SISTEMA DE RESPALDO INTELIGENTE DE IMÁGENES (Definitivo)
+// ==========================================
+async function obtenerRutaConRespaldo(exam) {
+  const codigoUpper = (exam.codigo || '').toUpperCase();
+  const tipoLower = (exam.tipo || '').toLowerCase();
+  const nombreLower = (exam.nombre || '').toLowerCase();
+
+  // 1. Verificar si corresponde a una imagen general de categoría
+  if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
+    return './img/Imagen_orina.jpeg';
+  } 
+  if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo') || nombreLower.includes('sangre oculta')) {
+    return './img/Imagen_deposicion.jpeg';
+  } 
+  if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre') || tipoLower.includes('suero') || nombreLower.includes('perfil') || nombreLower.includes('hemograma')) {
+    return './img/Imagen_sangre.jpeg';
+  }
+
+  // 2. Si es un examen con imagen personalizada propia, la buscamos
+  const rutasAProbar = [
+    `./img/${exam.codigo}.png`, 
+    `./img/${exam.codigo}.jpeg`, 
+    `./img/${exam.codigo}.jpg`
+  ];
+
+  for (const ruta of rutasAProbar) {
+    try {
+      const response = await fetch(ruta, { method: 'HEAD' });
+      if (response.ok) {
+        return ruta;
+      }
+    } catch (e) {
+      // Continuar si falla
+    }
+  }
+
+  // 3. Respaldo final por defecto
+  return './img/Imagen_sangre.jpeg';
+}
+
+// Versión síncrona optimizada para tarjetas
+function obtenerRutaImagenParaExamen(exam) {
+  const codigoUpper = (exam.codigo || '').toUpperCase();
+  const tipoLower = (exam.tipo || '').toLowerCase();
+  const nombreLower = (exam.nombre || '').toLowerCase();
+
+  if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
+    return 'img/Imagen_orina.jpeg';
+  } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo') || nombreLower.includes('sangre oculta')) {
+    return 'img/Imagen_deposicion.jpeg';
+  } else if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre') || tipoLower.includes('suero') || nombreLower.includes('perfil') || nombreLower.includes('hemograma')) {
+    return 'img/Imagen_sangre.jpeg';
+  }
+
+  return `img/${exam.codigo}.png`;
+}
+
+
+// ==========================================
+// 4. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
+// ==========================================
 function renderExams(exams) {
   const container = document.getElementById('examsContainer');
   if (!container) return;
@@ -64,26 +133,7 @@ function renderExams(exams) {
 
   exams.forEach(exam => {
     const isSelected = selectedExams.some(e => e.codigo === exam.codigo);
-    
-    const codigoUpper = (exam.codigo || '').toUpperCase();
-    const tipoLower = (exam.tipo || '').toLowerCase();
-    const nombreLower = (exam.nombre || '').toLowerCase();
-
-    let rutaImagenFinal = `img/${exam.codigo}.png`;
-    let tituloGuia = exam.nombre;
-
-    if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
-      rutaImagenFinal = 'img/Imagen_orina.jpeg';
-      tituloGuia = 'Guía Muestra de Orina';
-    } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo')) {
-      rutaImagenFinal = 'img/Imagen_deposicion.jpeg';
-      tituloGuia = 'Guía Muestra de Deposición';
-    } else if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre') || nombreLower.includes('sangre') || nombreLower.includes('perfil') || nombreLower.includes('hemograma')) {
-      if (codigoUpper === 'GUIA-SANGRE') {
-        rutaImagenFinal = 'img/Imagen_sangre.jpeg';
-        tituloGuia = 'Guía Exámenes de Sangre';
-      }
-    }
+    const rutaImagenFinal = obtenerRutaImagenParaExamen(exam);
 
     const requisitosHTML = Array.isArray(exam.requisitos_rapidos) 
       ? exam.requisitos_rapidos.map(r => `<span class="inline-block bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-md font-medium mr-1 mb-1">${r}</span>`).join('')
@@ -98,14 +148,13 @@ function renderExams(exams) {
             <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block">
               Código: ${exam.codigo}
             </span>
-            
-            <button 
-              type="button"
-              onclick="abrirModalImagen('${rutaImagenFinal}', '${tituloGuia}')"
-              class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
-            >
-              🖼️ Ver Guía
-            </button>
+<button 
+  type="button"
+  onclick="abrirModalImagenPorExamen('${exam.codigo}')"
+  class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
+>
+  🖼️ Ver Guía
+</button>
           </div>
           <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
         </div>
@@ -142,7 +191,10 @@ function renderExams(exams) {
   });
 }
 
-// 4. SISTEMA DE FILTRADO Y BÚSQUEDA AVANZADO
+
+// ==========================================
+// 5. SISTEMA DE FILTRADO Y BÚSQUEDA AVANZADO
+// ==========================================
 function filterExams() {
   const searchInput = document.getElementById('searchInput');
   if (!searchInput) return;
@@ -184,7 +236,10 @@ function filterExams() {
   renderExams(filtered);
 }
 
-// 5. GESTIÓN DE EXÁMENES SELECCIONADOS Y MODALES
+
+// ==========================================
+// 6. GESTIÓN DE EXÁMENES SELECCIONADOS
+// ==========================================
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   const searchInput = document.getElementById('searchInput');
@@ -244,25 +299,6 @@ function clearSelectedExams() {
   if (currentQuery) filterExams();
 }
 
-// Función auxiliar para calcular la ruta de la imagen en el panel lateral
-function obtenerRutaImagenParaExamen(exam) {
-  const codigoUpper = (exam.codigo || '').toUpperCase();
-  const tipoLower = (exam.tipo || '').toLowerCase();
-  const nombreLower = (exam.nombre || '').toLowerCase();
-
-  let rutaImagenFinal = `img/${exam.codigo}.png`;
-
-  if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
-    rutaImagenFinal = 'img/Imagen_orina.jpeg';
-  } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo')) {
-    rutaImagenFinal = 'img/Imagen_deposicion.jpeg';
-  } else if (codigoUpper === 'GUIA-SANGRE') {
-    rutaImagenFinal = 'img/Imagen_sangre.jpeg';
-  }
-
-  return rutaImagenFinal;
-}
-
 function updateSelectedUI() {
   const count = selectedExams.length;
   
@@ -284,7 +320,6 @@ function updateSelectedUI() {
 
   const itemsHTML = selectedExams.map(exam => {
     const rutaImg = obtenerRutaImagenParaExamen(exam);
-    const tituloGuia = exam.nombre;
 
     return `
       <div class="bg-white p-3 rounded-xl border border-gray-200 text-xs space-y-2 relative group shadow-sm">
@@ -304,13 +339,13 @@ function updateSelectedUI() {
         <div class="relative rounded-lg overflow-hidden border border-emerald-100 bg-emerald-50/50 group/img">
           <img src="${rutaImg}" alt="${exam.nombre}" class="w-full h-28 object-cover object-top transition-transform duration-300 group-hover/img:scale-105">
           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-            <button 
-              type="button"
-              onclick="abrirModalImagen('${rutaImg}', '${tituloGuia}')"
-              class="bg-white text-emerald-800 font-semibold px-3 py-1.5 rounded-lg text-xs shadow hover:bg-emerald-50 transition-colors"
-            >
-              🔍 Ampliar Guía
-            </button>
+<button 
+  type="button"
+  onclick="abrirModalImagenPorExamen('${exam.codigo}')"
+  class="bg-white text-emerald-800 font-semibold px-3 py-1.5 rounded-lg text-xs shadow hover:bg-emerald-50 transition-colors"
+>
+  🔍 Ampliar Guía
+</button>
           </div>
         </div>
 
@@ -338,16 +373,173 @@ function updateSelectedUI() {
   if (mobileContainer) mobileContainer.innerHTML = itemsHTML;
 }
 
-function toggleModal(modalId) {
+// Función para abrir y cerrar los modales generales (Sangre, Orina, Feca)
+    function toggleModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.toggle('hidden');
+      }
+    }
+
+    // Función para el botón del carrito en dispositivos móviles
+    function toggleMobileCart() {
+      const modal = document.getElementById('mobileCartModal');
+      if (modal) {
+        modal.classList.toggle('hidden');
+      }
+    }
+
+// ==========================================
+// 7. GESTIÓN DE MODALES DE IMÁGENES (Versión Directa y Síncrona)
+// ==========================================
+
+// Función directa para abrir el modal desde las tarjetas de exámenes
+function abrirModalImagenPorExamen(codigoExamen) {
+  const exam = allExams.find(e => e.codigo === codigoExamen);
+  if (!exam) {
+    console.error("No se encontró el examen con código:", codigoExamen);
+    return;
+  }
+
+  const rutaFinal = obtenerRutaImagenParaExamen(exam);
+  const titulo = exam.nombre || 'Guía de Examen';
+  
+  // Pasamos 'exam' como tercer parámetro opcional para extraer la muestra precisa
+  abrirModalImagen(rutaFinal, titulo, exam);
+}
+
+// Función general para mostrar el modal de imagen (usada por tarjetas y botones superiores)
+function abrirModalImagen(urlImagen, titulo, examData = null) {
+  const modal = document.getElementById('modalImagenAmpliada');
+  const imgElement = document.getElementById('imagenAmpliadaSrc');
+  const titleElement = document.getElementById('tituloModalImagen');
+  const downloadBtn = document.getElementById('btnDescargarModal');
+  const contenedorFondo = modal ? modal.querySelector('.max-w-4xl') : null;
+  const headerFondo = document.getElementById('modalHeaderFondo');
+
+  if (!modal || !imgElement || !titleElement) {
+    console.error("Faltan elementos del DOM para el modal de imágenes.");
+    return;
+  }
+
+  // Asignar valores
+  imgElement.src = urlImagen;
+  titleElement.textContent = titulo;
+  if (downloadBtn) downloadBtn.href = urlImagen;
+  
+  // Variables en minúsculas para comparaciones seguras
+  const urlLower = (urlImagen || '').toLowerCase();
+  const tituloLower = (titulo || '').toLowerCase();
+  const muestraLower = (examData?.tipo_muestra || examData?.muestra || '').toLowerCase();
+
+  // Cambiar colores según la categoría
+  if (headerFondo && contenedorFondo) {
+    
+    // 1. EXCEPCIÓN ESPECIAL: Sangre Oculta en Deposición / Weber -> Deposición (Café)
+    if (
+      tituloLower.includes('sangre oculta') || 
+      tituloLower.includes('weber') || 
+      tituloLower.includes('hemorragias ocultas') ||
+      urlLower.includes('sangre_oculta') || 
+      urlLower.includes('weber')
+    ) {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-50/90 text-gray-900 border border-amber-300 transition-colors duration-300";
+      headerFondo.className = "bg-amber-200 text-amber-950 border-b border-amber-300 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+    
+    // 2. DEPOSICIÓN / HECES / FECA (Cafecito claro)
+    else if (
+      muestraLower.includes('deposici') || muestraLower.includes('heces') || muestraLower.includes('copro') ||
+      urlLower.includes('deposicion') || urlLower.includes('heces') || urlLower.includes('feca') ||
+      tituloLower.includes('deposicion') || tituloLower.includes('heces')
+    ) {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-50/90 text-gray-900 border border-amber-300 transition-colors duration-300";
+      headerFondo.className = "bg-amber-200 text-amber-950 border-b border-amber-300 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+    
+    // 3. SANGRE (Rojito claro)
+    else if (
+      muestraLower.includes('sangre') || muestraLower.includes('plasma') || muestraLower.includes('suero') ||
+      urlLower.includes('sangre') || tituloLower.includes('sangre')
+    ) {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-red-50/90 text-gray-900 border border-red-200 transition-colors duration-300";
+      headerFondo.className = "bg-red-100 text-red-900 border-b border-red-200 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+    
+    // 4. ORINA (Amarillo clarito)
+    else if (
+      muestraLower.includes('orina') ||
+      urlLower.includes('orina') || tituloLower.includes('orina')
+    ) {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-yellow-50/90 text-gray-900 border border-yellow-200 transition-colors duration-300";
+      headerFondo.className = "bg-yellow-100 text-yellow-900 border-b border-yellow-200 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+    
+    // 5. NASALES Y FARÍNGEAS (Moraditas / Lilas)
+    else if (
+      muestraLower.includes('nasal') || muestraLower.includes('faringe') || muestraLower.includes('hisopado') ||
+      urlLower.includes('nasal') || urlLower.includes('faringe') ||
+      tituloLower.includes('nasal') || tituloLower.includes('faringe')
+    ) {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-purple-50/90 text-gray-900 border border-purple-200 transition-colors duration-300";
+      headerFondo.className = "bg-purple-100 text-purple-900 border-b border-purple-200 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+
+    // 6. SECRECIONES (Azulito claro)
+    else if (
+      muestraLower.includes('secreci') || muestraLower.includes('fluido') ||
+      urlLower.includes('secrecion') || tituloLower.includes('secrecion')
+    ) {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-blue-50/90 text-gray-900 border border-blue-200 transition-colors duration-300";
+      headerFondo.className = "bg-blue-100 text-blue-900 border-b border-blue-200 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+
+    // 7. HONGOS Y HERIDAS (Verdecito claro)
+    else if (
+      muestraLower.includes('hongo') || muestraLower.includes('herida') || muestraLower.includes('micolog') || muestraLower.includes('piel') ||
+      urlLower.includes('hongo') || urlLower.includes('herida') ||
+      tituloLower.includes('hongo') || tituloLower.includes('herida')
+    ) {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-emerald-50/90 text-gray-900 border border-emerald-200 transition-colors duration-300";
+      headerFondo.className = "bg-emerald-100 text-emerald-900 border-b border-emerald-200 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+
+    // 8. DEFAULT / OTROS (Gris neutro suave)
+    else {
+      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-slate-50/90 text-gray-900 border border-slate-200 transition-colors duration-300";
+      headerFondo.className = "bg-slate-100 text-slate-800 border-b border-slate-200 p-4 flex justify-between items-center transition-colors duration-300";
+    }
+  }
+
+  if (typeof resetZoom === 'function') resetZoom();
+  
+  // Mostrar modal quitando la clase hidden
+  modal.classList.remove('hidden');
+}
+
+function cerrarModalImagen() {
+  const modal = document.getElementById('modalImagenAmpliada');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+}
+
+// Asegurar compatibilidad global para los botones generales de la interfaz
+window.toggleModal = function(modalId) {
   const modal = document.getElementById(modalId);
-  if (modal) modal.classList.toggle('hidden');
-}
+  if (modal) {
+    modal.classList.toggle('hidden');
+  } else {
+    console.error(`No se encontró el modal general con ID: ${modalId}`);
+  }
+};
 
-function toggleMobileCart() {
-  toggleModal('mobileCartModal');
-}
-
-// 6 y 8. IMPRESIÓN Y GUARDAR COMO PDF (TEXTO)
+window.abrirModalImagen = abrirModalImagen;
+window.abrirModalImagenPorExamen = abrirModalImagenPorExamen;
+window.cerrarModalImagen = cerrarModalImagen;
+// ==========================================
+// 8. IMPRESIÓN Y EXPORTACIÓN DE RESUMENES
+// ==========================================
 function generarPDFResumen() {
   imprimirResumen();
 }
@@ -432,14 +624,12 @@ function imprimirResumen() {
   };
 }
 
-// NUEVA FUNCIÓN: IMPRIMIR GUÍAS VISUALES (3 IMÁGENES POR PÁGINA)
 function generarPDFImágenes() {
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen antes de imprimir las guías visuales.");
     return;
   }
 
-  // Filtrar para evitar duplicar imágenes idénticas si se seleccionan varios exámenes con la misma guía general (ej: orina)
   const rutasUnicas = [...new Set(selectedExams.map(exam => obtenerRutaImagenParaExamen(exam)))];
 
   let htmlContent = `
@@ -453,46 +643,15 @@ function generarPDFImágenes() {
         .header { border-bottom: 2px solid #0369a1; padding-bottom: 8px; margin-bottom: 20px; }
         .header h1 { font-size: 16px; font-weight: bold; margin: 0; color: #0369a1; text-transform: uppercase; }
         .header p { font-size: 11px; color: #4b5563; margin-top: 2px; }
-        
-        /* Contenedor de bloque vertical para cada página */
-        .page-block {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          gap: 15px;
-          page-break-after: always;
-          min-height: 90vh;
-        }
-        .page-block:last-child {
-          page-break-after: avoid;
-        }
-
-        /* Tarjeta contenedora de cada imagen dispuesta en vertical */
-        .image-card {
-          width: 100%;
-          max-width: 600px;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 10px;
-          background: #fff;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          box-sizing: border-box;
-          page-break-inside: avoid;
-        }
-        img {
-          width: 100%;
-          max-height: 26vh; /* Altura controlada para que quepan exactamente 3 por hoja de forma vertical */
-          object-fit: contain;
-        }
+        .page-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 15px; page-break-after: always; min-height: 90vh; }
+        .page-block:last-child { page-break-after: avoid; }
+        .image-card { width: 100%; max-width: 600px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; background: #fff; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; page-break-inside: avoid; }
+        img { width: 100%; max-height: 26vh; object-fit: contain; }
       </style>
     </head>
     <body>
   `;
 
-  // Agrupamos las rutas de 3 en 3 para colocarlas en bloques de página separados
   for (let i = 0; i < rutasUnicas.length; i += 3) {
     const grupoImagenes = rutasUnicas.slice(i, i + 3);
 
@@ -512,15 +671,10 @@ function generarPDFImágenes() {
       `;
     });
 
-    htmlContent += `
-      </div>
-    `;
+    htmlContent += `</div>`;
   }
 
-  htmlContent += `
-    </body>
-    </html>
-  `;
+  htmlContent += `</body></html>`;
 
   const printWindow = window.open('', '_blank', 'width=900,height=700');
   if (!printWindow) {
@@ -539,7 +693,6 @@ function generarPDFImágenes() {
   };
 }
 
-// 7. COMPARTIR LISTA (TEXTO)
 function compartirListaWhatsApp() {
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen para compartir.");
@@ -575,48 +728,6 @@ function compartirListaWhatsApp() {
   }
 }
 
-// 8. GESTIÓN DEL MODAL DE IMÁGENES Y RESPALDOS INTELIGENTES
-function abrirModalImagen(urlImagen, titulo) {
-  const modal = document.getElementById('modalImagenAmpliada');
-  const imgElement = document.getElementById('imagenAmpliadaSrc');
-  const titleElement = document.getElementById('tituloModalImagen');
-  const downloadBtn = document.getElementById('btnDescargarModal');
-  const contenedorFondo = modal ? modal.querySelector('.max-w-4xl') : null;
-  const headerFondo = document.getElementById('modalHeaderFondo');
-
-  if (modal && imgElement && titleElement) {
-    imgElement.src = urlImagen;
-    titleElement.textContent = titulo;
-    if (downloadBtn) downloadBtn.href = urlImagen;
-    
-    const urlLower = urlImagen.toLowerCase();
-    const tituloLower = titulo.toLowerCase();
-
-    if (headerFondo && contenedorFondo) {
-      if (urlLower.includes('sangre') || tituloLower.includes('sangre')) {
-        contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-red-950 text-white transition-colors duration-300";
-        headerFondo.className = "bg-red-600 text-white p-4 flex justify-between items-center transition-colors duration-300";
-      } else if (urlLower.includes('orina') || tituloLower.includes('orina')) {
-        contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-950 text-white transition-colors duration-300";
-        headerFondo.className = "bg-amber-500 text-white p-4 flex justify-between items-center transition-colors duration-300";
-      } else {
-        contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-stone-900 text-white transition-colors duration-300";
-        headerFondo.className = "bg-stone-700 text-white p-4 flex justify-between items-center transition-colors duration-300";
-      }
-    }
-
-    if (typeof resetZoom === 'function') resetZoom();
-    modal.classList.remove('hidden');
-  }
-}
-
-function cerrarModalImagen() {
-  const modal = document.getElementById('modalImagenAmpliada');
-  if (modal) {
-    modal.classList.add('hidden');
-  }
-}
-
 async function compartirListaComoImagen() {
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen para compartir sus imágenes.");
@@ -636,30 +747,22 @@ async function compartirListaComoImagen() {
     const codigosFaltantes = [];
 
     for (const examen of examenesAProcesar) {
-      const codigoExamen = examen.codigo || examen.id || '';
-      if (!codigoExamen) continue;
-
-      let rutaImagen = `img/${codigoExamen}.png`;
-      let response = await fetch(rutaImagen);
-
-      if (!response.ok) {
-        rutaImagen = `img/${codigoExamen}.jpg`;
-        response = await fetch(rutaImagen);
-      }
+      const rutaImagen = obtenerRutaImagenParaExamen(examen);
+      const response = await fetch(rutaImagen);
 
       if (response.ok) {
         const blob = await response.blob();
-        const extension = response.headers.get('content-type')?.includes('jpeg') ? 'jpg' : 'png';
-        const nombreArchivo = `${codigoExamen}.${extension}`;
+        const extension = response.headers.get('content-type')?.includes('jpeg') ? 'jpeg' : 'png';
+        const nombreArchivo = `${examen.codigo}.${extension}`;
         
         archivosParaCompartir.push(new File([blob], nombreArchivo, { type: blob.type }));
       } else {
-        codigosFaltantes.push(codigoExamen);
+        codigosFaltantes.push(examen.codigo);
       }
     }
 
     if (archivosParaCompartir.length === 0) {
-      alert("No se encontraron las imágenes asociadas a los exámenes seleccionados en la carpeta 'img'.");
+      alert("No se pudieron preparar las imágenes asociadas.");
       return;
     }
 
@@ -678,7 +781,7 @@ async function compartirListaComoImagen() {
         text: textoMensaje,
         files: [archivosParaCompartir[0]],
       });
-      alert("Tu dispositivo solo permitió adjuntar la primera imagen. Te sugerimos descargar el resto.");
+      alert("Tu dispositivo solo permitió adjuntar la primera imagen.");
     } else {
       archivosParaCompartir.forEach((archivo, index) => {
         setTimeout(() => {
@@ -692,15 +795,34 @@ async function compartirListaComoImagen() {
           URL.revokeObjectURL(url);
         }, index * 300);
       });
-      alert('Tu navegador no soporta compartir múltiples archivos directamente. Se han descargado las imágenes en tu equipo.');
+      alert('Se han descargado las imágenes en tu equipo.');
     }
-
-    if (codigosFaltantes.length > 0) {
-      console.log("No se encontraron imágenes para los códigos:", codigosFaltantes);
-    }
-
   } catch (error) {
-    console.log('Error al procesar las imágenes para compartir:', error);
+    console.log('Error al procesar las imágenes:', error);
     alert('Ocurrió un error al preparar las imágenes.');
   }
 }
+// ==========================================
+// 9. CONTROL DE CARRITO / LISTA MÓVIL Y MODALES GENERALES
+// ==========================================
+
+function toggleMobileCart() {
+  const mobileCart = document.getElementById('mobileCartModal') || document.getElementById('mobileSelectedContainer');
+  if (mobileCart) {
+    mobileCart.classList.toggle('hidden');
+  } else {
+    // Si usas un contenedor con clases de transformación (como translate-x)
+    const drawer = document.getElementById('mobileDrawer');
+    if (drawer) {
+      drawer.classList.toggle('translate-x-full');
+    }
+  }
+}
+
+
+// Exponer de forma global obligatoria para los eventos onclick del HTML
+window.toggleMobileCart = toggleMobileCart;
+window.toggleModal = window.toggleModal || function(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.toggle('hidden');
+};
