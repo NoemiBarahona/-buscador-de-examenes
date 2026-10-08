@@ -1,6 +1,5 @@
-// ==========================================
 // 1. VARIABLES GLOBALES Y CONFIGURACIÓN INICIAL
-// ==========================================
+
 let allExams = [];
 let selectedExams = JSON.parse(localStorage.getItem('selectedExams')) || [];
 let showingAll = false;
@@ -28,10 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-
-// ==========================================
 // 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
-// ==========================================
+
 function cleanText(text) {
   if (!text) return '';
   return text
@@ -56,15 +53,23 @@ function removeEmojis(string) {
 }
 
 
-
 // 3. SISTEMA DE RESPALDO INTELIGENTE DE IMÁGENES
-// ==========================================
-// 3. SISTEMA DE RESPALDO INTELIGENTE DE IMÁGENES (Definitivo)
-// ==========================================
+
 async function obtenerRutaConRespaldo(exam) {
-  const codigoUpper = (exam.codigo || '').toUpperCase();
+  const codigoUpper = String(exam.codigo || '').toUpperCase();
   const tipoLower = (exam.tipo || '').toLowerCase();
   const nombreLower = (exam.nombre || '').toLowerCase();
+
+  // 0. EXCEPCIONES ESPECÍFICAS (Búsqueda prioritaria por código o nombre)
+  if (codigoUpper === '0309008' || codigoUpper === '309008' || nombreLower.includes('calciuria')) {
+    return './img/0309008.png'; // O la extensión correspondiente (.jpeg / .jpg)
+  }
+  if (codigoUpper === '0309010' || codigoUpper === '309010' || nombreLower.includes('creatininuria')) {
+    return './img/0309010.png';
+  }
+  if (codigoUpper === '0302024' || codigoUpper === '302024' || nombreLower.includes('clearance')) {
+    return './img/0302024.png';
+  }
 
   // 1. Verificar si corresponde a una imagen general de categoría
   if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
@@ -101,10 +106,22 @@ async function obtenerRutaConRespaldo(exam) {
 
 // Versión síncrona optimizada para tarjetas
 function obtenerRutaImagenParaExamen(exam) {
-  const codigoUpper = (exam.codigo || '').toUpperCase();
+  const codigoUpper = String(exam.codigo || '').toUpperCase();
   const tipoLower = (exam.tipo || '').toLowerCase();
   const nombreLower = (exam.nombre || '').toLowerCase();
 
+  // 0. EXCEPCIONES ESPECÍFICAS (Evalúa primero si el examen tiene imagen dedicada)
+  if (codigoUpper === '0309008' || codigoUpper === '309008' || nombreLower.includes('calciuria')) {
+    return 'img/0309008.png'; // Cambia la extensión si tu archivo es .jpg o .jpeg
+  }
+  if (codigoUpper === '0309010' || codigoUpper === '309010' || nombreLower.includes('creatininuria')) {
+    return 'img/0309010.png';
+  }
+  if (codigoUpper === '0302024' || codigoUpper === '302024' || nombreLower.includes('clearance')) {
+    return 'img/0302024.png';
+  }
+
+  // Reglas generales por categoría
   if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
     return 'img/Imagen_orina.jpeg';
   } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo') || nombreLower.includes('sangre oculta')) {
@@ -116,10 +133,8 @@ function obtenerRutaImagenParaExamen(exam) {
   return `img/${exam.codigo}.png`;
 }
 
-
-// ==========================================
 // 4. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
-// ==========================================
+
 function renderExams(exams) {
   const container = document.getElementById('examsContainer');
   if (!container) return;
@@ -148,13 +163,13 @@ function renderExams(exams) {
             <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block">
               Código: ${exam.codigo}
             </span>
-<button 
-  type="button"
-  onclick="abrirModalImagenPorExamen('${exam.codigo}')"
-  class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
->
-  🖼️ Ver Guía
-</button>
+            <button 
+              type="button"
+              onclick="abrirModalImagenPorExamen('${exam.codigo}')"
+              class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
+            >
+              🖼️ Ver Guía
+            </button>
           </div>
           <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
         </div>
@@ -191,10 +206,8 @@ function renderExams(exams) {
   });
 }
 
-
-// ==========================================
 // 5. SISTEMA DE FILTRADO Y BÚSQUEDA AVANZADO
-// ==========================================
+
 function filterExams() {
   const searchInput = document.getElementById('searchInput');
   if (!searchInput) return;
@@ -236,10 +249,8 @@ function filterExams() {
   renderExams(filtered);
 }
 
-
-// ==========================================
 // 6. GESTIÓN DE EXÁMENES SELECCIONADOS
-// ==========================================
+
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   const searchInput = document.getElementById('searchInput');
@@ -339,13 +350,13 @@ function updateSelectedUI() {
         <div class="relative rounded-lg overflow-hidden border border-emerald-100 bg-emerald-50/50 group/img">
           <img src="${rutaImg}" alt="${exam.nombre}" class="w-full h-28 object-cover object-top transition-transform duration-300 group-hover/img:scale-105">
           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-<button 
-  type="button"
-  onclick="abrirModalImagenPorExamen('${exam.codigo}')"
-  class="bg-white text-emerald-800 font-semibold px-3 py-1.5 rounded-lg text-xs shadow hover:bg-emerald-50 transition-colors"
->
-  🔍 Ampliar Guía
-</button>
+            <button 
+              type="button"
+              onclick="abrirModalImagenPorExamen('${exam.codigo}')"
+              class="bg-white text-emerald-800 font-semibold px-3 py-1.5 rounded-lg text-xs shadow hover:bg-emerald-50 transition-colors"
+            >
+              🔍 Ampliar Guía
+            </button>
           </div>
         </div>
 
@@ -374,26 +385,24 @@ function updateSelectedUI() {
 }
 
 // Función para abrir y cerrar los modales generales (Sangre, Orina, Feca)
-    function toggleModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.classList.toggle('hidden');
-      }
-    }
+function toggleModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.toggle('hidden');
+  }
+}
 
-    // Función para el botón del carrito en dispositivos móviles
-    function toggleMobileCart() {
-      const modal = document.getElementById('mobileCartModal');
-      if (modal) {
-        modal.classList.toggle('hidden');
-      }
-    }
+// Función para el botón del carrito en dispositivos móviles
+function toggleMobileCart() {
+  const modal = document.getElementById('mobileCartModal');
+  if (modal) {
+    modal.classList.toggle('hidden');
+  }
+}
 
-// ==========================================
-// 7. GESTIÓN DE MODALES DE IMÁGENES (Versión Directa y Síncrona)
-// ==========================================
 
-// Función directa para abrir el modal desde las tarjetas de exámenes
+// 7. GESTIÓN DE MODALES DE IMÁGENES
+
 function abrirModalImagenPorExamen(codigoExamen) {
   const exam = allExams.find(e => e.codigo === codigoExamen);
   if (!exam) {
@@ -404,11 +413,9 @@ function abrirModalImagenPorExamen(codigoExamen) {
   const rutaFinal = obtenerRutaImagenParaExamen(exam);
   const titulo = exam.nombre || 'Guía de Examen';
   
-  // Pasamos 'exam' como tercer parámetro opcional para extraer la muestra precisa
   abrirModalImagen(rutaFinal, titulo, exam);
 }
 
-// Función general para mostrar el modal de imagen (usada por tarjetas y botones superiores)
 function abrirModalImagen(urlImagen, titulo, examData = null) {
   const modal = document.getElementById('modalImagenAmpliada');
   const imgElement = document.getElementById('imagenAmpliadaSrc');
@@ -422,20 +429,15 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
     return;
   }
 
-  // Asignar valores
   imgElement.src = urlImagen;
   titleElement.textContent = titulo;
   if (downloadBtn) downloadBtn.href = urlImagen;
   
-  // Variables en minúsculas para comparaciones seguras
   const urlLower = (urlImagen || '').toLowerCase();
   const tituloLower = (titulo || '').toLowerCase();
-  const muestraLower = (examData?.tipo_muestra || examData?.muestra || '').toLowerCase();
+  const muestraLower = (examData?.tipo_muestra || examData?.muestra || examData?.tipo || '').toLowerCase();
 
-  // Cambiar colores según la categoría
   if (headerFondo && contenedorFondo) {
-    
-    // 1. EXCEPCIÓN ESPECIAL: Sangre Oculta en Deposición / Weber -> Deposición (Café)
     if (
       tituloLower.includes('sangre oculta') || 
       tituloLower.includes('weber') || 
@@ -446,8 +448,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-50/90 text-gray-900 border border-amber-300 transition-colors duration-300";
       headerFondo.className = "bg-amber-200 text-amber-950 border-b border-amber-300 p-4 flex justify-between items-center transition-colors duration-300";
     }
-    
-    // 2. DEPOSICIÓN / HECES / FECA (Cafecito claro)
     else if (
       muestraLower.includes('deposici') || muestraLower.includes('heces') || muestraLower.includes('copro') ||
       urlLower.includes('deposicion') || urlLower.includes('heces') || urlLower.includes('feca') ||
@@ -456,8 +456,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-50/90 text-gray-900 border border-amber-300 transition-colors duration-300";
       headerFondo.className = "bg-amber-200 text-amber-950 border-b border-amber-300 p-4 flex justify-between items-center transition-colors duration-300";
     }
-    
-    // 3. SANGRE (Rojito claro)
     else if (
       muestraLower.includes('sangre') || muestraLower.includes('plasma') || muestraLower.includes('suero') ||
       urlLower.includes('sangre') || tituloLower.includes('sangre')
@@ -465,8 +463,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-red-50/90 text-gray-900 border border-red-200 transition-colors duration-300";
       headerFondo.className = "bg-red-100 text-red-900 border-b border-red-200 p-4 flex justify-between items-center transition-colors duration-300";
     }
-    
-    // 4. ORINA (Amarillo clarito)
     else if (
       muestraLower.includes('orina') ||
       urlLower.includes('orina') || tituloLower.includes('orina')
@@ -474,8 +470,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-yellow-50/90 text-gray-900 border border-yellow-200 transition-colors duration-300";
       headerFondo.className = "bg-yellow-100 text-yellow-900 border-b border-yellow-200 p-4 flex justify-between items-center transition-colors duration-300";
     }
-    
-    // 5. NASALES Y FARÍNGEAS (Moraditas / Lilas)
     else if (
       muestraLower.includes('nasal') || muestraLower.includes('faringe') || muestraLower.includes('hisopado') ||
       urlLower.includes('nasal') || urlLower.includes('faringe') ||
@@ -484,8 +478,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-purple-50/90 text-gray-900 border border-purple-200 transition-colors duration-300";
       headerFondo.className = "bg-purple-100 text-purple-900 border-b border-purple-200 p-4 flex justify-between items-center transition-colors duration-300";
     }
-
-    // 6. SECRECIONES (Azulito claro)
     else if (
       muestraLower.includes('secreci') || muestraLower.includes('fluido') ||
       urlLower.includes('secrecion') || tituloLower.includes('secrecion')
@@ -493,8 +485,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-blue-50/90 text-gray-900 border border-blue-200 transition-colors duration-300";
       headerFondo.className = "bg-blue-100 text-blue-900 border-b border-blue-200 p-4 flex justify-between items-center transition-colors duration-300";
     }
-
-    // 7. HONGOS Y HERIDAS (Verdecito claro)
     else if (
       muestraLower.includes('hongo') || muestraLower.includes('herida') || muestraLower.includes('micolog') || muestraLower.includes('piel') ||
       urlLower.includes('hongo') || urlLower.includes('herida') ||
@@ -503,8 +493,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-emerald-50/90 text-gray-900 border border-emerald-200 transition-colors duration-300";
       headerFondo.className = "bg-emerald-100 text-emerald-900 border-b border-emerald-200 p-4 flex justify-between items-center transition-colors duration-300";
     }
-
-    // 8. DEFAULT / OTROS (Gris neutro suave)
     else {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-slate-50/90 text-gray-900 border border-slate-200 transition-colors duration-300";
       headerFondo.className = "bg-slate-100 text-slate-800 border-b border-slate-200 p-4 flex justify-between items-center transition-colors duration-300";
@@ -512,8 +500,6 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
   }
 
   if (typeof resetZoom === 'function') resetZoom();
-  
-  // Mostrar modal quitando la clase hidden
   modal.classList.remove('hidden');
 }
 
@@ -524,7 +510,6 @@ function cerrarModalImagen() {
   }
 }
 
-// Asegurar compatibilidad global para los botones generales de la interfaz
 window.toggleModal = function(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
@@ -537,9 +522,10 @@ window.toggleModal = function(modalId) {
 window.abrirModalImagen = abrirModalImagen;
 window.abrirModalImagenPorExamen = abrirModalImagenPorExamen;
 window.cerrarModalImagen = cerrarModalImagen;
-// ==========================================
+
+
+
 // 8. IMPRESIÓN Y EXPORTACIÓN DE RESUMENES
-// ==========================================
 function generarPDFResumen() {
   imprimirResumen();
 }
@@ -601,7 +587,7 @@ function imprimirResumen() {
 
   htmlContent += `
       <div class="footer">
-        Por favor, cumpla estrictamente con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
+        Por favor, cumpla strictly con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
       </div>
     </body>
     </html>
@@ -767,62 +753,18 @@ async function compartirListaComoImagen() {
     }
 
     const nombresExamenes = examenesAProcesar.map(e => e.nombre).join(', ');
-    const textoMensaje = `Hola, te comparto las guías e indicaciones para mis exámenes: ${nombresExamenes}.`;
+    const textoMensaje = `Hola, te comparto las guías para: ${nombresExamenes}`;
 
     if (navigator.canShare && navigator.canShare({ files: archivosParaCompartir })) {
       await navigator.share({
-        title: 'Indicaciones de Exámenes',
+        title: 'Guías de Exámenes',
         text: textoMensaje,
-        files: archivosParaCompartir,
+        files: archivosParaCompartir
       });
-    } else if (navigator.share) {
-      await navigator.share({
-        title: 'Indicaciones de Exámenes',
-        text: textoMensaje,
-        files: [archivosParaCompartir[0]],
-      });
-      alert("Tu dispositivo solo permitió adjuntar la primera imagen.");
     } else {
-      archivosParaCompartir.forEach((archivo, index) => {
-        setTimeout(() => {
-          const url = URL.createObjectURL(archivo);
-          const enlaceTemporal = document.createElement('a');
-          enlaceTemporal.href = url;
-          enlaceTemporal.download = archivo.name;
-          document.body.appendChild(enlaceTemporal);
-          enlaceTemporal.click();
-          document.body.removeChild(enlaceTemporal);
-          URL.revokeObjectURL(url);
-        }, index * 300);
-      });
-      alert('Se han descargado las imágenes en tu equipo.');
+      alert("Tu dispositivo o navegador no soporta el envío directo de múltiples imágenes. Te sugerimos descargar los PDFs o usar el botón de 'Imprimir Guías'.");
     }
   } catch (error) {
-    console.log('Error al procesar las imágenes:', error);
-    alert('Ocurrió un error al preparar las imágenes.');
+    console.error("Error al compartir imágenes:", error);
   }
 }
-// ==========================================
-// 9. CONTROL DE CARRITO / LISTA MÓVIL Y MODALES GENERALES
-// ==========================================
-
-function toggleMobileCart() {
-  const mobileCart = document.getElementById('mobileCartModal') || document.getElementById('mobileSelectedContainer');
-  if (mobileCart) {
-    mobileCart.classList.toggle('hidden');
-  } else {
-    // Si usas un contenedor con clases de transformación (como translate-x)
-    const drawer = document.getElementById('mobileDrawer');
-    if (drawer) {
-      drawer.classList.toggle('translate-x-full');
-    }
-  }
-}
-
-
-// Exponer de forma global obligatoria para los eventos onclick del HTML
-window.toggleMobileCart = toggleMobileCart;
-window.toggleModal = window.toggleModal || function(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) modal.classList.toggle('hidden');
-};
