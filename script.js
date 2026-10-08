@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
+// 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
 
 function cleanText(text) {
   if (!text) return '';
@@ -52,85 +53,124 @@ function removeEmojis(string) {
     .trim();
 }
 
+// 🟢 AGREGA ESTA FUNCIÓN NUEVA AQUÍ
+function obtenerRutaImagenRespaldo(exam = {}) {
+  const codigoUpper = String(exam?.codigo || '').toUpperCase();
+  const tipoLower = String(exam?.tipo || '').toLowerCase();
+  const nombreLower = String(exam?.nombre || '').toLowerCase();
+
+  if (
+    codigoUpper.includes('ORINA') || 
+    tipoLower.includes('orina') || 
+    nombreLower.includes('orina') || 
+    nombreLower.includes('urocultivo')
+  ) {
+    return './img/Imagen_orina.jpeg';
+  }
+
+  if (
+    codigoUpper.includes('FECA') || 
+    codigoUpper.includes('DEPOSICION') || 
+    tipoLower.includes('deposicion') || 
+    tipoLower.includes('deposición') || 
+    nombreLower.includes('deposicion') || 
+    nombreLower.includes('deposición') || 
+    nombreLower.includes('coprocultivo')
+  ) {
+    return './img/Imagen_deposicion.jpeg';
+  }
+
+  return './img/Imagen_sangre.jpeg';
+}
+
+// 🟢 REEMPLAZA TU 'obtenerRutaImagenParaExamen' ANTIGUA POR ESTA:
+function obtenerRutaImagenParaExamen(exam) {
+  const codigo = String(exam?.codigo || '').trim();
+
+  // Si no hay código, entrega inmediatamente la imagen genérica
+  if (!codigo) {
+    return obtenerRutaImagenRespaldo(exam);
+  }
+
+  // Si tiene código, busca su .png
+  return `./img/${codigo}.png`;
+}
 
 // 3. SISTEMA DE RESPALDO INTELIGENTE DE IMÁGENES
 
 async function obtenerRutaConRespaldo(exam) {
-  const codigoUpper = String(exam.codigo || '').toUpperCase();
+  const codigo = String(exam.codigo || '').trim();
+  const codigoUpper = codigo.toUpperCase();
   const tipoLower = (exam.tipo || '').toLowerCase();
   const nombreLower = (exam.nombre || '').toLowerCase();
 
-  // 0. EXCEPCIONES ESPECÍFICAS (Búsqueda prioritaria por código o nombre)
-  if (codigoUpper === '0309008' || codigoUpper === '309008' || nombreLower.includes('calciuria')) {
-    return './img/0309008.png'; // O la extensión correspondiente (.jpeg / .jpg)
+  // 0. EXCEPCIONES ESPECÍFICAS
+  if (
+    codigoUpper === '0309008' ||
+    codigoUpper === '309008' ||
+    nombreLower.includes('calciuria')
+  ) {
+    return './img/0309008.png';
   }
-  if (codigoUpper === '0309010' || codigoUpper === '309010' || nombreLower.includes('creatininuria')) {
+
+  if (
+    codigoUpper === '0309010' ||
+    codigoUpper === '309010' ||
+    nombreLower.includes('creatininuria')
+  ) {
     return './img/0309010.png';
   }
-  if (codigoUpper === '0302024' || codigoUpper === '302024' || nombreLower.includes('clearance')) {
+
+  if (
+    codigoUpper === '0302024' ||
+    codigoUpper === '302024' ||
+    nombreLower.includes('clearance')
+  ) {
     return './img/0302024.png';
   }
 
-  // 1. Verificar si corresponde a una imagen general de categoría
-  if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
-    return './img/Imagen_orina.jpeg';
-  } 
-  if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo') || nombreLower.includes('sangre oculta')) {
-    return './img/Imagen_deposicion.jpeg';
-  } 
-  if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre') || tipoLower.includes('suero') || nombreLower.includes('perfil') || nombreLower.includes('hemograma')) {
-    return './img/Imagen_sangre.jpeg';
-  }
+  // 1. PRIMERO: buscar automáticamente la imagen propia del examen
+  // Todos los archivos individuales son .png
+  if (codigo) {
+    const rutaPersonalizada = `./img/${codigo}.png`;
 
-  // 2. Si es un examen con imagen personalizada propia, la buscamos
-  const rutasAProbar = [
-    `./img/${exam.codigo}.png`, 
-    `./img/${exam.codigo}.jpeg`, 
-    `./img/${exam.codigo}.jpg`
-  ];
-
-  for (const ruta of rutasAProbar) {
     try {
-      const response = await fetch(ruta, { method: 'HEAD' });
+      const response = await fetch(rutaPersonalizada, { method: 'HEAD' });
+
       if (response.ok) {
-        return ruta;
+        return rutaPersonalizada;
       }
     } catch (e) {
-      // Continuar si falla
+      // Si no existe, continúa con la imagen general
     }
   }
 
-  // 3. Respaldo final por defecto
+  // 2. Imagen general de ORINA
+  if (
+    codigoUpper.includes('ORINA') ||
+    tipoLower.includes('orina') ||
+    nombreLower.includes('orina') ||
+    nombreLower.includes('urocultivo')
+  ) {
+    return './img/Imagen_orina.jpeg';
+  }
+
+  // 3. Imagen general de DEPOSICIÓN
+  if (
+    codigoUpper.includes('FECA') ||
+    codigoUpper.includes('DEPOSICION') ||
+    tipoLower.includes('deposicion') ||
+    tipoLower.includes('deposición') ||
+    nombreLower.includes('deposicion') ||
+    nombreLower.includes('deposición') ||
+    nombreLower.includes('coprocultivo') ||
+    nombreLower.includes('sangre oculta')
+  ) {
+    return './img/Imagen_deposicion.jpeg';
+  }
+
+  // 4. Imagen general de SANGRE
   return './img/Imagen_sangre.jpeg';
-}
-
-// Versión síncrona optimizada para tarjetas
-function obtenerRutaImagenParaExamen(exam) {
-  const codigoUpper = String(exam.codigo || '').toUpperCase();
-  const tipoLower = (exam.tipo || '').toLowerCase();
-  const nombreLower = (exam.nombre || '').toLowerCase();
-
-  // 0. EXCEPCIONES ESPECÍFICAS (Evalúa primero si el examen tiene imagen dedicada)
-  if (codigoUpper === '0309008' || codigoUpper === '309008' || nombreLower.includes('calciuria')) {
-    return 'img/0309008.png'; // Cambia la extensión si tu archivo es .jpg o .jpeg
-  }
-  if (codigoUpper === '0309010' || codigoUpper === '309010' || nombreLower.includes('creatininuria')) {
-    return 'img/0309010.png';
-  }
-  if (codigoUpper === '0302024' || codigoUpper === '302024' || nombreLower.includes('clearance')) {
-    return 'img/0302024.png';
-  }
-
-  // Reglas generales por categoría
-  if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
-    return 'img/Imagen_orina.jpeg';
-  } else if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo') || nombreLower.includes('sangre oculta')) {
-    return 'img/Imagen_deposicion.jpeg';
-  } else if (codigoUpper.includes('SANGRE') || tipoLower.includes('sangre') || tipoLower.includes('suero') || nombreLower.includes('perfil') || nombreLower.includes('hemograma')) {
-    return 'img/Imagen_sangre.jpeg';
-  }
-
-  return `img/${exam.codigo}.png`;
 }
 
 // 4. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
@@ -254,26 +294,56 @@ function filterExams() {
 function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   const searchInput = document.getElementById('searchInput');
-  if (searchInput) searchInput.value = '';
 
-  const eyeIcon = `<svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
-  const eyeOffIcon = `<svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.025 10.025 0 013.122-.063c4.478 0 8.268 2.943 9.543 7a9.97 9.97 0 01-2.155 3.592m-2.228 2.228a9.98 9.98 0 01-2.589 1.17M3 3l18 18"/></svg>`;
+  // Limpiar buscador
+  if (searchInput) {
+    searchInput.value = '';
+  }
+
+  const eyeIcon = `
+    <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7z"/>
+    </svg>
+  `;
+
+  const eyeOffIcon = `
+    <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.025 10.025 0 013.122-.063c4.478 0 8.268 2.943 9.543 7a9.97 9.97 0 01-2.155 3.592m-2.228 2.228a9.98 9.98 0 01-2.589 1.17M3 3l18 18"/>
+    </svg>
+  `;
 
   if (showingAll) {
+    // Ocultar todos los exámenes
     showingAll = false;
+
     if (btn) {
       btn.innerHTML = `${eyeIcon} Ver todos`;
       btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
     }
-    renderExams([]); 
-  } else {
-    showingAll = true;
-    if (btn) {
-      btn.innerHTML = `${eyeOffIcon} Ocultar lista`;
-      btn.className = "bg-slate-600 hover:bg-slate-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
-    }
-    renderExams(allExams);
+
+    renderExams([]);
+} else {
+  showingAll = true;
+
+  if (btn) {
+    btn.innerHTML = `${eyeOffIcon} Ocultar lista`;
+    btn.className = "bg-slate-600 hover:bg-slate-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
   }
+
+  console.log("VER TODOS - cantidad de exámenes:", allExams.length);
+
+  if (allExams.length === 0) {
+    console.error("allExams está vacío");
+    alert("Los exámenes todavía no se han cargado.");
+    return;
+  }
+
+  renderExams(allExams);
+}
 }
 
 function toggleSelectExam(codigo) {
@@ -330,7 +400,8 @@ function updateSelectedUI() {
   }
 
   const itemsHTML = selectedExams.map(exam => {
-    const rutaImg = obtenerRutaImagenParaExamen(exam);
+const rutaImg = obtenerRutaImagenParaExamen(exam);
+const rutaRespaldo = obtenerRutaImagenRespaldo(exam);
 
     return `
       <div class="bg-white p-3 rounded-xl border border-gray-200 text-xs space-y-2 relative group shadow-sm">
@@ -348,7 +419,11 @@ function updateSelectedUI() {
         </div>
 
         <div class="relative rounded-lg overflow-hidden border border-emerald-100 bg-emerald-50/50 group/img">
-          <img src="${rutaImg}" alt="${exam.nombre}" class="w-full h-28 object-cover object-top transition-transform duration-300 group-hover/img:scale-105">
+          <img 
+  src="${rutaImg}" 
+  alt="${exam.nombre}" 
+  class="w-full h-28 object-cover object-top transition-transform duration-300 group-hover/img:scale-105"
+onerror="this.onerror=null; this.src='${rutaRespaldo}';">
           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
             <button 
               type="button"
@@ -373,8 +448,10 @@ function updateSelectedUI() {
                 ${formatPasos(exam.pasos_preparacion)}
               </div>
             </div>
+            
           </details>
         </div>
+        
 
       </div>
     `;
@@ -429,9 +506,25 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
     return;
   }
 
-  imgElement.src = urlImagen;
-  titleElement.textContent = titulo;
-  if (downloadBtn) downloadBtn.href = urlImagen;
+imgElement.onerror = function () {
+  // Evita un bucle infinito si tampoco existe la imagen de respaldo
+  imgElement.onerror = null;
+
+  const rutaRespaldo = obtenerRutaImagenRespaldo(examData);
+
+  imgElement.src = rutaRespaldo;
+
+  if (downloadBtn) {
+    downloadBtn.href = rutaRespaldo;
+  }
+};
+
+imgElement.src = urlImagen;
+titleElement.textContent = titulo;
+
+if (downloadBtn) {
+  downloadBtn.href = urlImagen;
+}
   
   const urlLower = (urlImagen || '').toLowerCase();
   const tituloLower = (titulo || '').toLowerCase();
@@ -610,14 +703,23 @@ function imprimirResumen() {
   };
 }
 
-function generarPDFImágenes() {
+async function generarPDFImágenes() {
   if (!selectedExams || selectedExams.length === 0) {
     alert("Por favor, selecciona al menos un examen antes de imprimir las guías visuales.");
     return;
   }
 
-  const rutasUnicas = [...new Set(selectedExams.map(exam => obtenerRutaImagenParaExamen(exam)))];
+  const rutasResueltas = [];
 
+  for (const exam of selectedExams) {
+    const ruta = await obtenerRutaConRespaldo(exam);
+
+    if (!rutasResueltas.includes(ruta)) {
+      rutasResueltas.push(ruta);
+    }
+  }
+
+const rutasUnicas = rutasResueltas;
   let htmlContent = `
     <!DOCTYPE html>
     <html lang="es">
@@ -733,8 +835,8 @@ async function compartirListaComoImagen() {
     const codigosFaltantes = [];
 
     for (const examen of examenesAProcesar) {
-      const rutaImagen = obtenerRutaImagenParaExamen(examen);
-      const response = await fetch(rutaImagen);
+const rutaImagen = await obtenerRutaConRespaldo(examen);
+const response = await fetch(rutaImagen);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -767,4 +869,45 @@ async function compartirListaComoImagen() {
   } catch (error) {
     console.error("Error al compartir imágenes:", error);
   }
+}
+
+// 9. FUNCIONES DE NOTIFICACIÓN (TOAST CON AUTO-CIERRE)
+let toastTimeout = null;
+
+function mostrarNotificacionOCR(mensaje, tipo = 'warning', duracionMs = 5000) {
+  const toast = document.getElementById('ocrToast');
+  const toastText = document.getElementById('ocrToastText');
+  const toastIcon = document.getElementById('ocrToastIcon');
+
+  if (!toast || !toastText) return;
+
+  // Limpiar cualquier temporizador previo para evitar que se cierre antes de tiempo
+  if (toastTimeout) clearTimeout(toastTimeout);
+
+  toastText.textContent = mensaje;
+
+  if (tipo === 'warning') {
+    toast.className = "mt-3 p-3 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 text-sm flex items-center justify-between shadow-sm transition-all duration-300";
+    toastIcon.textContent = '⚠️';
+  } else if (tipo === 'success') {
+    toast.className = "mt-3 p-3 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-sm flex items-center justify-between shadow-sm transition-all duration-300";
+    toastIcon.textContent = '✅';
+  } else if (tipo === 'error') {
+    toast.className = "mt-3 p-3 rounded-xl border border-red-200 bg-red-50 text-red-900 text-sm flex items-center justify-between shadow-sm transition-all duration-300";
+    toastIcon.textContent = '❌';
+  }
+
+  toast.classList.remove('hidden');
+
+  // Cierre automático después de los segundos configurados (por defecto 5s)
+  if (duracionMs > 0) {
+    toastTimeout = setTimeout(() => {
+      cerrarToastOCR();
+    }, duracionMs);
+  }
+}
+
+function cerrarToastOCR() {
+  const toast = document.getElementById('ocrToast');
+  if (toast) toast.classList.add('hidden');
 }

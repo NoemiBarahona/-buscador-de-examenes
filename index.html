@@ -62,23 +62,30 @@
       </div>
     </section>
 
-    <!-- GRID PRINCIPAL (Buscador + Resultados / Barra Lateral) -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-<!-- COLUMNA IZQUIERDA: Buscador y Listado de Exámenes -->
+<!-- GRID PRINCIPAL (Buscador + Resultados / Barra Lateral) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  
+  <!-- COLUMNA IZQUIERDA: Buscador y Listado de Exámenes -->
 <section class="lg:col-span-2">
   <div class="sticky top-[68px] sm:top-[80px] z-30 bg-slate-50 py-3 mb-4 border-b border-gray-200">
     <label for="searchInput" class="block text-sm font-semibold text-gray-700 mb-2">
       🔍 Busca tu examen:
     </label>
-    <div class="flex flex-col sm:flex-row gap-3">
-      <input 
-        type="text" 
-        id="searchInput" 
-        onkeyup="filterExams()" 
-        placeholder="Ej: Hemograma, Coprocultivo, Orina..." 
-        class="flex-1 p-3.5 sm:p-4 text-base rounded-xl border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-800 bg-white"
-      >
+    
+    <div class="flex flex-col sm:flex-row gap-3 items-stretch">
+      
+      <!-- CONTENEDOR UNIFICADO: Input + Botón Cámara -->
+     <div class="relative flex-1 flex items-center">
+  <input 
+    type="text" 
+    id="searchInput" 
+    onkeyup="filterExams()" 
+    placeholder="Ej: Hemograma, Coprocultivo, Orina..." 
+    class="w-full p-3.5 sm:p-4 text-base rounded-xl border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-800 bg-white"
+  >
+</div>
+
+      <!-- Botón Ver todos -->
       <button 
         id="showAllBtn" 
         onclick="toggleShowAll()" 
@@ -90,8 +97,26 @@
         </svg>
         Ver todos
       </button>
+
     </div>
+
+    <!-- Indicador de Carga/Procesamiento OCR -->
+    <div id="ocrStatus" class="hidden mt-2 p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm rounded-xl flex items-center gap-2 shadow-sm">
+      <span class="animate-spin">⏳</span>
+      <span id="ocrStatusText">Procesando imagen...</span>
+    </div>
+
+    <!-- Notificación dinámica para el resultado del OCR -->
+    <div id="ocrToast" class="hidden mt-3 p-3 rounded-xl border text-sm flex items-center justify-between shadow-sm transition-all duration-300">
+      <div class="flex items-center gap-2">
+        <span id="ocrToastIcon">⚠️</span>
+        <span id="ocrToastText" class="font-medium text-gray-700"></span>
+      </div>
+      <button type="button" onclick="cerrarToastOCR()" class="text-gray-400 hover:text-gray-600 font-bold ml-2">✕</button>
+    </div>
+
   </div>
+
   <div id="examsContainer" class="space-y-4"></div>
 </section>
 
@@ -364,42 +389,6 @@
 
  <!-- BLOQUE DE FUNCIONES AUXILIARES Y MODALES -->
   <script>
-    // Función centralizada para obtener la ruta de la imagen correcta según el tipo de examen
-    function obtenerRutaImagenParaExamen(exam) {
-      const codigoUpper = (exam.codigo || '').toUpperCase();
-      const tipoLower = (exam.tipo || '').toLowerCase();
-      const nombreLower = (exam.nombre || '').toLowerCase();
-
-      // 1. Orina
-      if (codigoUpper.includes('ORINA') || tipoLower.includes('orina') || nombreLower.includes('orina') || nombreLower.includes('urocultivo')) {
-        return 'img/Imagen_orina.jpeg';
-      } 
-
-      // 2. Deposición / Feca
-      if (codigoUpper.includes('FECA') || codigoUpper.includes('DEPOSICION') || tipoLower.includes('deposicion') || nombreLower.includes('deposicion') || nombreLower.includes('coprocultivo')) {
-        return 'img/Imagen_deposicion.jpeg';
-      } 
-
-      // 3. Sangre o perfiles generales de laboratorio
-      if (
-        codigoUpper.includes('SANGRE') || 
-        tipoLower.includes('sangre') || 
-        tipoLower.includes('suero') || 
-        tipoLower.includes('plasma') ||
-        tipoLower.includes('serologia') ||
-        nombreLower.includes('sangre') ||
-        nombreLower.includes('vih') ||
-        nombreLower.includes('perfil') ||
-        nombreLower.includes('pcr') ||
-        nombreLower.includes('hemograma')
-      ) {
-        return 'img/Imagen_sangre.jpeg';
-      }
-
-      // 4. Imagen individual o por defecto basada en el código
-      return `img/${exam.codigo}.png`;
-    }
-
     // Funciones de control de modales e interfaz
     function abrirModalImagen(urlImagen, titulo) {
       const modal = document.getElementById('modalImagenAmpliada');
