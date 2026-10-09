@@ -1,7 +1,6 @@
-// 1. VARIABLES GLOBALES Y CONFIGURACIÓN INICIAL
-
+// 1. VARIABLES GLOBALES Y CONFIGURACIÓN INICIAL (Sin almacenamiento persistente)
 let allExams = [];
-let selectedExams = JSON.parse(localStorage.getItem('selectedExams')) || [];
+let selectedExams = []; // Inicia siempre vacío al cargar la página
 let showingAll = false;
 
 // Diccionario interno de sinónimos por código de examen
@@ -13,6 +12,10 @@ const diccionarioSinonimos = {
 
 // Cargar el JSON al iniciar la página y conectar el buscador automáticamente
 document.addEventListener('DOMContentLoaded', () => {
+  // Nos aseguramos de limpiar cualquier caché antigua de localStorage o sessionStorage
+  localStorage.removeItem('selectedExams');
+  sessionStorage.removeItem('selectedExams');
+
   fetch('examenes.json')
     .then(response => response.json())
     .then(data => {
@@ -27,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
 // 2. FUNCIONES DE UTILIDAD (Limpieza y Formato)
 
 function cleanText(text) {
@@ -53,7 +55,8 @@ function removeEmojis(string) {
     .trim();
 }
 
-// 🟢 AGREGA ESTA FUNCIÓN NUEVA AQUÍ
+// 3. SISTEMA DE RESPALDO Y GESTIÓN INTELIGENTE DE IMÁGENES
+
 function obtenerRutaImagenRespaldo(exam = {}) {
   const codigoUpper = String(exam?.codigo || '').toUpperCase();
   const tipoLower = String(exam?.tipo || '').toLowerCase();
@@ -75,102 +78,43 @@ function obtenerRutaImagenRespaldo(exam = {}) {
     tipoLower.includes('deposición') || 
     nombreLower.includes('deposicion') || 
     nombreLower.includes('deposición') || 
-    nombreLower.includes('coprocultivo')
-  ) {
-    return './img/Imagen_deposicion.jpeg';
-  }
-
-  return './img/Imagen_sangre.jpeg';
-}
-
-// 🟢 REEMPLAZA TU 'obtenerRutaImagenParaExamen' ANTIGUA POR ESTA:
-function obtenerRutaImagenParaExamen(exam) {
-  const codigo = String(exam?.codigo || '').trim();
-
-  // Si no hay código, entrega inmediatamente la imagen genérica
-  if (!codigo) {
-    return obtenerRutaImagenRespaldo(exam);
-  }
-
-  // Si tiene código, busca su .png
-  return `./img/${codigo}.png`;
-}
-
-// 3. SISTEMA DE RESPALDO INTELIGENTE DE IMÁGENES
-
-async function obtenerRutaConRespaldo(exam) {
-  const codigo = String(exam.codigo || '').trim();
-  const codigoUpper = codigo.toUpperCase();
-  const tipoLower = (exam.tipo || '').toLowerCase();
-  const nombreLower = (exam.nombre || '').toLowerCase();
-
-  // 0. EXCEPCIONES ESPECÍFICAS
-  if (
-    codigoUpper === '0309008' ||
-    codigoUpper === '309008' ||
-    nombreLower.includes('calciuria')
-  ) {
-    return './img/0309008.png';
-  }
-
-  if (
-    codigoUpper === '0309010' ||
-    codigoUpper === '309010' ||
-    nombreLower.includes('creatininuria')
-  ) {
-    return './img/0309010.png';
-  }
-
-  if (
-    codigoUpper === '0302024' ||
-    codigoUpper === '302024' ||
-    nombreLower.includes('clearance')
-  ) {
-    return './img/0302024.png';
-  }
-
-  // 1. PRIMERO: buscar automáticamente la imagen propia del examen
-  // Todos los archivos individuales son .png
-  if (codigo) {
-    const rutaPersonalizada = `./img/${codigo}.png`;
-
-    try {
-      const response = await fetch(rutaPersonalizada, { method: 'HEAD' });
-
-      if (response.ok) {
-        return rutaPersonalizada;
-      }
-    } catch (e) {
-      // Si no existe, continúa con la imagen general
-    }
-  }
-
-  // 2. Imagen general de ORINA
-  if (
-    codigoUpper.includes('ORINA') ||
-    tipoLower.includes('orina') ||
-    nombreLower.includes('orina') ||
-    nombreLower.includes('urocultivo')
-  ) {
-    return './img/Imagen_orina.jpeg';
-  }
-
-  // 3. Imagen general de DEPOSICIÓN
-  if (
-    codigoUpper.includes('FECA') ||
-    codigoUpper.includes('DEPOSICION') ||
-    tipoLower.includes('deposicion') ||
-    tipoLower.includes('deposición') ||
-    nombreLower.includes('deposicion') ||
-    nombreLower.includes('deposición') ||
     nombreLower.includes('coprocultivo') ||
     nombreLower.includes('sangre oculta')
   ) {
     return './img/Imagen_deposicion.jpeg';
   }
 
-  // 4. Imagen general de SANGRE
   return './img/Imagen_sangre.jpeg';
+}
+
+function obtenerRutaImagenParaExamen(exam) {
+  // Si el examen ya trae una propiedad 'imagen' definida en el JSON, la priorizamos
+  if (exam && exam.imagen) {
+    return `./img/${exam.imagen}`;
+  }
+
+  const codigo = String(exam?.codigo || '').trim();
+  if (!codigo) {
+    return obtenerRutaImagenRespaldo(exam);
+  }
+
+  // Por defecto busca el PNG basado en su código único
+  return `./img/${codigo}.png`;
+}
+
+async function obtenerRutaConRespaldo(exam) {
+  const rutaPrincipal = obtenerRutaImagenParaExamen(exam);
+
+  try {
+    const response = await fetch(rutaPrincipal, { method: 'HEAD' });
+    if (response.ok) {
+      return rutaPrincipal;
+    }
+  } catch (e) {
+    // Si hay error en la red o no existe el archivo, usamos el respaldo genérico
+  }
+
+  return obtenerRutaImagenRespaldo(exam);
 }
 
 // 4. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
@@ -188,7 +132,6 @@ function renderExams(exams) {
 
   exams.forEach(exam => {
     const isSelected = selectedExams.some(e => e.codigo === exam.codigo);
-    const rutaImagenFinal = obtenerRutaImagenParaExamen(exam);
 
     const requisitosHTML = Array.isArray(exam.requisitos_rapidos) 
       ? exam.requisitos_rapidos.map(r => `<span class="inline-block bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-md font-medium mr-1 mb-1">${r}</span>`).join('')
@@ -295,7 +238,6 @@ function toggleShowAll() {
   const btn = document.getElementById('showAllBtn');
   const searchInput = document.getElementById('searchInput');
 
-  // Limpiar buscador
   if (searchInput) {
     searchInput.value = '';
   }
@@ -317,33 +259,25 @@ function toggleShowAll() {
   `;
 
   if (showingAll) {
-    // Ocultar todos los exámenes
     showingAll = false;
-
     if (btn) {
       btn.innerHTML = `${eyeIcon} Ver todos`;
       btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
     }
-
     renderExams([]);
-} else {
-  showingAll = true;
+  } else {
+    showingAll = true;
+    if (btn) {
+      btn.innerHTML = `${eyeOffIcon} Ocultar lista`;
+      btn.className = "bg-slate-600 hover:bg-slate-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+    }
 
-  if (btn) {
-    btn.innerHTML = `${eyeOffIcon} Ocultar lista`;
-    btn.className = "bg-slate-600 hover:bg-slate-700 text-white font-medium px-5 py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-44 shrink-0";
+    if (allExams.length === 0) {
+      alert("Los exámenes todavía no se han cargado.");
+      return;
+    }
+    renderExams(allExams);
   }
-
-  console.log("VER TODOS - cantidad de exámenes:", allExams.length);
-
-  if (allExams.length === 0) {
-    console.error("allExams está vacío");
-    alert("Los exámenes todavía no se han cargado.");
-    return;
-  }
-
-  renderExams(allExams);
-}
 }
 
 function toggleSelectExam(codigo) {
@@ -356,7 +290,8 @@ function toggleSelectExam(codigo) {
     if (examToAdd) selectedExams.push(examToAdd);
   }
 
-  localStorage.setItem('selectedExams', JSON.stringify(selectedExams));
+  // Guardamos en sessionStorage (se borra al cerrar la pestaña o cambiar de dispositivo)
+  sessionStorage.setItem('selectedExams', JSON.stringify(selectedExams));
   updateSelectedUI();
   
   const searchInput = document.getElementById('searchInput');
@@ -371,9 +306,14 @@ function toggleSelectExam(codigo) {
 }
 
 function clearSelectedExams() {
-  selectedExams = [];
+  selectedExams = []; // Vaciamos el arreglo
+  
+  // Limpiamos sessionStorage y también cualquier residuo viejo de localStorage
+  sessionStorage.removeItem('selectedExams');
   localStorage.removeItem('selectedExams');
-  updateSelectedUI();
+
+  updateSelectedUI(); // Refrescamos la interfaz al instante
+
   if (showingAll) renderExams(allExams);
   const searchInput = document.getElementById('searchInput');
   const currentQuery = searchInput ? cleanText(searchInput.value.trim()) : '';
@@ -400,8 +340,8 @@ function updateSelectedUI() {
   }
 
   const itemsHTML = selectedExams.map(exam => {
-const rutaImg = obtenerRutaImagenParaExamen(exam);
-const rutaRespaldo = obtenerRutaImagenRespaldo(exam);
+    const rutaImg = obtenerRutaImagenParaExamen(exam);
+    const rutaRespaldo = obtenerRutaImagenRespaldo(exam);
 
     return `
       <div class="bg-white p-3 rounded-xl border border-gray-200 text-xs space-y-2 relative group shadow-sm">
@@ -420,10 +360,11 @@ const rutaRespaldo = obtenerRutaImagenRespaldo(exam);
 
         <div class="relative rounded-lg overflow-hidden border border-emerald-100 bg-emerald-50/50 group/img">
           <img 
-  src="${rutaImg}" 
-  alt="${exam.nombre}" 
-  class="w-full h-28 object-cover object-top transition-transform duration-300 group-hover/img:scale-105"
-onerror="this.onerror=null; this.src='${rutaRespaldo}';">
+            src="${rutaImg}" 
+            alt="${exam.nombre}" 
+            class="w-full h-28 object-cover object-top transition-transform duration-300 group-hover/img:scale-105"
+            onerror="this.onerror=null; this.src='${rutaRespaldo}';"
+          >
           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
             <button 
               type="button"
@@ -448,10 +389,8 @@ onerror="this.onerror=null; this.src='${rutaRespaldo}';">
                 ${formatPasos(exam.pasos_preparacion)}
               </div>
             </div>
-            
           </details>
         </div>
-        
 
       </div>
     `;
@@ -460,23 +399,6 @@ onerror="this.onerror=null; this.src='${rutaRespaldo}';">
   if (desktopContainer) desktopContainer.innerHTML = itemsHTML;
   if (mobileContainer) mobileContainer.innerHTML = itemsHTML;
 }
-
-// Función para abrir y cerrar los modales generales (Sangre, Orina, Feca)
-function toggleModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.classList.toggle('hidden');
-  }
-}
-
-// Función para el botón del carrito en dispositivos móviles
-function toggleMobileCart() {
-  const modal = document.getElementById('mobileCartModal');
-  if (modal) {
-    modal.classList.toggle('hidden');
-  }
-}
-
 
 // 7. GESTIÓN DE MODALES DE IMÁGENES
 
@@ -501,56 +423,42 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
   const contenedorFondo = modal ? modal.querySelector('.max-w-4xl') : null;
   const headerFondo = document.getElementById('modalHeaderFondo');
 
-  if (!modal || !imgElement || !titleElement) {
-    console.error("Faltan elementos del DOM para el modal de imágenes.");
-    return;
-  }
+  if (!modal || !imgElement || !titleElement) return;
 
-imgElement.onerror = function () {
-  // Evita un bucle infinito si tampoco existe la imagen de respaldo
-  imgElement.onerror = null;
+  imgElement.onerror = function () {
+    imgElement.onerror = null;
+    const rutaRespaldo = obtenerRutaImagenRespaldo(examData);
+    imgElement.src = rutaRespaldo;
+    if (downloadBtn) downloadBtn.href = rutaRespaldo;
+  };
 
-  const rutaRespaldo = obtenerRutaImagenRespaldo(examData);
+  imgElement.src = urlImagen;
+  titleElement.textContent = titulo;
 
-  imgElement.src = rutaRespaldo;
-
-  if (downloadBtn) {
-    downloadBtn.href = rutaRespaldo;
-  }
-};
-
-imgElement.src = urlImagen;
-titleElement.textContent = titulo;
-
-if (downloadBtn) {
-  downloadBtn.href = urlImagen;
-}
+  if (downloadBtn) downloadBtn.href = urlImagen;
   
   const urlLower = (urlImagen || '').toLowerCase();
   const tituloLower = (titulo || '').toLowerCase();
-  const muestraLower = (examData?.tipo_muestra || examData?.muestra || examData?.tipo || '').toLowerCase();
+  const muestraLower = (examData?.tipo || '').toLowerCase();
 
   if (headerFondo && contenedorFondo) {
     if (
       tituloLower.includes('sangre oculta') || 
-      tituloLower.includes('weber') || 
       tituloLower.includes('hemorragias ocultas') ||
-      urlLower.includes('sangre_oculta') || 
-      urlLower.includes('weber')
+      urlLower.includes('sangre_oculta')
     ) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-50/90 text-gray-900 border border-amber-300 transition-colors duration-300";
       headerFondo.className = "bg-amber-200 text-amber-950 border-b border-amber-300 p-4 flex justify-between items-center transition-colors duration-300";
     }
     else if (
       muestraLower.includes('deposici') || muestraLower.includes('heces') || muestraLower.includes('copro') ||
-      urlLower.includes('deposicion') || urlLower.includes('heces') || urlLower.includes('feca') ||
-      tituloLower.includes('deposicion') || tituloLower.includes('heces')
+      urlLower.includes('deposicion') || urlLower.includes('heces') || urlLower.includes('feca')
     ) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-amber-50/90 text-gray-900 border border-amber-300 transition-colors duration-300";
       headerFondo.className = "bg-amber-200 text-amber-950 border-b border-amber-300 p-4 flex justify-between items-center transition-colors duration-300";
     }
     else if (
-      muestraLower.includes('sangre') || muestraLower.includes('plasma') || muestraLower.includes('suero') ||
+      muestraLower.includes('sangre') || muestraLower.includes('plasma') ||
       urlLower.includes('sangre') || tituloLower.includes('sangre')
     ) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-red-50/90 text-gray-900 border border-red-200 transition-colors duration-300";
@@ -562,31 +470,7 @@ if (downloadBtn) {
     ) {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-yellow-50/90 text-gray-900 border border-yellow-200 transition-colors duration-300";
       headerFondo.className = "bg-yellow-100 text-yellow-900 border-b border-yellow-200 p-4 flex justify-between items-center transition-colors duration-300";
-    }
-    else if (
-      muestraLower.includes('nasal') || muestraLower.includes('faringe') || muestraLower.includes('hisopado') ||
-      urlLower.includes('nasal') || urlLower.includes('faringe') ||
-      tituloLower.includes('nasal') || tituloLower.includes('faringe')
-    ) {
-      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-purple-50/90 text-gray-900 border border-purple-200 transition-colors duration-300";
-      headerFondo.className = "bg-purple-100 text-purple-900 border-b border-purple-200 p-4 flex justify-between items-center transition-colors duration-300";
-    }
-    else if (
-      muestraLower.includes('secreci') || muestraLower.includes('fluido') ||
-      urlLower.includes('secrecion') || tituloLower.includes('secrecion')
-    ) {
-      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-blue-50/90 text-gray-900 border border-blue-200 transition-colors duration-300";
-      headerFondo.className = "bg-blue-100 text-blue-900 border-b border-blue-200 p-4 flex justify-between items-center transition-colors duration-300";
-    }
-    else if (
-      muestraLower.includes('hongo') || muestraLower.includes('herida') || muestraLower.includes('micolog') || muestraLower.includes('piel') ||
-      urlLower.includes('hongo') || urlLower.includes('herida') ||
-      tituloLower.includes('hongo') || tituloLower.includes('herida')
-    ) {
-      contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-emerald-50/90 text-gray-900 border border-emerald-200 transition-colors duration-300";
-      headerFondo.className = "bg-emerald-100 text-emerald-900 border-b border-emerald-200 p-4 flex justify-between items-center transition-colors duration-300";
-    }
-    else {
+    } else {
       contenedorFondo.className = "max-w-4xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] bg-slate-50/90 text-gray-900 border border-slate-200 transition-colors duration-300";
       headerFondo.className = "bg-slate-100 text-slate-800 border-b border-slate-200 p-4 flex justify-between items-center transition-colors duration-300";
     }
@@ -598,27 +482,20 @@ if (downloadBtn) {
 
 function cerrarModalImagen() {
   const modal = document.getElementById('modalImagenAmpliada');
-  if (modal) {
-    modal.classList.add('hidden');
-  }
+  if (modal) modal.classList.add('hidden');
 }
 
 window.toggleModal = function(modalId) {
   const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.classList.toggle('hidden');
-  } else {
-    console.error(`No se encontró el modal general con ID: ${modalId}`);
-  }
+  if (modal) modal.classList.toggle('hidden');
 };
 
 window.abrirModalImagen = abrirModalImagen;
 window.abrirModalImagenPorExamen = abrirModalImagenPorExamen;
 window.cerrarModalImagen = cerrarModalImagen;
 
+// 8. IMPRESIÓN, COMPARTIR Y EXPORTACIÓN DE RESUMENES
 
-
-// 8. IMPRESIÓN Y EXPORTACIÓN DE RESUMENES
 function generarPDFResumen() {
   imprimirResumen();
 }
@@ -680,7 +557,7 @@ function imprimirResumen() {
 
   htmlContent += `
       <div class="footer">
-        Por favor, cumpla strictly con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
+        Por favor, cumpla con las indicaciones de ayuno e higiene antes de acudir al laboratorio.
       </div>
     </body>
     </html>
@@ -713,13 +590,11 @@ async function generarPDFImágenes() {
 
   for (const exam of selectedExams) {
     const ruta = await obtenerRutaConRespaldo(exam);
-
     if (!rutasResueltas.includes(ruta)) {
       rutasResueltas.push(ruta);
     }
   }
 
-const rutasUnicas = rutasResueltas;
   let htmlContent = `
     <!DOCTYPE html>
     <html lang="es">
@@ -740,8 +615,8 @@ const rutasUnicas = rutasResueltas;
     <body>
   `;
 
-  for (let i = 0; i < rutasUnicas.length; i += 3) {
-    const grupoImagenes = rutasUnicas.slice(i, i + 3);
+  for (let i = 0; i < rutasResueltas.length; i += 3) {
+    const grupoImagenes = rutasResueltas.slice(i, i + 3);
 
     htmlContent += `
       <div class="page-block">
@@ -835,8 +710,8 @@ async function compartirListaComoImagen() {
     const codigosFaltantes = [];
 
     for (const examen of examenesAProcesar) {
-const rutaImagen = await obtenerRutaConRespaldo(examen);
-const response = await fetch(rutaImagen);
+      const rutaImagen = await obtenerRutaConRespaldo(examen);
+      const response = await fetch(rutaImagen);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -864,14 +739,14 @@ const response = await fetch(rutaImagen);
         files: archivosParaCompartir
       });
     } else {
-      alert("Tu dispositivo o navegador no soporta el envío directo de múltiples imágenes. Te sugerimos descargar los PDFs o usar el botón de 'Imprimir Guías'.");
+      alert("Tu dispositivo o navegador no soporta el envío directo de múltiples imágenes. Te sugerimos usar el botón de 'Imprimir Guías'.");
     }
   } catch (error) {
     console.error("Error al compartir imágenes:", error);
   }
 }
 
-// 9. FUNCIONES DE NOTIFICACIÓN (TOAST CON AUTO-CIERRE)
+// 9. FUNCIONES DE NOTIFICACIÓN
 let toastTimeout = null;
 
 function mostrarNotificacionOCR(mensaje, tipo = 'warning', duracionMs = 5000) {
@@ -881,9 +756,7 @@ function mostrarNotificacionOCR(mensaje, tipo = 'warning', duracionMs = 5000) {
 
   if (!toast || !toastText) return;
 
-  // Limpiar cualquier temporizador previo para evitar que se cierre antes de tiempo
   if (toastTimeout) clearTimeout(toastTimeout);
-
   toastText.textContent = mensaje;
 
   if (tipo === 'warning') {
@@ -892,14 +765,13 @@ function mostrarNotificacionOCR(mensaje, tipo = 'warning', duracionMs = 5000) {
   } else if (tipo === 'success') {
     toast.className = "mt-3 p-3 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-sm flex items-center justify-between shadow-sm transition-all duration-300";
     toastIcon.textContent = '✅';
-  } else if (tipo === 'error') {
+  } else {
     toast.className = "mt-3 p-3 rounded-xl border border-red-200 bg-red-50 text-red-900 text-sm flex items-center justify-between shadow-sm transition-all duration-300";
     toastIcon.textContent = '❌';
   }
 
   toast.classList.remove('hidden');
 
-  // Cierre automático después de los segundos configurados (por defecto 5s)
   if (duracionMs > 0) {
     toastTimeout = setTimeout(() => {
       cerrarToastOCR();
@@ -911,3 +783,12 @@ function cerrarToastOCR() {
   const toast = document.getElementById('ocrToast');
   if (toast) toast.classList.add('hidden');
 }
+
+// 10. CONTROL DEL CARRITO FLOTANTE EN MÓVIL
+function toggleMobileCart() {
+  const modal = document.getElementById('mobileCartModal');
+  if (modal) {
+    modal.classList.toggle('hidden');
+  }
+}
+window.toggleMobileCart = toggleMobileCart;
