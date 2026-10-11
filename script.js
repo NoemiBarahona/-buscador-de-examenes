@@ -55,67 +55,100 @@ function removeEmojis(string) {
     .trim();
 }
 
-// 3. SISTEMA DE RESPALDO Y GESTIÓN INTELIGENTE DE IMÁGENES
+// 3. SISTEMA DE RESPALDO Y GESTIÓN DE IMÁGENES
 
 function obtenerRutaImagenRespaldo(exam = {}) {
-  const codigoUpper = String(exam?.codigo || '').toUpperCase();
-  const tipoLower = String(exam?.tipo || '').toLowerCase();
-  const nombreLower = String(exam?.nombre || '').toLowerCase();
+  const codigo = String(exam.codigo || '').toUpperCase();
+  const tipo = String(exam.tipo || '').toLowerCase();
+  const nombre = String(exam.nombre || '').toLowerCase();
 
+  // Guía general de deposiciones
   if (
-    codigoUpper.includes('ORINA') || 
-    tipoLower.includes('orina') || 
-    nombreLower.includes('orina') || 
-    nombreLower.includes('urocultivo')
+    codigo === 'GUIA-FECA' ||
+    codigo.includes('DEPOSICION') ||
+    codigo.includes('DEPOSICIÓN') ||
+    tipo.includes('deposición') ||
+    tipo.includes('deposicion') ||
+    nombre.includes('sangre oculta') ||
+    nombre.includes('hemorragias ocultas') ||
+    nombre.includes('coprocultivo') ||
+    nombre.includes('rotavirus') ||
+    nombre.includes('adenovirus') ||
+    nombre.includes('leucocitos fecales')
+  ) {
+    return './img/Imagen_deposición.jpeg';
+  }
+
+  // Muestras de orina
+  if (
+    codigo.includes('ORINA') ||
+    tipo.includes('orina') ||
+    nombre.includes('orina') ||
+    nombre.includes('calciuria') ||
+    nombre.includes('creatininuria')
   ) {
     return './img/Imagen_orina.jpeg';
   }
 
-  if (
-    codigoUpper.includes('FECA') || 
-    codigoUpper.includes('DEPOSICION') || 
-    tipoLower.includes('deposicion') || 
-    tipoLower.includes('deposición') || 
-    nombreLower.includes('deposicion') || 
-    nombreLower.includes('deposición') || 
-    nombreLower.includes('coprocultivo') ||
-    nombreLower.includes('sangre oculta')
-  ) {
-    return './img/Imagen_deposicion.jpeg';
-  }
-
+  // Guía general de sangre
   return './img/Imagen_sangre.jpeg';
 }
 
-function obtenerRutaImagenParaExamen(exam) {
-  // Si el examen ya trae una propiedad 'imagen' definida en el JSON, la priorizamos
-  if (exam && exam.imagen) {
+function obtenerRutaImagenParaExamen(exam = {}) {
+  // Las guías generales tienen una imagen fija prioritaria
+  const codigo = String(exam.codigo || '').toUpperCase();
+
+  if (codigo === 'GUIA-FECA') {
+    return './img/Imagen_deposición.jpeg';
+  }
+
+  if (codigo === 'GUIA-ORINA') {
+    return './img/Imagen_orina.jpeg';
+  }
+
+  if (codigo === 'GUIA-SANGRE') {
+    return './img/Imagen_sangre.jpeg';
+  }
+
+  // Los demás exámenes utilizan la imagen de su JSON
+  if (exam.imagen) {
     return `./img/${exam.imagen}`;
   }
 
-  const codigo = String(exam?.codigo || '').trim();
-  if (!codigo) {
-    return obtenerRutaImagenRespaldo(exam);
-  }
-
-  // Por defecto busca el PNG basado en su código único
-  return `./img/${codigo}.png`;
+  // Si no tienen imagen definida, utilizan el respaldo
+  return obtenerRutaImagenRespaldo(exam);
 }
 
-async function obtenerRutaConRespaldo(exam) {
+async function obtenerRutaConRespaldo(exam = {}) {
   const rutaPrincipal = obtenerRutaImagenParaExamen(exam);
 
   try {
     const response = await fetch(rutaPrincipal, { method: 'HEAD' });
+
     if (response.ok) {
       return rutaPrincipal;
     }
-  } catch (e) {
-    // Si hay error en la red o no existe el archivo, usamos el respaldo genérico
+  } catch (error) {
+    console.warn('No se pudo verificar la imagen:', rutaPrincipal);
   }
 
-  return obtenerRutaImagenRespaldo(exam);
+  const rutaRespaldo = obtenerRutaImagenRespaldo(exam);
+
+  if (rutaRespaldo !== rutaPrincipal) {
+    try {
+      const response = await fetch(rutaRespaldo, { method: 'HEAD' });
+
+      if (response.ok) {
+        return rutaRespaldo;
+      }
+    } catch (error) {
+      console.warn('No se pudo verificar la imagen de respaldo:', rutaRespaldo);
+    }
+  }
+
+  return rutaPrincipal;
 }
+
 
 // 4. RENDERIZADO DE INTERFAZ (Tarjetas de Exámenes)
 
@@ -146,13 +179,13 @@ function renderExams(exams) {
             <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md inline-block">
               Código: ${exam.codigo}
             </span>
-            <button 
-              type="button"
-              onclick="abrirModalImagenPorExamen('${exam.codigo}')"
-              class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
-            >
-              🖼️ Ver Guía
-            </button>
+<button 
+  type="button"
+  onclick="abrirModalImagenPorExamen('${exam.codigo}', '${exam.nombre}')"
+  class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 shrink-0"
+>
+  🖼️ Ver Guía
+</button>
           </div>
           <h3 class="text-base sm:text-xl font-bold text-gray-800">${exam.nombre}</h3>
         </div>
@@ -174,7 +207,7 @@ function renderExams(exams) {
       <div class="pt-4 mt-4 sm:flex sm:justify-end border-t border-gray-100">
         <button 
           type="button"
-          onclick="toggleSelectExam('${exam.codigo}')"
+          onclick="toggleSelectExam('${exam.codigo}', '${exam.nombre}')"
           class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shrink-0 ${
             isSelected 
               ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' 
@@ -280,17 +313,17 @@ function toggleShowAll() {
   }
 }
 
-function toggleSelectExam(codigo) {
-  const examIndex = selectedExams.findIndex(e => e.codigo === codigo);
+function toggleSelectExam(codigo, nombreExamen) {
+  // Buscamos coincidiendo el código y el nombre exacto para evitar conflictos por códigos repetidos
+  const examIndex = selectedExams.findIndex(e => e.codigo === codigo && e.nombre === nombreExamen);
 
   if (examIndex > -1) {
     selectedExams.splice(examIndex, 1);
   } else {
-    const examToAdd = allExams.find(e => e.codigo === codigo);
+    const examToAdd = allExams.find(e => e.codigo === codigo && e.nombre === nombreExamen);
     if (examToAdd) selectedExams.push(examToAdd);
   }
 
-  // Guardamos en sessionStorage (se borra al cerrar la pestaña o cambiar de dispositivo)
   sessionStorage.setItem('selectedExams', JSON.stringify(selectedExams));
   updateSelectedUI();
   
@@ -304,7 +337,6 @@ function toggleSelectExam(codigo) {
     renderExams([]);
   }
 }
-
 function clearSelectedExams() {
   selectedExams = []; // Vaciamos el arreglo
   
@@ -402,18 +434,20 @@ function updateSelectedUI() {
 
 // 7. GESTIÓN DE MODALES DE IMÁGENES
 
-function abrirModalImagenPorExamen(codigoExamen) {
-  const exam = allExams.find(e => e.codigo === codigoExamen);
+function abrirModalImagenPorExamen(codigoExamen, nombreExamen) {
+  const exam = allExams.find(
+    e => String(e.codigo) === String(codigoExamen) && e.nombre === nombreExamen
+  );
+
   if (!exam) {
-    console.error("No se encontró el examen con código:", codigoExamen);
+    console.error("No se encontró el examen:", codigoExamen, nombreExamen);
     return;
   }
 
   const rutaFinal = obtenerRutaImagenParaExamen(exam);
-  const titulo = exam.nombre || 'Guía de Examen';
-  
-  abrirModalImagen(rutaFinal, titulo, exam);
+  abrirModalImagen(rutaFinal, exam.nombre || 'Guía de Examen', exam);
 }
+
 
 function abrirModalImagen(urlImagen, titulo, examData = null) {
   const modal = document.getElementById('modalImagenAmpliada');
@@ -424,13 +458,20 @@ function abrirModalImagen(urlImagen, titulo, examData = null) {
   const headerFondo = document.getElementById('modalHeaderFondo');
 
   if (!modal || !imgElement || !titleElement) return;
+imgElement.onerror = function () {
+  imgElement.onerror = null;
 
-  imgElement.onerror = function () {
-    imgElement.onerror = null;
-    const rutaRespaldo = obtenerRutaImagenRespaldo(examData);
+  const rutaRespaldo = obtenerRutaImagenRespaldo(examData);
+
+  // Evita intentar cargar repetidamente la misma imagen
+  if (imgElement.src !== new URL(rutaRespaldo, document.baseURI).href) {
     imgElement.src = rutaRespaldo;
     if (downloadBtn) downloadBtn.href = rutaRespaldo;
-  };
+  } else {
+    console.error('No se pudo cargar la imagen:', rutaRespaldo);
+    imgElement.alt = 'No se pudo cargar la guía. Verifica la ruta de la imagen.';
+  }
+};
 
   imgElement.src = urlImagen;
   titleElement.textContent = titulo;

@@ -80,7 +80,7 @@
       "6. Entrega cada muestra al laboratorio en la fecha estipulada para completar las 3 tomas."
     ],
     "importancia": "Permite buscar parásitos intestinales y sus formas en las deposiciones.",
-    "imagen": "Coproparasito.png"
+    "imagen": "Coproparasitológico seriado simple (3 muestras).png"
   },
   {
     "codigo": "0308004",
@@ -94,7 +94,7 @@
       "No restringir carnes ni suspender suplementos o medicamentos sin confirmar que el método utilizado lo requiere."
     ],
     "importancia": "Busca indicios de sangrado digestivo que no siempre se observa a simple vista.",
-    "imagen": "Sangre oculta deposicion.png"
+    "imagen": "Hemorragias ocultas en deposiciones (método químico, como guayaco).png"
   },
   {
     "codigo": "0306002",
@@ -248,47 +248,70 @@
     "importancia": "Permite estudiar microorganismos presentes en una muestra de secreción del oído. El tipo de muestra y la técnica dependen de la indicación clínica.",
     "imagen": "Cultivo de oido.png"
   },
-  {
+{
     "codigo": "0309022",
     "nombre": "Orina completa",
     "tipo": "🧪 Muestra de Orina",
-    "requisitos_rapidos": ["📦 Frasco indicado por el laboratorio", "🧼 Aseo previo"],
-    "pasos_preparacion": [
-      "Realizar aseo genital según las instrucciones entregadas por el laboratorio.",
-      "Recolectar el chorro medio si así se indicó, evitando tocar el interior del recipiente.",
-      "Cerrar el frasco y entregarlo dentro del plazo indicado por el laboratorio.",
-      "La primera orina de la mañana puede ser preferida en algunos casos, pero se debe seguir la indicación recibida."
+    "requisitos_rapidos": [
+      "📦 Frasco estéril de boca ancha indicado por el laboratorio",
+      "🧼 Toallitas húmedas sin antiseptico o jabón neutro y agua",
+      "⏰ Primera orina de la mañana preferentemente"
     ],
-    "importancia": "Evalúa características físicas, químicas y microscópicas de la orina y puede apoyar el estudio de alteraciones urinarias y renales.",
+    "pasos_preparacion": [
+      "1. Realizar lavado de manos prolijo con agua y jabón antes de manipular la zona genital y el frasco.",
+      "2. Realizar aseo genital externo de adelante hacia atrás (en mujeres) o retrayendo el prepucio (en hombres) usando agua y jabón neutro; enjuagar y secar con gasa o papel absorbente limpio.",
+      "3. Destapar el frasco estéril **sin tocar nunca el interior ni la rosca** del recipiente ni de la tapa; mantén la tapa boca arriba si la apoyas.",
+      "4. Descartar la primera porción del chorro de orina directamente en el inodoro.",
+      "5. Sin detener la micción, recolectar la porción intermedia (**chorro medio**) directamente dentro del frasco hasta llenarlo al menos hasta la mitad (o según indicación).",
+      "6. Terminar de orinar el resto del chorro en el inodoro.",
+      "7. Cerrar herméticamente el frasco de inmediato y limpiar el exterior si se hubiese salpicado.",
+      "8. Rotular con tus datos y refrigerar la muestra si no se entrega de forma inmediata (entregar idealmente dentro de las 2 horas posteriores a la recolección)."
+    ],
+    "importancia": "Evalúa características físicas (color, aspecto, densidad), químicas (pH, proteínas, glucosa, sangre) y microscópicas (sedimento urinario) para apoyar el diagnóstico de infecciones, patologías renales y trastornos metabólicos.",
     "imagen": "Orina completa.png"
   },
-  {
+{
     "codigo": "0306011",
     "nombre": "Urocultivo con recuento de colonias y antibiograma",
     "tipo": "🧪 Muestra de Orina",
-    "requisitos_rapidos": ["📦 Frasco estéril", "🧼 Aseo previo"],
-    "pasos_preparacion": [
-      "Realizar aseo genital según las instrucciones del laboratorio.",
-      "Recolectar el chorro medio en el recipiente estéril, evitando tocar su interior.",
-      "Entregar la muestra según el plazo indicado por el laboratorio.",
-      "Informar si se utilizan antibióticos; no suspenderlos por cuenta propia."
+    "requisitos_rapidos": [
+      "📦 Frasco estéril de boca ancha (preferentemente entregado por el laboratorio)",
+      "🧼 Toallitas húmedas sin jabón perfumado o gasas con agua y jabón neutro",
+      "⏰ Primera orina de la mañana (o retención urinaria mínima de 3 a 4 horas)"
     ],
-    "importancia": "Busca bacterias causantes de infección urinaria y, cuando corresponde, evalúa su sensibilidad a antibióticos.",
-    "imagen": "Orina completa.png"
+    "pasos_preparacion": [
+      "Lavado exhaustivo de manos con agua y jabón antes de manipular la zona genital y el frasco.",
+      "Aseo genital externo: en mujeres, separar los labios mayores y limpiar de adelante hacia atrás con gasas/toallitas húmedas; en hombres, retraer el prepucio y limpiar el glande cuidadosamente.",
+      "Descartar el primer chorro de orina en el inodoro (aproximadamente los primeros 2 o 3 segundos).",
+      "Sin detener el flujo urinario, recolectar directamente el **chorro medio** en el frasco estéril, llenándolo hasta la mitad o tres cuartos.",
+      "Evitar estrictamente tocar con los dedos o la piel el interior del frasco o la superficie interna de la tapa.",
+      "Tapar herméticamente el frasco de inmediato y lavarse nuevamente las manos.",
+      "Refrigerar la muestra si no se entrega inmediatamente (según indicación del laboratorio, idealmente antes de 2 horas a temperatura ambiente o refrigerada entre 2°C y 8°C por un máximo de 24 horas).",
+      "Informar al laboratorio si se están usando o se acaban de terminar antibióticos; nunca suspender la medicación prescrita por cuenta propia."
+    ],
+    "importancia": "Identifica de forma precisa la bacteria patógena causante de la infección urinaria mediante recuento de colonias (UFC/mL) y determina mediante antibiograma qué fármacos son efectivos para el tratamiento.",
+    "imagen": "Urocultivo con recuento de colonias y antibiograma.png"
   },
-  {
+{
     "codigo": "0309028",
     "nombre": "Proteínas cuantitativas en orina",
     "tipo": "🧪 Muestra de Orina",
-    "requisitos_rapidos": ["📦 Recipiente indicado", "📋 Confirmar si se requiere orina de 24 horas"],
-    "pasos_preparacion": [
-      "Confirmar si la orden solicita una muestra aislada o una recolección de 24 horas.",
-      "Si se solicita una recolección de 24 horas, seguir exactamente las instrucciones de inicio, conservación y término entregadas por el laboratorio.",
-      "No descartar micciones durante el período de recolección indicado.",
-      "Entregar la muestra según las instrucciones del establecimiento."
+    "requisitos_rapidos": [
+      "📦 Contenedor estéril (muestra aislada) o bidón limpio de 2 a 3 litros (recolección de 24 horas)",
+      "📋 Verificar en la orden médica si corresponde a una muestra única o recolección de 24h",
+      "🕒 Registrar hora exactas de inicio y término si es de 24 horas"
     ],
-    "importancia": "Cuantifica proteínas eliminadas en la orina. La modalidad de recolección depende de la prestación solicitada.",
-    "imagen": "Orina completa.png"
+    "pasos_preparacion": [
+      "1. **Confirmar la modalidad:** Revisar minuciosamente la indicación médica para saber si el examen requiere una **muestra aislada** (primera orina de la mañana o aleatoria) o una **recolección de 24 horas**.",
+      "2. **Para recolección de 24 horas (Paso a paso):**",
+      "   - **Inicio (ej. 7:00 AM):** Orinar y **descartar** completamente esa primera orina (la vejiga debe quedar vacía). Anotar esta hora exacta como el inicio.",
+      "   - **Durante el día y noche:** Recolectar absolutamente **todas** las micciones subsiguientes en el bidón limpio proporcionado o adquirido. No se debe perder ninguna gota.",
+      "   - **Término (ej. 7:00 AM del día siguiente):** Realizar la última micción exactamente a la misma hora en que inició el día anterior y agregarla al bidón.",
+      "3. **Conservación:** Mantener el bidón permanentemente refrigerado entre 2 °C y 8 °C (en la parte baja del refrigerador) durante todo el proceso de recolección.",
+      "4. **Entrega:** Homogeneizar (agitar suavemente) el bidón si es necesario, medir y anotar el volumen total si el laboratorio lo solicita, y llevar la muestra al establecimiento dentro del plazo indicado."
+    ],
+    "importancia": "Mide de forma exacta la cantidad de proteínas eliminadas a través de los riñones en un periodo determinado. Es fundamental para el diagnóstico, seguimiento y evaluación de patologías renales (como nefropatías o proteinuria).",
+    "imagen": "Proteinas_orina_24h.png"
   },
   {
     "codigo": "0309013",
@@ -303,57 +326,69 @@
     "importancia": "Mide la eliminación de albúmina en la orina y puede apoyar la evaluación de daño renal.",
     "imagen": "Microalbuminuria.png"
   },
-  {
+{
     "codigo": "0303014",
     "nombre": "Subunidad beta de HCG (cuantitativa en sangre)",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Generalmente sin ayuno obligatorio", "📋 Seguir indicaciones del laboratorio"],
-    "pasos_preparacion": [
-      "Confirmar con el laboratorio si existe alguna indicación especial.",
-      "Informar la fecha de la última menstruación si se solicita para estudiar un posible embarazo.",
-      "Realizar la toma de sangre según las instrucciones del establecimiento."
+    "requisitos_rapidos": [
+      "⏱️ No requiere ayuno estricto (a menos que el médico ordene otros exámenes en conjunto)",
+      "🗓️ Es indispensable indicar la fecha de la última menstruación (FUM)"
     ],
-    "importancia": "Permite detectar y cuantificar la hormona gonadotrofina coriónica humana, utilizada para evaluar un posible embarazo y otras situaciones clínicas.",
-    "imagen": "Imagen_sangre.jpeg"
-  },
-  {
-    "codigo": "0306042",
-    "nombre": "VDRL",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Generalmente sin ayuno obligatorio", "📋 Seguir indicaciones del CESFAM"],
     "pasos_preparacion": [
-      "No suele requerir ayuno.",
-      "Informar al personal si existe diagnóstico o tratamiento previo para sífilis.",
-      "Realizar la toma de muestra según las indicaciones del establecimiento."
+      "Presentarse en el laboratorio con orden médica y cédula de identidad en el horario establecido.",
+      "Informar al personal de salud la fecha de su última menstruación y si presenta sospecha o confirmación previa de embarazo.",
+      "Si el médico solicitó exámenes adicionales (como un perfil bioquímico), consulte con el centro si alguno de ellos requiere ayuno previo.",
+      "Permanecer en reposo relativo unos minutos antes de la extracción si es propenso a mareos con las punciones."
     ],
-    "importancia": "Se utilizan para el tamizaje y seguimiento de la sífilis. El resultado debe interpretarse junto con los antecedentes clínicos y, cuando corresponda, pruebas confirmatorias.",
-    "imagen": "Imagen_sangre.jpeg"
+    "importancia": "Mide con precisión los niveles de la hormona gonadotrofina coriónica humana en suero, permitiendo confirmar o descartar un embarazo en etapas tempranas, así como monitorear su evolución o evaluar ciertas patologías clínicas.",
+    "imagen": "Subunidad beta de HCG (cuantitativa en sangre).png"
   },
-  {
+{
+  "codigo": "0306042",
+  "nombre": "VDRL",
+  "tipo": "🩸 Muestra de Sangre",
+  "requisitos_rapidos": [
+    "⏱️ Sin requerimiento de ayuno estricto",
+    "📋 Presentar cédula de identidad y orden médica"
+  ],
+  "pasos_preparacion": [
+    "Asistir al establecimiento de salud (CESFAM u hospital) en el horario asignado o por orden de llegada según corresponda.",
+    "No requiere ayuno obligatorio, pero se sugiere evitar comidas muy abundantes o grasosas antes de la extracción.",
+    "Informar al profesional de salud sobre antecedentes médicos relevantes, tratamientos previos o si existe la sospecha de exposición reciente.",
+    "Permanece sentado o recostado mientras se realiza la punción venosa en el brazo para la extracción de la muestra de sangre."
+  ],
+  "importancia": "Examen serológico fundamental para el tamizaje, diagnóstico presuntivo y seguimiento de la sífilis. Sus resultados deben ser evaluados por un médico en conjunto con el cuadro clínico del paciente y, de ser necesario, complementados con pruebas confirmatorias específicas.",
+  "imagen": "VDRL.png"
+},
+{
     "codigo": "0306038",
     "nombre": "RPR",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Generalmente sin ayuno obligatorio", "📋 Seguir indicaciones del CESFAM"],
+    "requisitos_rapidos": ["⏱️ Ayuno de 4 a 8 horas recomendado", "📋 Seguir indicaciones específicas del CESFAM"],
     "pasos_preparacion": [
-      "No suele requerir ayuno.",
-      "Informar al personal si existe diagnóstico o tratamiento previo para sífilis.",
-      "Realizar la toma de muestra según las indicaciones del establecimiento."
+      "Presentarse con un ayuno ligero de 4 a 8 horas (evitar comidas grasosas o pesadas la noche anterior para asegurar que la muestra de suero no presente lipemia).",
+      "Informar al personal de salud si existe diagnóstico previo, sospecha de exposición o tratamiento activo para sífilis.",
+      "Asistir en el horario indicado por el establecimiento para la extracción de sangre venosa."
     ],
-    "importancia": "Se utilizan para el tamizaje y seguimiento de la sífilis. El resultado debe interpretarse junto con los antecedentes clínicos y, cuando corresponda, pruebas confirmatorias.",
-    "imagen": "Imagen_sangre.jpeg"
+    "importancia": "Se utiliza para el tamizaje, diagnóstico presuntivo y seguimiento de la sífilis. El resultado reactivo o positivo debe ser interpretado obligatoriamente junto con los antecedentes clínicos y pruebas confirmatorias específicas (como FTA-ABS o TPHA).",
+    "imagen": "RPR.png"
   },
-  {
+{
     "codigo": "0306112",
     "nombre": "VIH, anticuerpos y antígenos virales, determinación de H.I.V.",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Generalmente sin ayuno", "📋 Orientación y consentimiento según protocolo vigente"],
-    "pasos_preparacion": [
-      "Confirmar con el establecimiento el tipo de prueba que se realizará.",
-      "Seguir el procedimiento de orientación, consentimiento y entrega de resultados establecido por el centro.",
-      "No suele requerir ayuno para la prueba."
+    "requisitos_rapidos": [
+      "⏱️ No requiere ayuno previo (se puede realizar a cualquier hora del día)",
+      "📋 Presentar cédula de identidad y documento médico (si aplica)",
+      "🔒 Considera consejería de pre y post prueba según normativa vigente"
     ],
-    "importancia": "Detecta marcadores de infección por VIH. Un resultado de tamizaje reactivo requiere el algoritmo de confirmación correspondiente.",
-    "imagen": "Imagen_sangre.jpeg"
+    "pasos_preparacion": [
+      "Verificar con el centro de salud si la orden médica es obligatoria o si cuenta con programa de acceso voluntario.",
+      "Asistir hidratado para facilitar la extracción de sangre.",
+      "Informar al personal de salud sobre cualquier situación de riesgo reciente, tratamientos activos o dudas en relación con la prueba."
+    ],
+    "importancia": "Permite la detección temprana de anticuerpos y antígenos del VIH. Todo resultado reactivo requiere una prueba confirmatoria complementaria para establecer un diagnóstico definitivo.",
+    "imagen": "VIH, anticuerpos y antígenos virales, determinación de H.I.V..png"
   },
   {
     "codigo": "0303020",
@@ -421,18 +456,22 @@
     "importancia": "Ayuda a evaluar la función ovárica y a estudiar si ocurrió ovulación, según el momento de la toma.",
     "imagen": "Progesterona.png"
   },
-  {
+{
     "codigo": "0303022",
     "nombre": "Testosterona en sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["🌅 Preferentemente horario indicado", "📋 Confirmar si requiere ayuno"],
-    "pasos_preparacion": [
-      "Confirmar el horario recomendado por el laboratorio.",
-      "Seguir las indicaciones de ayuno entregadas para el examen.",
-      "Informar el uso de tratamientos hormonales o suplementos."
+    "tipo": "🩸 Muestra de Sangre Venosa",
+    "requisitos_rapidos": [
+      "🌅 Horario matutino estricto (7:00 a 10:00 AM)",
+      "🍽️ Ayuno de 8 a 12 horas requerido"
     ],
-    "importancia": "Ayuda a estudiar alteraciones de la función hormonal. El significado depende del contexto clínico y de los valores de referencia.",
-    "imagen": "PSD.png"
+    "pasos_preparacion": [
+      "Acudir al laboratorio preferentemente temprano en la mañana (entre las 7:00 y las 10:00 AM), ya que los niveles de testosterona presentan su peak más alto en este horario.",
+      "Mantener un ayuno de 8 a 12 horas antes de la extracción (se permite la ingesta moderada de agua)",
+      "Evitar ejercicios físicos intensos o extremos las 24 horas previas al examen.",
+      "Informar al equipo médico y de laboratorio sobre el uso de tratamientos hormonales, suplementos o medicamentos actuales que puedan interferir en el resultado."
+    ],
+    "importancia": "Ayuda a evaluar el funcionamiento de las gónadas (testículos u ovarios) y a estudiar alteraciones endocrinas y metabólicas. Su interpretación clínica requiere siempre correlación con los síntomas y los valores de referencia del laboratorio.",
+    "imagen": "Testosterona en sangre.png"
   },
   {
     "codigo": "0303006",
@@ -448,18 +487,23 @@
     "importancia": "Ayuda a evaluar la función de las glándulas suprarrenales.",
     "imagen": "Cortisol en sangre.png"
   },
-  {
-    "codigo": "0301014",
-    "nombre": "Prueba de antiglobulina directa (Coombs directo)",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["⏱️ Generalmente sin ayuno", "📋 Informar antecedentes relevantes"],
-    "pasos_preparacion": [
-      "Generalmente no requiere preparación especial.",
-      "Informar al personal si existen antecedentes de transfusiones o enfermedades hematológicas."
-    ],
-    "importancia": "Detecta inmunoglobulinas o componentes del complemento adheridos a los glóbulos rojos.",
-    "imagen": "Coombs indirecto, test de (prueba de antiglobulina indirecta).png"
-  },
+{
+  "codigo": "0301014",
+  "nombre": "Prueba de antiglobulina directa (Coombs directo)",
+  "tipo": "🩸 Muestra de Sangre Venosa",
+  "requisitos_rapidos": [
+    "⏱️ Sin requerimiento de ayuno",
+    "📋 Presentar orden médica y cédula de identidad",
+    "⚠️ Notificar antecedentes de transfusiones recientes o embarazos"
+  ],
+  "pasos_preparacion": [
+    "No requiere ayuno previo ni restricciones dietéticas especiales; el paciente puede alimentarse e hidratarse normalmente.",
+    "Presentar la orden médica correspondiente y un documento de identificación en el mesón de atención.",
+    "Informar obligatoriamente al personal de enfermería o tecnólogo médico si ha recibido transfusiones sanguíneas en los últimos 3 meses, si padece de enfermedades autoinmunes (como lupus eritematoso sistémico), anemias hemolíticas conocidas o si se encuentra en periodo de gestación."
+  ],
+  "importancia": "Permite detectar anticuerpos (IgG) o fracciones del complemento (como C3d) fijados directamente en la membrana de los glóbulos rojos in vivo. Es fundamental para el diagnóstico de anemias hemolíticas autoinmunes, reacciones transfusionales hemolíticas agudas o tardías, y enfermedad hemolítica del recién nacido.",
+  "imagen": "Coombs indirecto, test de (prueba de antiglobulina indirecta).png"
+},
   {
     "codigo": "0301015",
     "nombre": "Coombs indirecto, test de (prueba de antiglobulina indirecta)",
@@ -507,17 +551,22 @@
     "importancia": "Detecta anticuerpos contra el virus de la hepatitis C. Un resultado reactivo no confirma por sí solo una infección activa; puede requerir pruebas adicionales.",
     "imagen": "Anticuerpos contra el Virus de la Hepatitis C (Anti-HCV).png"
   },
-  {
+{
     "codigo": "0306069",
     "nombre": "Parásitos IgG/IgM (Chagas, hidatidosis, toxocariasis y otros por ELISA o inmunofluorescencia), c/u",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Seguir protocolo del establecimiento", "⏱️ Confirmar si requiere ayuno"],
-    "pasos_preparacion": [
-      "Confirmar con el laboratorio si existe alguna preparación especial.",
-      "Informar antecedentes de diagnóstico o tratamiento de Chagas si corresponde."
+    "tipo": "🩸 Muestra de Sangre Venosa",
+    "requisitos_rapidos": [
+      "📋 Asistir con orden médica y documento de identidad",
+      "⏱️ Ayuno estricto de 8 a 12 horas (se permite consumo de agua)",
+      "🚫 Evitar alimentos grasos y alcohol la noche anterior a la extracción"
     ],
-    "importancia": "Apoya el diagnóstico de infección por Trypanosoma cruzi. El método y la interpretación dependen del contexto clínico.",
-    "imagen": "Imagen_sangre.jpeg"
+    "pasos_preparacion": [
+      "Presentarse en el laboratorio clínico dentro del horario establecido para toma de muestras en ayunas.",
+      "Informar al personal de salud si presenta síntomas actuales, fiebre o si ha recibido tratamientos antiparasitarios previos.",
+      "Detallar antecedentes epidemiológicos relevantes (zonas rurales, contacto con animales, tenencia de mascotas o antecedentes de transfusiones y viajes)."
+    ],
+    "importancia": "Detecta anticuerpos (IgG/IgM) específicos mediante enzimoinmunoanálisis (ELISA) o inmunofluorescencia, apoyando el diagnóstico de infecciones parasitarias como Chagas (Trypanosoma cruzi), hidatidosis o toxocariasis. La interpretación debe correlacionarse estrictamente con el cuadro clínico y antecedentes del paciente.",
+    "imagen": "Parásitos IgG/IgM (Chagas, hidatidosis, toxocariasis y otros por ELISA o inmunofluorescencia).png"
   },
   {
     "codigo": "0305104",
@@ -577,17 +626,21 @@
     "importancia": "Mide una enzima que puede contribuir al estudio de alteraciones pancreáticas y otras condiciones.",
     "imagen": "Amilasa en sangre.png"
   },
-  {
+{
     "codigo": "0302053",
     "nombre": "Lipasa en sangre",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Confirmar si requiere ayuno"],
-    "pasos_preparacion": [
-      "Seguir las instrucciones de preparación entregadas por el laboratorio.",
-      "Informar los medicamentos que utiliza habitualmente."
+    "requisitos_rapidos": [
+      "📋 Ayuno estricto de 8 a 12 horas",
+      "💧 Se permite beber agua sola"
     ],
-    "importancia": "Mide una enzima utilizada principalmente en el estudio de enfermedades pancreáticas.",
-    "imagen": "Amilasa en sangre.png"
+    "pasos_preparacion": [
+      "Asistir al laboratorio con un ayuno de 8 a 12 horas (evitar alimentos, café, té o jugos).",
+      "Evitar consumir alcohol y realizar ejercicio intenso durante las 24 horas previas al examen.",
+      "Informar al personal del laboratorio sobre los medicamentos que utiliza habitualmente (especialmente analgésicos o diuréticos)."
+    ],
+    "importancia": "Mide una enzima utilizada principalmente en el estudio y diagnóstico de enfermedades pancreáticas, como la pancreatitis aguda.",
+    "imagen": "Lipasa en sangre.png"
   },
   {
     "codigo": "0308030",
@@ -647,29 +700,42 @@
     "importancia": "Ayuda a evaluar el metabolismo mineral y puede contribuir al estudio de alteraciones renales y óseas.",
     "imagen": "Fósforo en sangre.png"
   },
-  {
+{
     "codigo": "0302056",
     "nombre": "Magnesio en sangre",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Confirmar preparación con el laboratorio"],
-    "pasos_preparacion": [
-      "Seguir las instrucciones del laboratorio.",
-      "Informar el uso de suplementos y medicamentos."
+    "requisitos_rapidos": [
+      "📋 Ayuno de 8 a 12 horas",
+      "💧 Mantener hidratación solo con agua",
+      "💊 Suspender suplementos de magnesio 24 a 48 horas antes (previo aviso médico)"
     ],
-    "importancia": "Mide la concentración de magnesio, mineral importante para la función muscular, nerviosa y metabólica.",
-    "imagen": "Electrolitos Plasmaticos.png"
+    "pasos_preparacion": [
+      "Presentarse en el laboratorio con un ayuno estricto de 8 a 12 horas.",
+      "Informar al personal de salud sobre todos los medicamentos actuales (especialmente diuréticos, antiácidos y antibióticos) y suplementos vitamínicos.",
+      "Evitar la ingesta de alcohol y comidas pesadas o grasosas durante las 24 horas previas a la extracción.",
+      "Evitar ejercicio físico intenso o de alto rendimiento la mañana del examen.",
+      "Permitir el reposo de 10 a 15 minutos sentados antes de la punción venosa si el laboratorio lo requiere."
+    ],
+    "importancia": "Mide la concentración sérica de magnesio, un mineral esencial para la función neuromuscular, la regulación de la presión arterial, el metabolismo energético y la función cardíaca.",
+    "imagen": "Magnesio en sangre.png"
   },
-  {
+{
     "codigo": "0306061",
     "nombre": "Toxoplasmosis, anticuerpos IgG e IgM",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Seguir indicaciones del laboratorio", "🤰 Informar si corresponde a control prenatal"],
-    "pasos_preparacion": [
-      "Confirmar si el laboratorio requiere alguna preparación especial.",
-      "Informar antecedentes relevantes y si existe embarazo, cuando corresponda."
+    "requisitos_rapidos": [
+      "📋 Ayuno de 8 a 12 horas recomendado (según indicación específica de tu laboratorio)",
+      "🤰 Informar obligatoriamente si estás embarazada y cuántas semanas tienes de gestación",
+      "📄 Presentar cédula de identidad y orden médica con código Fonasa vigente"
     ],
-    "importancia": "Busca anticuerpos contra Toxoplasma gondii. La interpretación de IgG e IgM requiere considerar el contexto clínico y, en ocasiones, pruebas complementarias.",
-    "imagen": "Imagen_sangre.jpeg"
+    "pasos_preparacion": [
+      "Acudir al laboratorio en el horario establecido (idealmente por la mañana)",
+      "Mantener el ayuno indicado de agua y alimentos para evitar interferencias en la muestra",
+      "Informar al personal de salud si se trata de un control prenatal rutinario o por sospecha clínica",
+      "Notificar si has tomado medicamentos recientes o si presentas síntomas asociados"
+    ],
+    "importancia": "Busca anticuerpos contra Toxoplasma gondii para determinar infección pasada (IgG) o reciente (IgM). Crucial en el control prenatal para la prevención y diagnóstico oportuno.",
+    "imagen": "Toxoplasmosis, anticuerpos IgG e IgM.png"
   },
   {
     "codigo": "0306051",
@@ -747,18 +813,23 @@
     "importancia": "Evalúa una parte del proceso de coagulación y se utiliza, entre otras indicaciones, para controlar determinados tratamientos anticoagulantes.",
     "imagen": "Tiempo de protrombina (TP-INR).png"
   },
-  {
+{
     "codigo": "0301085",
     "nombre": "TTPA (tiempo de tromboplastina parcial activada)",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["💊 Informar anticoagulantes", "📋 Seguir indicaciones del laboratorio"],
-    "pasos_preparacion": [
-      "Informar al personal si se utilizan anticoagulantes u otros medicamentos relevantes.",
-      "No suspender medicamentos por cuenta propia.",
-      "Seguir las indicaciones del laboratorio."
+    "requisitos_rapidos": [
+      "💊 Informar uso de anticoagulantes (heparina, etc.)",
+      "⚠️ No suspender fármacos por cuenta propia",
+      "📋 Ayuno según indicación médica previa"
     ],
-    "importancia": "Evalúa parte del proceso de coagulación y contribuye al estudio de determinadas alteraciones hemorrágicas o de coagulación.",
-    "imagen": "Tiempo de protrombina (TP-INR).png"
+    "pasos_preparacion": [
+      "Informar de inmediato al personal de salud si se encuentra bajo tratamiento con anticoagulantes (como heparina o anticoagulantes orales) u otros medicamentos que afecten la coagulación.",
+      "Bajo ninguna circunstancia suspenda ni modifique la dosis de sus medicamentos recetados a menos que su médico tratante lo indique expresamente.",
+      "Verificar con su médico tratante o el centro de toma de muestras si el examen requiere un periodo de ayuno previo.",
+      "Acudir al laboratorio en el horario indicado, evitando realizar ejercicio físico intenso previo a la extracción para no alterar los parámetros de coagulación."
+    ],
+    "importancia": "Evalúa la vía intrínseca y común de la coagulación sanguínea, siendo fundamental para monitorear tratamientos con heparina, detectar deficiencias de factores de coagulación y estudiar tendencias a hemorragias o trombosis.",
+    "imagen": "TTPA (tiempo de tromboplastina parcial activada).png"
   },
   {
     "codigo": "0301034",
@@ -866,7 +937,7 @@
       "Informar los medicamentos utilizados y no modificarlos por cuenta propia."
     ],
     "importancia": "Mide la concentración de insulina y puede formar parte de la evaluación de alteraciones metabólicas. No establece por sí sola un diagnóstico de resistencia a la insulina.",
-    "imagen": "Imagen_sangre.jpeg"
+    "imagen": "Insulina en sangre.png"
   },
   {
     "codigo": "0302048",
@@ -882,17 +953,22 @@
     "importancia": "Evalúa la respuesta de la glucosa después de administrar una cantidad controlada de glucosa oral.",
     "imagen": "PTGO.png"
   },
-  {
+{
     "codigo": "0305031",
-    "nombre": "Proteína C reactiva normal/ultrasensible",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Confirmar el tipo de PCR solicitado", "📋 Seguir indicaciones del laboratorio"],
-    "pasos_preparacion": [
-      "Confirmar si la solicitud corresponde a PCR convencional o PCR ultrasensible, ya que tienen usos clínicos diferentes.",
-      "Seguir las indicaciones de preparación del laboratorio.",
-      "Informar si existe una infección o inflamación reciente, cuando corresponda."
+    "nombre": "Proteína C reactiva (PCR) normal / Ultrasensible",
+    "tipo": "🩸 Muestra de Sangre Venosa",
+    "requisitos_rapidos": [
+      "📋 Verificar en la orden médica si corresponde a PCR convencional o Ultrasensible (hs-CRP)",
+      "⏰ Consultar con el centro de salud si requiere ayuno específico (generalmente no obligatorio para la PCR convencional, pero puede ser requerido según el perfil lipídico asociado)",
+      "💊 Informar al personal si toma medicamentos antiinflamatorios, corticoides o estatinas"
     ],
-    "importancia": "La PCR convencional se utiliza como marcador de inflamación; la PCR ultrasensible puede utilizarse en determinadas evaluaciones de riesgo cardiovascular. Debe verificarse el código específico.",
+    "pasos_preparacion": [
+      "Revisar detalladamente la orden médica para distinguir entre PCR convencional (evaluación de inflamación aguda/infección) y PCR ultrasensible (evaluación de riesgo cardiovascular).",
+      "Asistir al centro de salud en el horario indicado. Si la prueba está asociada a un perfil bioquímico completo, respetar el ayuno de 8 a 12 horas solicitado.",
+      "Informar al laboratorista o enfermero/a si ha presentado síntomas de resfrío, infecciones recientes, fiebre, traumatismos o cirugías en las últimas semanas, ya que esto altera significativamente los resultados.",
+      "Notificar el uso de tratamientos farmacológicos actuales que puedan influir en los niveles de proteína en sangre."
+    ],
+    "importancia": "La Proteína C reactiva (PCR) es una proteína producida por el hígado cuyos niveles se elevan ante procesos inflamatorios o infecciosos. La PCR convencional se utiliza para detectar inflamación aguda o infecciones bacterianas, mientras que la PCR ultrasensible (hs-CRP) mide concentraciones más bajas y se emplea para estimar el riesgo cardiovascular a futuro. Es indispensable verificar el código en la orden para asegurar la técnica correcta.",
     "imagen": "PCR.png"
   },
   {
@@ -1006,18 +1082,25 @@
     "importancia": "Mide el nivel de creatinina en la sangre para evaluar de forma rápida y directa cómo están funcionando tus riñones.",
     "imagen": "Creatinina en sangre.png"
   },
-  {
-    "codigo": "0302057",
-    "nombre": "Nitrógeno ureico y/o urea en sangre",
-    "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Confirmar preparación con el laboratorio"],
-    "pasos_preparacion": [
-      "Seguir las indicaciones de preparación entregadas por el laboratorio.",
-      "Informar medicamentos y antecedentes relevantes si el personal los solicita."
-    ],
-    "importancia": "Mide compuestos nitrogenados en sangre y contribuye a la evaluación clínica de la función renal y del metabolismo.",
-    "imagen": "Creatinina en sangre.png"
-  },
+{
+  "codigo": "0302057",
+  "nombre": "Nitrógeno ureico y/o urea en sangre (BUN)",
+  "tipo": "🩸 Muestra de Sangre (Venopunción)",
+  "requisitos_rapidos": [
+    "📋 Ayuno de 8 a 12 horas (según indicación médica)",
+    "💧 Se permite la ingesta moderada de agua",
+    "💊 Informar medicamentos actuales (diuréticos, corticoides, etc.)"
+  ],
+  "pasos_preparacion": [
+    "Presentarse en el laboratorio con un ayuno estricto de 8 a 12 horas (evitar alimentos, café, té o jugos).",
+    "Se permite beber agua sola en pequeñas cantidades si es necesario.",
+    "Evitar dietas excesivamente altas en proteínas o cambios drásticos en la alimentación las 24 horas previas al examen.",
+    "Informar al personal de salud sobre cualquier medicamento que esté tomando (especialmente diuréticos o antibióticos), ya que pueden influir en los niveles de urea.",
+    "Notificar antecedentes relevantes como problemas renales, hepáticos o si se encuentra en estado de embarazo."
+  ],
+  "importancia": "Mide la cantidad de nitrógeno ureico en la sangre. Es un indicador clave para evaluar el funcionamiento de los riñones, el estado de hidratación y cómo el organismo metaboliza las proteínas.",
+  "imagen": "Nitrógeno ureico y/o urea en sangre (BUN).png"
+},
   {
     "codigo": "0302005",
     "nombre": "Ácido úrico en sangre",
@@ -1068,18 +1151,20 @@
     "importancia": "Mide bilirrubina total y conjugada y contribuye al estudio de ictericia y alteraciones hepáticas o biliares.",
     "imagen": "Bilirrubina total y conjugada.png"
   },
-  {
+{
     "codigo": "0302063",
     "nombre": "Transaminasas GOT/AST y GPT/ALT",
     "tipo": "🩸 Muestra de Sangre",
-    "requisitos_rapidos": ["📋 Confirmar preparación", "💊 Informar medicamentos"],
+    "requisitos_rapidos": ["⏱️ Ayuno de 8 a 12 horas", "💧 Se permite agua", "🚫 Evitar ejercicio intenso 24h antes", "💊 Informar medicamentos y consumo de alcohol"],
     "pasos_preparacion": [
-      "Confirmar si se solicitan ambas transaminasas o una determinación individual.",
-      "Seguir las indicaciones del laboratorio sobre ayuno y preparación.",
-      "Informar los medicamentos y suplementos que utiliza."
+      "Presentarse con un ayuno estricto de 8 a 12 horas (se permite la ingesta moderada de agua pura).",
+      "Evitar realizar ejercicio físico intenso, anaeróbico o de fuerza en las 24 horas previas a la extracción, ya que puede elevar falsamente los valores de AST.",
+      "Informar al personal de salud si toma medicamentos hepatotóxicos (como estatinas, acetaminofén/paracetamol, antiinflamatorios) o suplementos herbales.",
+      "Evitar la ingesta de alcohol al menos 48 horas antes del examen, ya que altera de forma directa las enzimas hepáticas.",
+      "Acudir con ropa cómoda de mangas holgadas para facilitar la punción venosa en el brazo."
     ],
-    "importancia": "Mide enzimas que pueden elevarse en distintas alteraciones hepáticas y, en el caso de AST, también en lesiones de otros tejidos.",
-    "imagen": "ALT GPT.png"
+    "importancia": "Mide enzimas que se liberan a la sangre cuando hay daño o inflamación en el hígado (GPT/ALT es más específica del hígado, mientras que GOT/AST también se encuentra en el tejido cardíaco, muscular y renal).",
+    "imagen": "Transaminasas GOTAST y GPTALT.png"
   },
   {
     "codigo": "0302040",
@@ -1256,17 +1341,22 @@
     "importancia": "Mide la concentración de 25-hidroxivitamina D en sangre y contribuye a la evaluación del estado de vitamina D.",
     "imagen": "Vitamina D.png"
   },
-  {
-    "codigo": "0306082",
-    "nombre": "Reacción de Polimerasa en Cadena (P.C.R.) en tiempo real, SARS-CoV-2 (incluye toma de muestra por hisopado nasofaríngeo)",
-    "tipo": "👃 Muestra Nasal / Nasofaríngea",
-    "requisitos_rapidos": ["👃 Hisopado según protocolo", "📋 Seguir indicaciones del establecimiento"],
-    "pasos_preparacion": [
-      "Seguir las instrucciones entregadas por el establecimiento antes de la toma.",
-      "Informar al personal sobre los síntomas y la fecha de inicio.",
-      "La muestra debe ser recolectada por personal capacitado según el método solicitado."
-    ],
-    "importancia": "Detecta material genético del SARS-CoV-2 en una muestra respiratoria. El código exacto depende de la prestación y modalidad facturada.",
-    "imagen": "SARS-CoV-2.png"
-  }
+{
+  "codigo": "0306082",
+  "nombre": "Reacción de Polimerasa en Cadena (P.C.R.) en tiempo real, SARS-CoV-2 (incluye toma de muestra por hisopado nasofaríngeo)",
+  "tipo": "👃 Muestra Nasal / Nasofaríngea",
+  "requisitos_rapidos": [
+    "👃 Evitar el uso de aseos nasales, sprays descongestionantes o lavados salinos al menos 2 horas antes de la toma.",
+    "📋 Presentar cédula de identidad o documento de identificación válido.",
+    "😷 Portar mascarilla quirúrgica o KN95 en todo momento dentro del recinto de salud."
+  ],
+  "pasos_preparacion": [
+    "1. **Identificación y Registro:** Acudir al box asignado en el horario indicado y presentar la orden médica junto con el documento de identidad.",
+    "2. **Anamnesis Breve:** Informar al TENS o enfermero/a la fecha exacta de inicio de los síntomas (si aplica) o si es un examen por contacto estrecho o preventivo.",
+    "3. **Toma de Muestra:** El profesional inclinará ligeramente su cabeza hacia atrás para introducir con suavidad un hisopo estéril a través de ambas fosas nasales hasta la zona nasofaríngea, rotándolo unos segundos para recolectar la muestra celular.",
+    "4. **Post-Toma:** Puede experimentar una leve molestia transitoria, picazón o estornudos. Podrá retirarse de inmediato siguiendo las normas de bioseguridad del centro."
+  ],
+  "importancia": "Prueba de alta sensibilidad que detecta el ARN (material genético) del virus SARS-CoV-2. Es el estándar de oro (gold standard) para el diagnóstico confirmatorio de COVID-19 activo.",
+  "imagen": "Reacción de Polimerasa en Cadena (P.C.R.) en tiempo real, SARS-CoV-2 (incluye toma de muestra por hisopado nasofaríngeo).png"
+}
 ]
