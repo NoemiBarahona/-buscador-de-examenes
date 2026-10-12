@@ -530,6 +530,13 @@ window.toggleModal = function(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) modal.classList.toggle('hidden');
 };
+function cerrarSiEsFondo(event) {
+  const modal = document.getElementById('modalImagenAmpliada');
+  // Si el usuario hace clic exactamente en el fondo del modal (y no en sus hijos)
+  if (event.target === modal) {
+    cerrarModalImagen();
+  }
+}
 
 window.abrirModalImagen = abrirModalImagen;
 window.abrirModalImagenPorExamen = abrirModalImagenPorExamen;
